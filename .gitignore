@@ -1,0 +1,9 @@
+# Secrets (NUNCA subir a GitHub)
+.streamlit/secrets.toml
+
+# Datos locales
+lista_boda.csv
+
+# Python
+__pycache__/
+*.pyc
