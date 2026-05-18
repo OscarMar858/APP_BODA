@@ -39,8 +39,7 @@ def get_image_base64(path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-seal_b64 = get_image_base64(SEAL_PATH)
-seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-size: cover; background-position: center;" if seal_b64 else "background: #697d5a; box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
+seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-color: #d4af37; background-blend-mode: multiply; background-size: cover; background-position: center;" if seal_b64 else "background: radial-gradient(circle, #f9d976 0%, #e9b646 50%, #c18e28 100%); box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
 
 # Ruta Acuarela
 ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
@@ -99,10 +98,11 @@ st.markdown("""
        ═══════════════════════════════════════ */
 
     .envelope-container {
-        width: 400px;
-        height: 280px;
+        width: 90vw;
+        max-width: 400px;
+        aspect-ratio: 1.428;
         position: relative;
-        margin: 80px auto 40px auto;
+        margin: 15vh auto 40px auto;
         perspective: 1000px;
     }
     .envelope-container.arrive {
@@ -117,7 +117,7 @@ st.markdown("""
         position: relative;
         width: 100%;
         height: 100%;
-        background: #dfcbb8; 
+        background: #4A5B46; 
         border-radius: 8px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     }
@@ -164,7 +164,7 @@ st.markdown("""
         position: absolute;
         top: 0; left: 0;
         width: 50%; height: 100%;
-        background: #ebd8c5;
+        background: #556B51;
         clip-path: polygon(0 0, 100% 50%, 0 100%);
         z-index: 2;
         border-radius: 8px 0 0 8px;
@@ -174,7 +174,7 @@ st.markdown("""
         position: absolute;
         top: 0; right: 0;
         width: 50%; height: 100%;
-        background: #ebd8c5;
+        background: #556B51;
         clip-path: polygon(100% 0, 0 50%, 100% 100%);
         z-index: 2;
         border-radius: 0 8px 8px 0;
@@ -184,7 +184,7 @@ st.markdown("""
         position: absolute;
         bottom: 0; left: 0;
         width: 100%; height: 60%;
-        background: #f4e3d1;
+        background: #5E755A;
         clip-path: polygon(0 100%, 50% 0, 100% 100%);
         z-index: 3;
         border-radius: 0 0 8px 8px;
@@ -199,11 +199,16 @@ st.markdown("""
     }
     .flap-top-shape {
         width: 100%; height: 100%;
-        background: #dabc9e;
+        background: #3E4D3B;
         clip-path: polygon(0 0, 50% 100%, 100% 0);
         border-radius: 8px 8px 0 0;
     }
 
+    @keyframes pulse-vibrate {
+        0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+        50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0); }
+        100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
     .wax-seal {
         position: absolute;
         top: 100%;
@@ -216,14 +221,14 @@ st.markdown("""
         justify-content: center;
         align-items: center;
         z-index: 10;
-        /* El fondo se inyecta via estilo inline */
+        animation: pulse-vibrate 2s infinite ease-in-out;
     }
     .seal-text {
         font-family: 'Great Vibes', cursive;
-        color: #e5eeda;
+        color: #fff;
         font-size: 2.2rem;
         line-height: 1;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
         margin-top: 5px;
     }
     .seal-text .ampersand-seal {
@@ -549,6 +554,32 @@ st.markdown("""
 # ═════════════════════════════════════════════
 if st.session_state.envelope_state == "closed":
 
+    # CSS para hacer el botón invisible a pantalla completa
+    st.markdown("""
+    <style>
+        .stButton[data-testid="stButton"] {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+        }
+        .stButton[data-testid="stButton"] button {
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            border: none !important;
+            color: transparent !important;
+            box-shadow: none !important;
+        }
+        .stButton[data-testid="stButton"] button:hover {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     envelope_class = "envelope-container arrive envelope-closed"
     
     # Renderizamos el sobre HTML
@@ -574,12 +605,10 @@ if st.session_state.envelope_state == "closed":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="open-hint" style="margin-top: 3rem;">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
-            st.session_state.envelope_state = "opened"
-            st.rerun()
+    # Botón invisible a pantalla completa
+    if st.button(" ", key="open_envelope", use_container_width=True):
+        st.session_state.envelope_state = "opened"
+        st.rerun()
 
 # ═════════════════════════════════════════════
 # PANTALLA 2: INVITACIÓN COMPLETA
