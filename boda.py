@@ -228,21 +228,21 @@ st.markdown("""
     }
     .seal-text {
         font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
-        color: #e5b85c;
-        font-size: 1.8rem;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.2);
+        font-size: 2rem;
         line-height: 1;
         white-space: nowrap;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.5), -1px -1px 2px rgba(0,0,0,0.7);
         margin-top: 3px;
         letter-spacing: 1px;
     }
     .seal-text .ampersand-seal {
         font-family: 'Great Vibes', cursive;
         font-weight: 400;
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         margin: 0 2px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
+        text-shadow: 1px 1px 0px rgba(255,255,255,0.5), -1px -1px 2px rgba(0,0,0,0.7);
     }
 
     /* Animaciones de apertura */
