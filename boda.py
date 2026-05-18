@@ -12,6 +12,7 @@ except ImportError:
 
 import time
 import base64
+import streamlit.components.v1 as components
 
 # ─────────────────────────────────────────────
 # Configuración de la página
@@ -248,6 +249,21 @@ st.markdown("""
     .envelope-opening .letter {
         animation: slideLetter 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         animation-delay: 0.5s;
+    }
+
+    .envelope-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(160deg, #fdf6f0 0%, #f5ebe0 30%, #faf3ed 60%, #f0e6d8 100%);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: hideOverlay 2.5s forwards;
+    }
+    @keyframes hideOverlay {
+        0%, 80% { opacity: 1; visibility: visible; }
+        100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
 
     /* Hint */
@@ -531,12 +547,13 @@ st.markdown("""
 # ═════════════════════════════════════════════
 # PANTALLA 1: SOBRE ELEGANTE (INTERACTIVO)
 # ═════════════════════════════════════════════
-if st.session_state.envelope_state in ["closed", "opening"]:
+if st.session_state.envelope_state == "closed":
 
-    envelope_class = "envelope-container arrive envelope-opening" if st.session_state.envelope_state == "opening" else "envelope-container arrive envelope-closed"
+    envelope_class = "envelope-container arrive envelope-closed"
     
     # Renderizamos el sobre HTML
     st.markdown(f"""
+    <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center;">
     <div class="{envelope_class}">
         <div class="envelope">
             <div class="letter">
@@ -556,25 +573,46 @@ if st.session_state.envelope_state in ["closed", "opening"]:
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-    if st.session_state.envelope_state == "closed":
-        st.markdown('<div class="open-hint" style="margin-top: 3rem;">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
-                st.session_state.envelope_state = "opening"
-                st.rerun()
-    elif st.session_state.envelope_state == "opening":
-        # Pausa para que se vea la animación y luego pasa a la pantalla completa
-        time.sleep(2.0)
-        st.session_state.envelope_state = "opened"
-        st.rerun()
+    st.markdown('<div class="open-hint" style="margin-top: 3rem;">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
+            st.session_state.envelope_state = "opened"
+            st.rerun()
+            
+    st.markdown('</div>', unsafe_allow_html=True)
 
 # ═════════════════════════════════════════════
 # PANTALLA 2: INVITACIÓN COMPLETA
 # ═════════════════════════════════════════════
 elif st.session_state.envelope_state == "opened":
+
+    # Overlay de animación fluida del sobre abriéndose
+    st.markdown(f"""
+    <div class="envelope-overlay">
+        <div class="envelope-container envelope-opening">
+            <div class="envelope">
+                <div class="letter">
+                    <div class="letter-content">
+                        <div class="letter-title">A <span style="font-family: 'Cormorant Garamond', serif; font-size: 2rem;">&amp;</span> O</div>
+                        <div class="letter-subtitle">Estáis Invitados</div>
+                    </div>
+                </div>
+                <div class="flap-left"></div>
+                <div class="flap-right"></div>
+                <div class="flap-bottom"></div>
+                <div class="flap-top-wrapper">
+                    <div class="flap-top-shape"></div>
+                    <div class="wax-seal" style="{seal_bg}">
+                        <div class="seal-text">A <span class="ampersand-seal">&amp;</span> O</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
     if acuarela_bg:
@@ -612,23 +650,23 @@ elif st.session_state.envelope_state == "opened":
         <div class="section-label">Cuenta Atrás</div>
         <div class="countdown-container" style="gap: 1rem;">
             <div class="countdown-item">
-                <div class="countdown-number">{months_left}</div>
+                <div class="countdown-number" id="cd-months">{months_left}</div>
                 <div class="countdown-label">Meses</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number">{remaining_days}</div>
+                <div class="countdown-number" id="cd-days">{remaining_days}</div>
                 <div class="countdown-label">Días</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number">{hours_left}</div>
+                <div class="countdown-number" id="cd-hours">{hours_left}</div>
                 <div class="countdown-label">Horas</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number">{minutes_left}</div>
+                <div class="countdown-number" id="cd-minutes">{minutes_left}</div>
                 <div class="countdown-label">Min</div>
             </div>
             <div class="countdown-item">
-                <div class="countdown-number">{seconds_left}</div>
+                <div class="countdown-number" id="cd-seconds">{seconds_left}</div>
                 <div class="countdown-label">Seg</div>
             </div>
         </div>
@@ -732,3 +770,40 @@ elif st.session_state.envelope_state == "opened":
     """, unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # Inyección de JS para actualizar la cuenta atrás en tiempo real
+    components.html("""
+    <script>
+        const targetDate = new Date("2026-10-17T00:00:00").getTime();
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            if (distance < 0) return;
+            
+            const totalSeconds = Math.floor(distance / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const months = Math.floor(days / 30);
+            const remDays = days % 30;
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = Math.floor(totalSeconds % 60);
+            
+            const doc = window.parent.document;
+            const elMonths = doc.getElementById("cd-months");
+            const elDays = doc.getElementById("cd-days");
+            const elHours = doc.getElementById("cd-hours");
+            const elMinutes = doc.getElementById("cd-minutes");
+            const elSeconds = doc.getElementById("cd-seconds");
+            
+            if (elMonths) elMonths.innerText = months;
+            if (elDays) elDays.innerText = remDays;
+            if (elHours) elHours.innerText = hours;
+            if (elMinutes) elMinutes.innerText = minutes;
+            if (elSeconds) elSeconds.innerText = seconds;
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+    """, height=0, width=0)
