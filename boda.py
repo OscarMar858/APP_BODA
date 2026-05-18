@@ -598,14 +598,19 @@ elif st.session_state.envelope_state == "opened":
     wedding_date = datetime(2026, 10, 17)
     today = datetime.now()
     delta = wedding_date - today
-    days_left = max(delta.days, 0)
+    
+    total_seconds = max(int(delta.total_seconds()), 0)
+    days_left = total_seconds // 86400
     months_left = days_left // 30
     remaining_days = days_left % 30
+    hours_left = (total_seconds % 86400) // 3600
+    minutes_left = (total_seconds % 3600) // 60
+    seconds_left = total_seconds % 60
 
     st.markdown(f"""
     <div class="info-card">
         <div class="section-label">Cuenta Atrás</div>
-        <div class="countdown-container">
+        <div class="countdown-container" style="gap: 1rem;">
             <div class="countdown-item">
                 <div class="countdown-number">{months_left}</div>
                 <div class="countdown-label">Meses</div>
@@ -613,6 +618,18 @@ elif st.session_state.envelope_state == "opened":
             <div class="countdown-item">
                 <div class="countdown-number">{remaining_days}</div>
                 <div class="countdown-label">Días</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number">{hours_left}</div>
+                <div class="countdown-label">Horas</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number">{minutes_left}</div>
+                <div class="countdown-label">Min</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number">{seconds_left}</div>
+                <div class="countdown-label">Seg</div>
             </div>
         </div>
     </div>
