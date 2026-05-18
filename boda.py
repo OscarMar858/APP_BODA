@@ -99,8 +99,8 @@ st.markdown("""
        ═══════════════════════════════════════ */
 
     .envelope-container {
-        width: 320px;
-        height: 220px;
+        width: 400px;
+        height: 280px;
         position: relative;
         margin: 80px auto 40px auto;
         perspective: 1000px;
@@ -209,8 +209,8 @@ st.markdown("""
         top: 100%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 75px;
-        height: 75px;
+        width: 95px;
+        height: 95px;
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -221,16 +221,16 @@ st.markdown("""
     .seal-text {
         font-family: 'Great Vibes', cursive;
         color: #e5eeda;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         line-height: 1;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        margin-top: 3px;
+        margin-top: 5px;
     }
     .seal-text .ampersand-seal {
         font-family: 'Cormorant Garamond', serif;
         font-style: italic;
-        font-size: 1.2rem;
-        margin: 0 2px;
+        font-size: 1.5rem;
+        margin: 0 4px;
     }
 
     /* Animaciones de apertura */
@@ -553,7 +553,6 @@ if st.session_state.envelope_state == "closed":
     
     # Renderizamos el sobre HTML
     st.markdown(f"""
-    <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center;">
     <div class="{envelope_class}">
         <div class="envelope">
             <div class="letter">
@@ -581,8 +580,6 @@ if st.session_state.envelope_state == "closed":
         if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
             st.session_state.envelope_state = "opened"
             st.rerun()
-            
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ═════════════════════════════════════════════
 # PANTALLA 2: INVITACIÓN COMPLETA
