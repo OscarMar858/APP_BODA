@@ -572,7 +572,7 @@ if st.session_state.envelope_state == "closed":
             </div>
         </div>
     </div>
-    """)
+    """, unsafe_allow_html=True)
 
     st.markdown('<div class="open-hint" style="margin-top: 3rem;">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
