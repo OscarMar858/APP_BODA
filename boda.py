@@ -147,8 +147,9 @@ st.markdown("""
         color: #7a8c6e;
     }
     .letter-title {
-        font-family: 'Great Vibes', cursive;
-        font-size: 3rem;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        font-size: 3.5rem;
         line-height: 1.2;
         margin-bottom: 0.2rem;
         color: #7a8c6e;
@@ -225,18 +226,21 @@ st.markdown("""
         animation: pulse-vibrate 2s infinite ease-in-out;
     }
     .seal-text {
-        font-family: 'Great Vibes', cursive;
-        color: #fff;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        color: #e5b85c;
         font-size: 2.2rem;
         line-height: 1;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-        margin-top: 5px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
+        margin-top: 3px;
+        letter-spacing: 2px;
     }
     .seal-text .ampersand-seal {
-        font-family: 'Cormorant Garamond', serif;
-        font-style: italic;
-        font-size: 1.5rem;
+        font-family: 'Great Vibes', cursive;
+        font-weight: 400;
+        font-size: 1.8rem;
         margin: 0 4px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
     }
 
     /* Animaciones de apertura */
@@ -589,7 +593,7 @@ if st.session_state.envelope_state == "closed":
         <div class="envelope">
             <div class="letter">
                 <div class="letter-content">
-                    <div class="letter-title">A <span style="font-family: 'Cormorant Garamond', serif; font-size: 2rem;">&amp;</span> O</div>
+                    <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
                     <div class="letter-subtitle">Estáis Invitados</div>
                 </div>
             </div>
@@ -623,9 +627,9 @@ elif st.session_state.envelope_state == "opened":
             <div class="envelope">
                 <div class="letter">
                     <div class="letter-content">
-                        <div class="letter-title">A <span style="font-family: 'Cormorant Garamond', serif; font-size: 2rem;">&amp;</span> O</div>
-                        <div class="letter-subtitle">Estáis Invitados</div>
-                    </div>
+                    <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
+                    <div class="letter-subtitle">Estáis Invitados</div>
+                </div>
                 </div>
                 <div class="flap-left"></div>
                 <div class="flap-right"></div>
@@ -652,8 +656,8 @@ elif st.session_state.envelope_state == "opened":
 
     # ── Iniciales ──
     st.markdown("""
-    <div style="font-family: 'Great Vibes', cursive; font-size: 5.5rem; color: #7a8c6e; text-align: center; margin: 1.5rem 0; line-height: 1; text-shadow: 0 2px 20px rgba(122, 140, 110, 0.15);">
-        A <span style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #a3b899; margin: 0 0.5rem; font-style: italic;">&amp;</span> O
+    <div style="font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 6rem; color: #7a8c6e; text-align: center; margin: 1.5rem 0; line-height: 1; text-shadow: 0 2px 20px rgba(122, 140, 110, 0.15); letter-spacing: 5px;">
+        A <span style="font-family: 'Great Vibes', cursive; font-size: 4rem; color: #a3b899; margin: 0 0.5rem; font-weight: 400;">&amp;</span> O
     </div>
     """, unsafe_allow_html=True)
 
