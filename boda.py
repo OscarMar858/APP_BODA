@@ -39,6 +39,7 @@ def get_image_base64(path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
+seal_b64 = get_image_base64(SEAL_PATH)
 seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-color: #d4af37; background-blend-mode: multiply; background-size: cover; background-position: center;" if seal_b64 else "background: radial-gradient(circle, #f9d976 0%, #e9b646 50%, #c18e28 100%); box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
 
 # Ruta Acuarela
