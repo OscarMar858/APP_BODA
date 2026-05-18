@@ -28,8 +28,14 @@ st.set_page_config(
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
 if "envelope_state" not in st.session_state:
-# Se ha eliminado la carga de la imagen del sello para usar un sello CSS puro y perfecto
+    st.session_state.envelope_state = "closed"
 
+def get_image_base64(path):
+    if os.path.isfile(path):
+        with open(path, "rb") as img_file:
+            import base64
+            return base64.b64encode(img_file.read()).decode()
+    return ""
 # Ruta Acuarela
 ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
 acuarela_b64 = get_image_base64(ACUARELA_PATH)
