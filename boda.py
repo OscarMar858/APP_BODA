@@ -30,12 +30,19 @@ st.set_page_config(
 if "envelope_state" not in st.session_state:
     st.session_state.envelope_state = "closed"
 
+# Ruta del sello
+SEAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sello_transparente.png")
+
 def get_image_base64(path):
     if os.path.isfile(path):
         with open(path, "rb") as img_file:
             import base64
             return base64.b64encode(img_file.read()).decode()
     return ""
+
+seal_b64 = get_image_base64(SEAL_PATH)
+seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-size: cover; background-position: center;" if seal_b64 else "background: radial-gradient(circle, #f9d976 0%, #e9b646 50%, #c18e28 100%); box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
+
 # Ruta Acuarela
 ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
 acuarela_b64 = get_image_base64(ACUARELA_PATH)
@@ -219,48 +226,7 @@ st.markdown("""
         align-items: center;
         z-index: 10;
         animation: pulse-vibrate 2s infinite ease-in-out;
-        
-        /* Efecto 3D de cera dorada puro CSS */
-        background: radial-gradient(ellipse at 30% 30%, #f9d976 0%, #d4af37 40%, #aa801b 80%, #684a04 100%);
-        box-shadow: 
-            inset 0 4px 6px rgba(255, 255, 255, 0.6), 
-            inset 0 -4px 6px rgba(0, 0, 0, 0.5),      
-            0 5px 15px rgba(0, 0, 0, 0.4);            
-        border: 1px solid #b58d24; 
-    }
-    
-    /* Anillo interior para dar realismo al sello */
-    .wax-seal::before {
-        content: '';
-        position: absolute;
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        border: 2px solid rgba(0,0,0,0.15);
-        box-shadow: 
-            inset 0 2px 4px rgba(0,0,0,0.3),
-            0 2px 2px rgba(255,255,255,0.4);
-        pointer-events: none;
-    }
-
-    .seal-text {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 700;
-        color: #d4af37; 
-        font-size: 2.2rem;
-        line-height: 1;
-        white-space: nowrap;
-        text-shadow: -1px -1px 1px rgba(255, 255, 255, 0.7), 1px 1px 3px rgba(0, 0, 0, 0.8);
-        margin-top: 3px;
-        letter-spacing: 1px;
-        z-index: 2; 
-        position: relative;
-    }
-    .seal-text .ampersand-seal {
-        font-family: 'Great Vibes', cursive;
-        font-weight: 400;
-        font-size: 1.8rem;
-        margin: 0 2px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     /* Animaciones de apertura */
@@ -622,9 +588,7 @@ if st.session_state.envelope_state == "closed":
             <div class="flap-bottom"></div>
             <div class="flap-top-wrapper">
                 <div class="flap-top-shape"></div>
-                <div class="wax-seal">
-                    <div class="seal-text">A <span class="ampersand-seal">&amp;</span> O</div>
-                </div>
+                <div class="wax-seal" style="{seal_bg}"></div>
             </div>
         </div>
     </div>
@@ -656,9 +620,7 @@ elif st.session_state.envelope_state == "opened":
                 <div class="flap-bottom"></div>
                 <div class="flap-top-wrapper">
                     <div class="flap-top-shape"></div>
-                    <div class="wax-seal">
-                        <div class="seal-text">A <span class="ampersand-seal">&amp;</span> O</div>
-                    </div>
+                    <div class="wax-seal" style="{seal_bg}"></div>
                 </div>
             </div>
         </div>
