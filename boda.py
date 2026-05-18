@@ -10,6 +10,9 @@ try:
 except ImportError:
     GSPREAD_AVAILABLE = False
 
+import time
+import base64
+
 # ─────────────────────────────────────────────
 # Configuración de la página
 # ─────────────────────────────────────────────
@@ -23,11 +26,20 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
-if "envelope_opened" not in st.session_state:
-    st.session_state.envelope_opened = False
+if "envelope_state" not in st.session_state:
+    st.session_state.envelope_state = "closed"
 
 # Ruta del sello
 SEAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sello.png")
+
+def get_image_base64(path):
+    if os.path.isfile(path):
+        with open(path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return ""
+
+seal_b64 = get_image_base64(SEAL_PATH)
+seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-size: cover; background-position: center;" if seal_b64 else "background: #697d5a; box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
 
 # ─────────────────────────────────────────────
 # CSS global
@@ -77,48 +89,160 @@ st.markdown("""
     }
 
     /* ═══════════════════════════════════════
-       PANTALLA DEL SOBRE
+       PANTALLA DEL SOBRE (NUEVO DISEÑO 3D)
        ═══════════════════════════════════════ */
 
-    /* Iniciales A & O */
-    .initials-display {
-        font-family: 'Great Vibes', cursive;
-        font-size: 6rem;
+    .envelope-container {
+        width: 320px;
+        height: 220px;
+        position: relative;
+        margin: 80px auto 40px auto;
+        perspective: 1000px;
+    }
+    .envelope-container.arrive {
+        animation: envelopeArrive 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes envelopeArrive {
+        0% { transform: translateY(100vh) scale(0.7) rotate(-5deg); opacity: 0; }
+        100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .envelope {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #dfcbb8; 
+        border-radius: 8px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    }
+
+    .letter {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        height: 90%;
+        background: #fff;
+        border-radius: 8px;
+        z-index: 1;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+        background-image: linear-gradient(135deg, #fff 0%, #f9f5f0 100%);
+    }
+
+    .letter-content {
+        font-family: 'Cormorant Garamond', serif;
         color: #7a8c6e;
-        text-align: center;
-        margin-top: 3rem;
-        margin-bottom: 0;
-        line-height: 1;
-        text-shadow: 0 2px 25px rgba(122, 140, 110, 0.2);
-        animation: float 5s ease-in-out infinite;
     }
-    .ampersand {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 3.2rem;
-        font-weight: 300;
-        font-style: italic;
+    .letter-title {
+        font-family: 'Great Vibes', cursive;
+        font-size: 3rem;
+        line-height: 1.2;
+        margin-bottom: 0.2rem;
+        color: #7a8c6e;
+    }
+    .letter-subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 3px;
         color: #a3b899;
-        margin: 0 0.4rem;
+        text-transform: uppercase;
     }
 
-    /* Línea decorativa */
-    .thin-line {
-        width: 100px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #a3b899, transparent);
-        margin: 1.2rem auto;
+    .flap-left {
+        position: absolute;
+        top: 0; left: 0;
+        width: 50%; height: 100%;
+        background: #ebd8c5;
+        clip-path: polygon(0 0, 100% 50%, 0 100%);
+        z-index: 2;
+        border-radius: 8px 0 0 8px;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+    }
+    .flap-right {
+        position: absolute;
+        top: 0; right: 0;
+        width: 50%; height: 100%;
+        background: #ebd8c5;
+        clip-path: polygon(100% 0, 0 50%, 100% 100%);
+        z-index: 2;
+        border-radius: 0 8px 8px 0;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+    }
+    .flap-bottom {
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 100%; height: 60%;
+        background: #f4e3d1;
+        clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        z-index: 3;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    }
+    .flap-top-wrapper {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 65%;
+        z-index: 4;
+        transform-origin: top;
+    }
+    .flap-top-shape {
+        width: 100%; height: 100%;
+        background: #dabc9e;
+        clip-path: polygon(0 0, 50% 100%, 100% 0);
+        border-radius: 8px 8px 0 0;
     }
 
-    /* Texto del sobre */
-    .envelope-text {
+    .wax-seal {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+        /* El fondo se inyecta via estilo inline */
+    }
+    .seal-text {
+        font-family: 'Great Vibes', cursive;
+        color: #e5eeda;
+        font-size: 1.8rem;
+        line-height: 1;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        margin-top: 3px;
+    }
+    .seal-text .ampersand-seal {
         font-family: 'Cormorant Garamond', serif;
-        font-size: 1.2rem;
-        font-weight: 300;
         font-style: italic;
-        color: #8b7d6b;
-        text-align: center;
-        letter-spacing: 2px;
-        margin-bottom: 2rem;
+        font-size: 1.2rem;
+        margin: 0 2px;
+    }
+
+    /* Animaciones de apertura */
+    @keyframes openFlap {
+        0% { transform: rotateX(0deg); z-index: 4; }
+        100% { transform: rotateX(180deg); z-index: 0; }
+    }
+    @keyframes slideLetter {
+        0% { transform: translate(-50%, 0); z-index: 1; }
+        100% { transform: translate(-50%, -120px); z-index: 1; }
+    }
+
+    .envelope-opening .flap-top-wrapper {
+        animation: openFlap 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .envelope-opening .letter {
+        animation: slideLetter 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.5s;
     }
 
     /* Hint */
@@ -383,37 +507,52 @@ st.markdown("""
 
 
 # ═════════════════════════════════════════════
-# PANTALLA 1: SOBRE ELEGANTE
+# PANTALLA 1: SOBRE ELEGANTE (INTERACTIVO)
 # ═════════════════════════════════════════════
-if not st.session_state.envelope_opened:
+if st.session_state.envelope_state in ["closed", "opening"]:
 
-    # Iniciales A & O en letra cursiva
-    st.markdown("""
-    <div class="initials-display">A <span class="ampersand">&</span> O</div>
-    <div class="thin-line"></div>
-    <div class="envelope-text">Estáis invitados a nuestra boda</div>
+    envelope_class = "envelope-container arrive envelope-opening" if st.session_state.envelope_state == "opening" else "envelope-container arrive envelope-closed"
+    
+    # Renderizamos el sobre HTML
+    st.markdown(f"""
+    <div class="{envelope_class}">
+        <div class="envelope">
+            <div class="letter">
+                <div class="letter-content">
+                    <div class="letter-title">A <span style="font-family: 'Cormorant Garamond', serif; font-size: 2rem;">&amp;</span> O</div>
+                    <div class="letter-subtitle">Estáis Invitados</div>
+                </div>
+            </div>
+            <div class="flap-left"></div>
+            <div class="flap-right"></div>
+            <div class="flap-bottom"></div>
+            <div class="flap-top-wrapper">
+                <div class="flap-top-shape"></div>
+                <div class="wax-seal" style="{seal_bg}">
+                    <div class="seal-text">A <span class="ampersand-seal">&amp;</span> O</div>
+                </div>
+            </div>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
 
-    # Sello de lacre botánico (como imagen nativa de Streamlit)
-    if os.path.isfile(SEAL_PATH):
-        col_s1, col_s2, col_s3 = st.columns([1.3, 1, 1.3])
-        with col_s2:
-            st.image(SEAL_PATH, use_container_width=True)
-
-    # Hint
-    st.markdown('<div class="open-hint">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
-
-    # Botón de abrir
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
-            st.session_state.envelope_opened = True
-            st.rerun()
+    if st.session_state.envelope_state == "closed":
+        st.markdown('<div class="open-hint" style="margin-top: 3rem;">✦ &ensp; Pulsa para abrir &ensp; ✦</div>', unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            if st.button("💌  Abrir Invitación", key="open_envelope", use_container_width=True):
+                st.session_state.envelope_state = "opening"
+                st.rerun()
+    elif st.session_state.envelope_state == "opening":
+        # Pausa para que se vea la animación y luego pasa a la pantalla completa
+        time.sleep(2.0)
+        st.session_state.envelope_state = "opened"
+        st.rerun()
 
 # ═════════════════════════════════════════════
 # PANTALLA 2: INVITACIÓN COMPLETA
 # ═════════════════════════════════════════════
-else:
+elif st.session_state.envelope_state == "opened":
 
     st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
 
