@@ -41,6 +41,11 @@ def get_image_base64(path):
 seal_b64 = get_image_base64(SEAL_PATH)
 seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-size: cover; background-position: center;" if seal_b64 else "background: #697d5a; box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
 
+# Ruta Acuarela
+ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
+acuarela_b64 = get_image_base64(ACUARELA_PATH)
+acuarela_bg = f"background-image: url('data:image/jpeg;base64,{acuarela_b64}');" if acuarela_b64 else ""
+
 # ─────────────────────────────────────────────
 # CSS global
 # ─────────────────────────────────────────────
@@ -263,7 +268,24 @@ st.markdown("""
        INVITACIÓN – CONTENIDO
        ═══════════════════════════════════════ */
     .invitation-reveal {
+        position: relative;
+        z-index: 1;
         animation: revealContent 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .watermark-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 75vh;
+        background-size: cover;
+        background-position: center bottom;
+        opacity: 0.35;
+        z-index: 0;
+        pointer-events: none;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
     }
 
     .floating-title {
@@ -555,23 +577,18 @@ if st.session_state.envelope_state in ["closed", "opening"]:
 elif st.session_state.envelope_state == "opened":
 
     st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
-
-    # ── Sello pequeño como cabecera ──
-    if os.path.isfile(SEAL_PATH):
-        col_h1, col_h2, col_h3 = st.columns([2, 1, 2])
-        with col_h2:
-            st.image(SEAL_PATH, use_container_width=True)
+    if acuarela_bg:
+        st.markdown(f'<div class="watermark-bg" style="{acuarela_bg}"></div>', unsafe_allow_html=True)
 
     # ── Título flotante ──
     st.markdown('<div class="floating-title">Nos Casamos</div>', unsafe_allow_html=True)
     st.markdown('<div class="ornament">✦ ✦ ✦</div>', unsafe_allow_html=True)
     st.markdown('<div class="shimmer-subtitle">Estáis Invitados</div>', unsafe_allow_html=True)
 
-    # ── Texto poético ──
+    # ── Iniciales ──
     st.markdown("""
-    <div class="poetic-text">
-        «Porque cada historia de amor es hermosa,<br>
-        pero la nuestra es nuestra favorita.»
+    <div style="font-family: 'Great Vibes', cursive; font-size: 5.5rem; color: #7a8c6e; text-align: center; margin: 1.5rem 0; line-height: 1; text-shadow: 0 2px 20px rgba(122, 140, 110, 0.15);">
+        A <span style="font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: #a3b899; margin: 0 0.5rem; font-style: italic;">&amp;</span> O
     </div>
     """, unsafe_allow_html=True)
 
