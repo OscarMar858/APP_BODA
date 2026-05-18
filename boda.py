@@ -149,10 +149,11 @@ st.markdown("""
     .letter-title {
         font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
-        font-size: 3.5rem;
+        font-size: 3rem;
         line-height: 1.2;
         margin-bottom: 0.2rem;
         color: #7a8c6e;
+        white-space: nowrap;
     }
     .letter-subtitle {
         font-family: 'Montserrat', sans-serif;
@@ -229,17 +230,18 @@ st.markdown("""
         font-family: 'Cormorant Garamond', serif;
         font-weight: 600;
         color: #e5b85c;
-        font-size: 2.2rem;
+        font-size: 1.8rem;
         line-height: 1;
+        white-space: nowrap;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
         margin-top: 3px;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
     }
     .seal-text .ampersand-seal {
         font-family: 'Great Vibes', cursive;
         font-weight: 400;
-        font-size: 1.8rem;
-        margin: 0 4px;
+        font-size: 1.5rem;
+        margin: 0 2px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.6), -1px -1px 1px rgba(255,255,255,0.4);
     }
 
