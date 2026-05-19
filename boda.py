@@ -30,18 +30,50 @@ st.set_page_config(
 if "envelope_state" not in st.session_state:
     st.session_state.envelope_state = "closed"
 
-# Ruta del sello
-SEAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sello_transparente.png")
+# Sello de lacre SVG vectorial premium diseñado a medida
+SEAL_SVG = """
+<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Degradado dorado tridimensional para la base del sello -->
+    <radialGradient id="gold-base" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#fff8d1" />
+      <stop offset="25%" stop-color="#e9c252" />
+      <stop offset="65%" stop-color="#b88d2f" />
+      <stop offset="90%" stop-color="#7a5a11" />
+      <stop offset="100%" stop-color="#473205" />
+    </radialGradient>
+    
+    <!-- Degradado invertido para las iniciales grabadas (debossed) -->
+    <linearGradient id="gold-text" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3d2b05" />
+      <stop offset="30%" stop-color="#7a5a11" />
+      <stop offset="70%" stop-color="#eac25e" />
+      <stop offset="100%" stop-color="#fff8d1" />
+    </linearGradient>
+    
+    <!-- Sombra suave para darle volumen sobre el sobre -->
+    <filter id="seal-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
 
-def get_image_base64(path):
-    if os.path.isfile(path):
-        with open(path, "rb") as img_file:
-            import base64
-            return base64.b64encode(img_file.read()).decode()
-    return ""
+  <!-- Base de lacre con forma orgánica e irregular (realista) -->
+  <path d="M 50,4 C 67,3 81,9 89,21 C 97,33 99,50 95,66 C 91,82 79,94 63,97 C 47,100 31,96 19,86 C 7,76 3,59 5,43 C 7,27 19,11 35,5 C 40,3 45,4 50,4 Z" fill="url(#gold-base)" filter="url(#seal-shadow)"/>
 
-seal_b64 = get_image_base64(SEAL_PATH)
-seal_bg = f"background-image: url('data:image/png;base64,{seal_b64}'); background-size: cover; background-position: center; background-repeat: no-repeat; background-color: transparent;" if seal_b64 else "background: radial-gradient(circle, #f9d976 0%, #e9b646 50%, #c18e28 100%); box-shadow: inset 0 3px 6px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);"
+  <!-- Anillo exterior con relieve tridimensional -->
+  <path d="M 50,9 A 41,41 0 1,1 49.9,9 Z" fill="none" stroke="#473205" stroke-width="2.5" opacity="0.35" />
+  <path d="M 50,10 A 40,40 0 1,1 49.9,10 Z" fill="none" stroke="#fff8d1" stroke-width="1.5" opacity="0.45" />
+
+  <!-- Corona de perlas/esferas grabadas para el borde floral clásico -->
+  <circle cx="50" cy="50" r="32" fill="none" stroke="#3d2b05" stroke-width="3.2" stroke-dasharray="1,5.5" stroke-linecap="round" opacity="0.45" />
+  <circle cx="51" cy="51" r="32" fill="none" stroke="#fff8d1" stroke-width="3.2" stroke-dasharray="1,5.5" stroke-linecap="round" opacity="0.35" />
+
+  <!-- Monograma A & O esculpido con efecto de bajorrelieve -->
+  <text x="49" y="58" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="#261b02" opacity="0.85">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
+  <text x="51" y="60" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="#fffae6" opacity="0.65">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
+  <text x="50" y="59" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="url(#gold-text)">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
+</svg>
+"""
 
 # Ruta Acuarela
 ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
@@ -586,7 +618,7 @@ if st.session_state.envelope_state == "closed":
             <div class="flap-bottom"></div>
             <div class="flap-top-wrapper">
                 <div class="flap-top-shape"></div>
-                <div class="wax-seal" style="{seal_bg}"></div>
+                <div class="wax-seal">{SEAL_SVG}</div>
             </div>
         </div>
     </div>
@@ -618,7 +650,7 @@ elif st.session_state.envelope_state == "opened":
                 <div class="flap-bottom"></div>
                 <div class="flap-top-wrapper">
                     <div class="flap-top-shape"></div>
-                    <div class="wax-seal" style="{seal_bg}"></div>
+                    <div class="wax-seal">{SEAL_SVG}</div>
                 </div>
             </div>
         </div>
