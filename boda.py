@@ -220,13 +220,11 @@ st.markdown("""
         transform: translate(-50%, -50%);
         width: 110px;
         height: 110px;
-        border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 10;
         animation: pulse-vibrate 2s infinite ease-in-out;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
     /* Animaciones de apertura */
