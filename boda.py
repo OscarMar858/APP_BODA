@@ -24,19 +24,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st.sidebar.caption("Código versión: Autolimpieza Activa (V2)")
-
-with st.sidebar.expander("🔍 Info de Clave en Nube"):
-    st.write("Cód: **V2 (Activo)**")
-    if "gcp_service_account" in st.secrets:
-        key = st.secrets["gcp_service_account"]["private_key"]
-        st.write(f"Longitud: **{len(key)}**")
-        st.write(f"Inicio: `{repr(key[:25])}`")
-        st.write(f"Fin: `{repr(key[-25:])}`")
-        st.write(f"Tiene 'ndVoTur'?: **{'ndVoTur' in key}**")
-    else:
-        st.write("⚠️ No hay gcp_service_account")
-
 # ─────────────────────────────────────────────
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
