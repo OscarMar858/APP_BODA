@@ -805,7 +805,23 @@ elif st.session_state.envelope_state == "opened":
                         sheet.append_row(fila)
                         guardado = True
                     except Exception as e:
-                        st.warning(f"⚠️ No se pudo guardar en Google Sheets: {e}")
+                        err_msg = str(e)
+                        try:
+                            pk = st.secrets["gcp_service_account"]["private_key"]
+                            # Encontrar índices de '=' en la clave procesada
+                            processed_key = gcp_info.get("private_key", "")
+                            eq_indices = [i for i, c in enumerate(processed_key) if c == "="]
+                            diag = (
+                                f"\n\n🔍 **Diagnóstico de Clave en Nube:**"
+                                f"\n* Longitud leída por Streamlit: {len(pk)}"
+                                f"\n* Inicio: `{repr(pk[:25])}`"
+                                f"\n* Fin: `{repr(pk[-25:])}`"
+                                f"\n* ¿Contiene 'ndVoTur'?: {'ndVoTur' in pk}"
+                                f"\n* Índices de '=' en clave procesada: {eq_indices}"
+                            )
+                        except Exception as diag_err:
+                            diag = f"\n\n❌ No se pudo generar el diagnóstico: {diag_err}"
+                        st.warning(f"⚠️ No se pudo guardar en Google Sheets: {err_msg}{diag}")
 
                 # ── Fallback: guardar en CSV local ──
                 if not guardado:
