@@ -73,7 +73,7 @@ SEAL_SVG = """
   <text x="51" y="60" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="#fffae6" opacity="0.65">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
   <text x="50" y="59" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="url(#gold-text)">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
 </svg>
-"""
+""".replace("\n", "").replace("\r", "")
 
 def get_image_base64(path):
     if os.path.isfile(path):
