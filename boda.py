@@ -29,6 +29,8 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 if "envelope_state" not in st.session_state:
     st.session_state.envelope_state = "closed"
+if "show_opening_animation" not in st.session_state:
+    st.session_state.show_opening_animation = False
 
 # Sello de lacre SVG vectorial premium diseñado a medida (dorado envejecido/antiguo)
 SEAL_SVG = """
@@ -278,11 +280,11 @@ st.markdown("""
     }
 
     .envelope-opening .flap-top-wrapper {
-        animation: openFlap 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation: openFlap 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
     .envelope-opening .letter {
-        animation: slideLetter 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.5s;
+        animation: slideLetter 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.3s;
     }
 
     .envelope-overlay {
@@ -293,10 +295,10 @@ st.markdown("""
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: hideOverlay 2.5s forwards;
+        animation: hideOverlay 1.6s forwards;
     }
     @keyframes hideOverlay {
-        0%, 80% { opacity: 1; visibility: visible; }
+        0%, 75% { opacity: 1; visibility: visible; }
         100% { opacity: 0; visibility: hidden; pointer-events: none; }
     }
 
@@ -608,7 +610,6 @@ if st.session_state.envelope_state == "closed":
         }
     </style>
     """, unsafe_allow_html=True)
-
     envelope_class = "envelope-container arrive envelope-closed"
     
     # Renderizamos el sobre HTML
@@ -635,35 +636,38 @@ if st.session_state.envelope_state == "closed":
     # Botón invisible a pantalla completa
     if st.button(" ", key="open_envelope", use_container_width=True):
         st.session_state.envelope_state = "opened"
+        st.session_state.show_opening_animation = True
         st.rerun()
 
 # ═════════════════════════════════════════════
 # PANTALLA 2: INVITACIÓN COMPLETA
 # ═════════════════════════════════════════════
 elif st.session_state.envelope_state == "opened":
-
-    # Overlay de animación fluida del sobre abriéndose
-    st.markdown(f"""
-    <div class="envelope-overlay">
-        <div class="envelope-container envelope-opening">
-            <div class="envelope">
-                <div class="letter">
-                    <div class="letter-content">
-                    <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
-                    <div class="letter-subtitle">Estáis Invitados</div>
-                </div>
-                </div>
-                <div class="flap-left"></div>
-                <div class="flap-right"></div>
-                <div class="flap-bottom"></div>
-                <div class="flap-top-wrapper">
-                    <div class="flap-top-shape"></div>
-                    <div class="wax-seal">{SEAL_SVG}</div>
+    if st.session_state.get("show_opening_animation", False):
+        # Overlay de animación fluida del sobre abriéndose (solo se ejecuta la primera vez al abrir)
+        st.markdown(f"""
+        <div class="envelope-overlay">
+            <div class="envelope-container envelope-opening">
+                <div class="envelope">
+                    <div class="letter">
+                        <div class="letter-content">
+                        <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
+                        <div class="letter-subtitle">Estáis Invitados</div>
+                    </div>
+                    </div>
+                    <div class="flap-left"></div>
+                    <div class="flap-right"></div>
+                    <div class="flap-bottom"></div>
+                    <div class="flap-top-wrapper">
+                        <div class="flap-top-shape"></div>
+                        <div class="wax-seal">{SEAL_SVG}</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+        # Desactivar la animación para futuras interacciones/refrescos en esta sesión
+        st.session_state.show_opening_animation = False
 
     st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
     if acuarela_bg:
