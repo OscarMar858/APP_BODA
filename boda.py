@@ -78,6 +78,7 @@ SEAL_SVG = """
 </svg>
 """.replace("\n", "").replace("\r", "")
 
+@st.cache_data
 def get_image_base64(path):
     if os.path.isfile(path):
         with open(path, "rb") as img_file:
