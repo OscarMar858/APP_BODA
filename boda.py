@@ -24,8 +24,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st.write(f"🔧 **DEBUG: V2 Activa | gspread={GSPREAD_AVAILABLE} | secrets_ok={'gcp_service_account' in st.secrets}**")
-
 # ─────────────────────────────────────────────
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
