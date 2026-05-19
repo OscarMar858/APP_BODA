@@ -24,6 +24,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+st.sidebar.caption("Código versión: Autolimpieza Activa (V2)")
+
 # ─────────────────────────────────────────────
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
