@@ -75,6 +75,13 @@ SEAL_SVG = """
 </svg>
 """
 
+def get_image_base64(path):
+    if os.path.isfile(path):
+        with open(path, "rb") as img_file:
+            import base64
+            return base64.b64encode(img_file.read()).decode()
+    return ""
+
 # Ruta Acuarela
 ACUARELA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "acuarela.jpg")
 acuarela_b64 = get_image_base64(ACUARELA_PATH)
