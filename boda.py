@@ -783,16 +783,28 @@ elif st.session_state.envelope_state == "opened":
                             "https://spreadsheets.google.com/feeds",
                             "https://www.googleapis.com/auth/drive",
                         ]
-                        # Limpiar y reconstruir la clave privada para evitar errores de formato/espaciado
+                        # Limpiar y reconstruir la clave privada para evitar cualquier error de formato o espaciado
                         gcp_info = dict(st.secrets["gcp_service_account"])
                         raw_key = gcp_info["private_key"]
-                        # Reemplazar '\n' de texto por saltos de línea reales
-                        raw_key = raw_key.replace("\\n", "\n")
-                        # Quitar cabeceras para limpiar el bloque base64
-                        base64_content = raw_key.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "").strip()
-                        # Eliminar todos los espacios y saltos de línea intermedios
-                        base64_content = "".join(base64_content.split())
-                        # Reconstruir en líneas estándar de 64 caracteres
+                        
+                        # Normalizar saltos de línea (reemplazar literal \n y \r por saltos de línea reales)
+                        normalized_key = raw_key.replace("\\n", "\n").replace("\\r", "\n")
+                        lines = normalized_key.split("\n")
+                        
+                        base64_lines = []
+                        for line in lines:
+                            line_stripped = line.strip()
+                            if not line_stripped:
+                                continue
+                            # Ignorar líneas que contengan BEGIN o END
+                            if "BEGIN" in line_stripped.upper() or "END" in line_stripped.upper():
+                                continue
+                            # Quitar espacios en blanco dentro de la línea de base64
+                            cleaned_line = "".join(line_stripped.split())
+                            base64_lines.append(cleaned_line)
+                        
+                        base64_content = "".join(base64_lines)
+                        # Reconstruir el PEM en formato estándar (líneas de 64 caracteres)
                         wrapped_key = "\n".join([base64_content[i:i+64] for i in range(0, len(base64_content), 64)])
                         gcp_info["private_key"] = f"-----BEGIN PRIVATE KEY-----\n{wrapped_key}\n-----END PRIVATE KEY-----"
 
