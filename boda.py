@@ -24,6 +24,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+st.write("🔧 **DEBUG: Versión V2 (Autolimpieza de Clave Activa)**")
+
 # ─────────────────────────────────────────────
 # Estado de sesión: sobre abierto / cerrado
 # ─────────────────────────────────────────────
