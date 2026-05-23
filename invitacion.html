@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alejandra & Óscar · 17 Octubre 2026</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --olive: #6B7C50;
+    --olive-dark: #4F5E3B;
+    --olive-light: #8A9968;
+    --cream: #F5F0E3;
+    --cream-deep: #ECE3CD;
+    --ink: #3D3829;
+    --bronze: #8B6B2F;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==================== HERO ==================== */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('acuarela.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    animation: heroZoom 25s ease-out forwards;
+  }
+
+  @keyframes heroZoom {
+    0%   { transform: scale(1); }
+    100% { transform: scale(1.08); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(245, 240, 227, 0.05) 0%,
+        rgba(245, 240, 227, 0.30) 55%,
+        rgba(245, 240, 227, 0.90) 100%);
+    z-index: 2;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 0 24px;
+    max-width: 760px;
+    animation: heroFade 2.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+  }
+
+  @keyframes heroFade {
+    0%   { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-preamble {
+    font-family: 'Italiana', serif;
+    font-size: clamp(10px, 2.4vw, 13px);
+    letter-spacing: 0.55em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    margin-bottom: clamp(20px, 5vw, 36px);
+    opacity: 0.85;
+  }
+
+  .hero-names {
+    font-family: 'Allura', cursive;
+    font-size: clamp(64px, 18vw, 150px);
+    color: var(--olive-dark);
+    line-height: 0.95;
+    margin-bottom: clamp(16px, 4vw, 32px);
+    font-weight: 400;
+    text-shadow: 0 2px 12px rgba(255, 252, 240, 0.5);
+  }
+
+  .hero-amp {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.65em;
+    vertical-align: 0.08em;
+    color: var(--bronze);
+    padding: 0 0.1em;
+  }
+
+  .hero-divider {
+    width: clamp(60px, 15vw, 100px);
+    height: 1px;
+    background: var(--olive-dark);
+    margin: clamp(20px, 5vw, 36px) auto;
+    opacity: 0.45;
+  }
+
+  .hero-date {
+    font-family: 'Italiana', serif;
+    font-size: clamp(15px, 3.8vw, 22px);
+    letter-spacing: 0.4em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: clamp(20px, 4vh, 36px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    font-family: 'Italiana', serif;
+    font-size: 10px;
+    letter-spacing: 0.45em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    opacity: 0.7;
+    animation: scrollHint 2.8s ease-in-out infinite;
+    text-decoration: none;
+  }
+
+  @keyframes scrollHint {
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+    50%      { opacity: 0.9; transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ==================== SECTIONS ==================== */
+  section.content {
+    padding: clamp(70px, 14vw, 130px) 24px;
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(0.2, 0, 0.2, 1), transform 1s cubic-bezier(0.2, 0, 0.2, 1);
+  }
+
+  section.content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-eyebrow {
+    font-family: 'Italiana', serif;
+    font-size: clamp(10px, 2.4vw, 12px);
+    letter-spacing: 0.55em;
+    color: var(--olive);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(30px, 7vw, 50px);
+    color: var(--olive-dark);
+    margin-bottom: clamp(28px, 6vw, 44px);
+    line-height: 1.15;
+  }
+
+  /* Ornament olive branch */
+  .ornament {
+    display: block;
+    width: clamp(70px, 14vw, 110px);
+    height: auto;
+    margin: clamp(28px, 6vw, 44px) auto;
+    color: var(--olive);
+    opacity: 0.6;
+  }
+
+  /* ==================== COUNTDOWN ==================== */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 28px);
+    margin: clamp(24px, 6vw, 48px) auto 0;
+    flex-wrap: nowrap;
+  }
+
+  .countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    flex: 1;
+    max-width: 130px;
+    padding: clamp(14px, 3vw, 22px) clamp(4px, 2vw, 14px);
+    border: 1px solid var(--olive);
+    border-opacity: 0.4;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 2px;
+  }
+
+  .countdown-num {
+    font-family: 'Italiana', serif;
+    font-size: clamp(32px, 8.5vw, 64px);
+    color: var(--olive-dark);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+  }
+
+  .countdown-label {
+    font-family: 'Italiana', serif;
+    font-size: clamp(8px, 1.9vw, 11px);
+    letter-spacing: 0.3em;
+    color: var(--olive);
+    text-transform: uppercase;
+    margin-top: clamp(8px, 2vw, 12px);
+    opacity: 0.85;
+  }
+
+  /* ==================== SCHEDULE ==================== */
+  .schedule {
+    margin-top: clamp(20px, 5vw, 32px);
+  }
+
+  .schedule-item {
+    margin: clamp(28px, 6vw, 44px) 0;
+    position: relative;
+  }
+
+  .schedule-time {
+    font-family: 'Italiana', serif;
+    font-size: clamp(34px, 8vw, 52px);
+    color: var(--olive-dark);
+    line-height: 1;
+  }
+
+  .schedule-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 3.5vw, 20px);
+    color: var(--olive);
+    letter-spacing: 0.2em;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  .schedule-divider {
+    width: 30px;
+    height: 1px;
+    background: var(--olive);
+    margin: clamp(28px, 6vw, 44px) auto;
+    opacity: 0.3;
+  }
+
+  /* ==================== LOCATION ==================== */
+  .location-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 4vw, 22px);
+    color: var(--ink);
+    font-style: italic;
+    margin-bottom: 28px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 16px 44px;
+    font-family: 'Italiana', serif;
+    font-size: clamp(11px, 2.5vw, 13px);
+    letter-spacing: 0.5em;
+    color: var(--cream);
+    background: var(--olive-dark);
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid var(--olive-dark);
+    transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    background: transparent;
+    color: var(--olive-dark);
+    letter-spacing: 0.55em;
+  }
+
+  /* ==================== RSVP FORM ==================== */
+  .rsvp-section {
+    background: var(--cream-deep);
+  }
+
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .field { margin-bottom: 24px; }
+
+  label.field-label {
+    display: block;
+    font-family: 'Italiana', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  textarea {
+    width: 100%;
+    padding: 13px 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(107, 124, 80, 0.35);
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--olive-dark);
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 10px;
+  }
+
+  .radio-option {
+    flex: 1;
+    position: relative;
+  }
+
+  .radio-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+  .radio-option label {
+    display: block;
+    padding: 13px 10px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid rgba(107, 124, 80, 0.35);
+    letter-spacing: 0.2em;
+    margin: 0;
+    transition: all 0.25s ease;
+    font-family: 'Italiana', serif;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  .radio-option input:checked + label {
+    background: var(--olive-dark);
+    color: var(--cream);
+    border-color: var(--olive-dark);
+  }
+
+  .radio-option label:hover {
+    border-color: var(--olive-dark);
+  }
+
+  /* Honeypot - oculto pero accesible para bots */
+  .botcheck-field {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 36px;
+    padding: 18px;
+    font-family: 'Italiana', serif;
+    font-size: 13px;
+    letter-spacing: 0.5em;
+    color: var(--cream);
+    background: var(--olive-dark);
+    border: 1px solid var(--olive-dark);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .form-message {
+    display: none;
+    margin-top: 24px;
+    padding: 18px 20px;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.5;
+    border-radius: 2px;
+  }
+
+  .form-message.success {
+    display: block;
+    color: var(--olive-dark);
+    background: rgba(107, 124, 80, 0.12);
+    border: 1px solid var(--olive);
+  }
+
+  .form-message.error {
+    display: block;
+    color: #8B2A2A;
+    background: rgba(139, 42, 42, 0.08);
+    border: 1px solid rgba(139, 42, 42, 0.3);
+  }
+
+  /* ==================== FOOTER ==================== */
+  footer {
+    padding: clamp(50px, 10vw, 80px) 24px;
+    text-align: center;
+    background: var(--olive-dark);
+    color: var(--cream);
+  }
+
+  .footer-names {
+    font-family: 'Allura', cursive;
+    font-size: clamp(40px, 9vw, 60px);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .footer-amp {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.6em;
+    opacity: 0.8;
+  }
+
+  .footer-note {
+    font-family: 'Italiana', serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    opacity: 0.75;
+    text-transform: uppercase;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 380px) {
+    .countdown { gap: 6px; }
+    .countdown-unit { padding: 12px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-preamble">Os invitamos a nuestra boda</div>
+    <h1 class="hero-names">Alejandra<span class="hero-amp">&amp;</span>Óscar</h1>
+    <div class="hero-divider"></div>
+    <div class="hero-date">17 · Octubre · 2026</div>
+  </div>
+  <a href="#countdown" class="scroll-hint">Descubre&nbsp;más</a>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="content" id="countdown">
+  <div class="section-eyebrow">La cuenta atrás</div>
+  <h2 class="section-title">Nos vemos en</h2>
+  <div class="countdown">
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-days">--</span>
+      <span class="countdown-label">Días</span>
+    </div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-hours">--</span>
+      <span class="countdown-label">Horas</span>
+    </div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-minutes">--</span>
+      <span class="countdown-label">Min</span>
+    </div>
+    <div class="countdown-unit">
+      <span class="countdown-num" id="cd-seconds">--</span>
+      <span class="countdown-label">Seg</span>
+    </div>
+  </div>
+
+  <!-- Ornament: rama de olivo -->
+  <svg class="ornament" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round">
+    <line x1="10" y1="15" x2="110" y2="15"/>
+    <ellipse cx="28" cy="9"  rx="5.5" ry="2.2" transform="rotate(-25 28 9)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="34" cy="21" rx="5.5" ry="2.2" transform="rotate(25 34 21)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="50" cy="8"  rx="5.5" ry="2.2" transform="rotate(-25 50 8)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="56" cy="22" rx="5.5" ry="2.2" transform="rotate(25 56 22)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="72" cy="8"  rx="5.5" ry="2.2" transform="rotate(-25 72 8)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="78" cy="22" rx="5.5" ry="2.2" transform="rotate(25 78 22)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <ellipse cx="94" cy="9"  rx="5.5" ry="2.2" transform="rotate(-25 94 9)"  fill="currentColor" stroke="none" opacity="0.7"/>
+    <circle cx="60" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+  </svg>
+</section>
+
+<!-- SCHEDULE -->
+<section class="content">
+  <div class="section-eyebrow">El gran día</div>
+  <h2 class="section-title">Sábado, 17 de Octubre</h2>
+
+  <div class="schedule">
+    <div class="schedule-item">
+      <div class="schedule-time">13:30</div>
+      <div class="schedule-name">Apertura de puertas</div>
+    </div>
+    <div class="schedule-divider"></div>
+    <div class="schedule-item">
+      <div class="schedule-time">14:00</div>
+      <div class="schedule-name">Ceremonia</div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="content">
+  <div class="section-eyebrow">Cómo llegar</div>
+  <h2 class="section-title">Te esperamos aquí</h2>
+  <p class="location-name">Pincha el botón y te llevará a la finca en Google Maps</p>
+  <a href="https://share.google/O62nZiOw4sIHrsvAh" target="_blank" rel="noopener" class="btn">
+    Ver ubicación
+  </a>
+</section>
+
+<!-- RSVP FORM -->
+<section class="content rsvp-section">
+  <div class="section-eyebrow">Confirma tu asistencia</div>
+  <h2 class="section-title">Tu hueco nos importa</h2>
+
+  <form id="rsvp-form" autocomplete="on">
+    <!-- Web3Forms: estos campos se mandan ocultos en cada envío -->
+    <input type="hidden" name="access_key" value="REEMPLAZAR_CON_TU_ACCESS_KEY_DE_WEB3FORMS">
+    <input type="hidden" name="subject" value="Nueva confirmación · Alejandra & Óscar">
+    <input type="hidden" name="from_name" value="Invitación A&Ó">
+
+    <!-- Honeypot anti-spam (oculto, los bots lo rellenan, los humanos no) -->
+    <input type="checkbox" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off">
+
+    <div class="field">
+      <label class="field-label" for="nombre">Nombre y apellidos</label>
+      <input type="text" id="nombre" name="nombre" required autocomplete="name">
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="email">Tu email</label>
+      <input type="email" id="email" name="email" required autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label class="field-label">¿Vendrás?</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="asist-si" name="asistencia" value="Sí, allí estaré" required>
+          <label for="asist-si">Sí, allí estaré</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="asist-no" name="asistencia" value="No podré ir" required>
+          <label for="asist-no">No podré ir</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="acompanantes">Nº de personas (incluyéndote)</label>
+      <input type="number" id="acompanantes" name="num_personas" min="1" max="10" value="1">
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="nombres-acomp">Nombres de tus acompañantes</label>
+      <textarea id="nombres-acomp" name="nombres_acompanantes" placeholder="Si vienes acompañado/a, escribe aquí los nombres"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="alergias">Alergias o intolerancias</label>
+      <textarea id="alergias" name="alergias" placeholder="Indícanos cualquier alergia o restricción alimentaria"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">¿Necesitarás autobús?</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="bus-si" name="autobus" value="Sí, autobús" required>
+          <label for="bus-si">Sí</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="bus-no" name="autobus" value="No, voy por mi cuenta" required>
+          <label for="bus-no">No</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="mensaje">Mensaje para los novios (opcional)</label>
+      <textarea id="mensaje" name="mensaje"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn">Enviar confirmación</button>
+
+    <div class="form-message" id="form-message"></div>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-names">Alejandra<span class="footer-amp">&amp;</span>Óscar</div>
+  <div class="footer-note">17 · Octubre · 2026</div>
+</footer>
+
+<script>
+  // ==================== COUNTDOWN ====================
+  // Apertura de puertas: 17 Octubre 2026, 13:30 (horario de Madrid)
+  const TARGET_DATE = new Date('2026-10-17T13:30:00+02:00').getTime();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function updateCountdown() {
+    const diff = TARGET_DATE - Date.now();
+
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent    = '0';
+      document.getElementById('cd-hours').textContent   = '00';
+      document.getElementById('cd-minutes').textContent = '00';
+      document.getElementById('cd-seconds').textContent = '00';
+      return;
+    }
+
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff / 3600000) % 24);
+    const minutes = Math.floor((diff / 60000) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('cd-days').textContent    = days;
+    document.getElementById('cd-hours').textContent   = pad(hours);
+    document.getElementById('cd-minutes').textContent = pad(minutes);
+    document.getElementById('cd-seconds').textContent = pad(seconds);
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ==================== SCROLL ANIMATIONS ====================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('section.content').forEach(s => observer.observe(s));
+
+  // ==================== RSVP FORM ====================
+  const form = document.getElementById('rsvp-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const message = document.getElementById('form-message');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando…';
+    message.className = 'form-message';
+    message.textContent = '';
+
+    try {
+      const formData = new FormData(form);
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
+        message.className = 'form-message success';
+        form.reset();
+        submitBtn.textContent = 'Confirmación enviada';
+        // Mantener disabled para que no se reenvíe accidentalmente
+      } else {
+        throw new Error(result.message || 'Error al enviar');
+      }
+    } catch (error) {
+      message.textContent = 'Ha habido un problema al enviar. Por favor, inténtalo de nuevo o escríbenos directamente.';
+      message.className = 'form-message error';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar confirmación';
+    }
+  });
+</script>
+
+</body>
+</html>

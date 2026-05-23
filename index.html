@@ -192,23 +192,15 @@
 <script>
   const seal = document.getElementById('seal');
   const light = document.getElementById('light');
-  const DESTINATION = 'https://invitacionbodaoscaryalejandra2026.streamlit.app/';
+  const DESTINATION = 'invitacion.html';
 
   let opened = false;
 
-  // Prefetch de la app
+  // Prefetch de la página de invitación
   const prefetch = document.createElement('link');
   prefetch.rel = 'prefetch';
   prefetch.href = DESTINATION;
   document.head.appendChild(prefetch);
-
-  // Warmup: cargamos Streamlit en un iframe invisible para despertarlo
-  window.addEventListener('load', () => {
-    const warmer = document.createElement('iframe');
-    warmer.src = DESTINATION;
-    warmer.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;';
-    document.body.appendChild(warmer);
-  });
 
   function openInvitation() {
     if (opened) return;
