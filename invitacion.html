@@ -11,8 +11,8 @@
 
 <style>
   :root {
-    --olive: #6B7C50;
-    --olive-dark: #4F5E3B;
+    --olive: #5D6E45;
+    --olive-dark: #3D4A2A;
     --olive-light: #8A9968;
     --cream: #F5F0E3;
     --cream-deep: #ECE3CD;
@@ -31,15 +31,127 @@
     overflow-x: hidden;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* Acuarela fija de fondo para toda la página */
+  .page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(245, 240, 227, 0.80), rgba(245, 240, 227, 0.84)),
+      url('acuarela.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* ==================== HAMBURGER MENU ==================== */
+  .menu-toggle {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 50;
+    width: 46px;
+    height: 46px;
+    background: rgba(245, 240, 227, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(61, 74, 42, 0.18);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .menu-toggle:hover {
+    background: rgba(245, 240, 227, 0.98);
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--olive-dark);
+    border-radius: 1px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    transform-origin: center;
+  }
+
+  /* Abierto: las 3 rayas se transforman en una X */
+  .menu-toggle.open span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  .menu-toggle.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .menu-toggle.open span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  /* Panel deslizante */
+  .menu-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(82vw, 340px);
+    height: 100vh;
+    height: 100dvh;
+    background: var(--cream);
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 90px 36px 36px;
+    overflow-y: auto;
+  }
+
+  .menu-panel.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .menu-panel-placeholder {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--olive);
+    opacity: 0.55;
+    text-align: center;
+    margin-top: 30vh;
+  }
+
+  /* Fondo oscuro cuando el menú está abierto */
+  .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(61, 56, 41, 0.4);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 35;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .menu-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* ==================== HERO ==================== */
   .hero {
     position: relative;
     width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    min-height: 600px;
+    height: 88vh;
+    height: 88dvh;
+    min-height: 560px;
+    max-height: 820px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -60,7 +172,7 @@
 
   @keyframes heroZoom {
     0%   { transform: scale(1); }
-    100% { transform: scale(1.08); }
+    100% { transform: scale(1.04); }
   }
 
   .hero-overlay {
@@ -69,8 +181,8 @@
     background:
       linear-gradient(180deg,
         rgba(245, 240, 227, 0.05) 0%,
-        rgba(245, 240, 227, 0.30) 55%,
-        rgba(245, 240, 227, 0.90) 100%);
+        rgba(245, 240, 227, 0.25) 60%,
+        rgba(245, 240, 227, 0.78) 100%);
     z-index: 2;
   }
 
@@ -99,12 +211,13 @@
 
   .hero-names {
     font-family: 'Allura', cursive;
-    font-size: clamp(64px, 18vw, 150px);
+    font-size: clamp(42px, 11.5vw, 96px);
     color: var(--olive-dark);
     line-height: 0.95;
-    margin-bottom: clamp(16px, 4vw, 32px);
+    margin-bottom: clamp(20px, 4vw, 32px);
     font-weight: 400;
     text-shadow: 0 2px 12px rgba(255, 252, 240, 0.5);
+    white-space: nowrap;
   }
 
   .hero-amp {
@@ -127,8 +240,8 @@
 
   .hero-date {
     font-family: 'Italiana', serif;
-    font-size: clamp(15px, 3.8vw, 22px);
-    letter-spacing: 0.4em;
+    font-size: clamp(20px, 5.5vw, 32px);
+    letter-spacing: 0.35em;
     color: var(--olive-dark);
     text-transform: uppercase;
   }
@@ -309,7 +422,9 @@
 
   /* ==================== RSVP FORM ==================== */
   .rsvp-section {
-    background: var(--cream-deep);
+    background: rgba(236, 227, 205, 0.55);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
   }
 
   form {
@@ -495,6 +610,22 @@
 </head>
 <body>
 
+<!-- Fondo de acuarela fijo en toda la página -->
+<div class="page-bg"></div>
+
+<!-- MENÚ HAMBURGUESA -->
+<button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+<div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
+
+<aside class="menu-panel" id="menu-panel" aria-label="Menú principal" aria-hidden="true">
+  <p class="menu-panel-placeholder">Próximamente</p>
+</aside>
+
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
@@ -658,6 +789,33 @@
 </footer>
 
 <script>
+  // ==================== HAMBURGER MENU ====================
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function toggleMenu(forceState) {
+    const isOpen = (typeof forceState === 'boolean')
+      ? forceState
+      : !menuToggle.classList.contains('open');
+
+    menuToggle.classList.toggle('open', isOpen);
+    menuPanel.classList.toggle('open', isOpen);
+    menuBackdrop.classList.toggle('open', isOpen);
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuPanel.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  menuToggle.addEventListener('click', () => toggleMenu());
+  menuBackdrop.addEventListener('click', () => toggleMenu(false));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuPanel.classList.contains('open')) {
+      toggleMenu(false);
+    }
+  });
+
   // ==================== COUNTDOWN ====================
   // Apertura de puertas: 17 Octubre 2026, 13:30 (horario de Madrid)
   const TARGET_DATE = new Date('2026-10-17T13:30:00+02:00').getTime();
