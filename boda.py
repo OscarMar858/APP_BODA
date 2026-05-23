@@ -3,12 +3,7 @@ import csv
 import os
 from datetime import datetime
 
-try:
-    import gspread
-    from google.oauth2.service_account import Credentials
-    GSPREAD_AVAILABLE = True
-except ImportError:
-    GSPREAD_AVAILABLE = False
+# Importación diferida de Google Sheets para mejorar la velocidad de carga inicial
 
 import time
 import base64
@@ -22,6 +17,25 @@ st.set_page_config(
     page_icon="💒",
     layout="centered",
     initial_sidebar_state="collapsed",
+)
+
+# Evitar que Google Chrome intente traducir la página (el pop-up molesto)
+components.html(
+    """
+    <script>
+        // Establecer el idioma del documento principal a español
+        parent.document.documentElement.lang = 'es';
+        // Añadir meta tag para evitar la traducción
+        if (!parent.document.querySelector('meta[name="google"]')) {
+            let meta = parent.document.createElement('meta');
+            meta.name = 'google';
+            meta.content = 'notranslate';
+            parent.document.head.appendChild(meta);
+        }
+    </script>
+    """,
+    height=0,
+    width=0
 )
 
 @st.cache_data
@@ -475,8 +489,10 @@ with st.form("rsvp_form", clear_on_submit=True):
             guardado = False
 
             # ── Intentar guardar en Google Sheets ──
-            if GSPREAD_AVAILABLE and "gcp_service_account" in st.secrets:
+            if "gcp_service_account" in st.secrets:
                 try:
+                    import gspread
+                    from google.oauth2.service_account import Credentials
                     scope = [
                         "https://spreadsheets.google.com/feeds",
                         "https://www.googleapis.com/auth/drive",
