@@ -24,55 +24,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ─────────────────────────────────────────────
-# Estado de sesión: sobre abierto / cerrado
-# ─────────────────────────────────────────────
-if "envelope_state" not in st.session_state:
-    st.session_state.envelope_state = "closed"
-if "show_opening_animation" not in st.session_state:
-    st.session_state.show_opening_animation = False
-
-# Sello de lacre SVG vectorial premium diseñado a medida (dorado envejecido/antiguo)
-SEAL_SVG = """
-<svg viewBox="0 0 120 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <!-- Organic Edge Filter -->
-    <filter id="rough-edge" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" />
-      <feGaussianBlur in="displaced" stdDeviation="0.4" result="blurred" />
-      
-      <!-- 3D Lighting for thickness -->
-      <feSpecularLighting in="blurred" surfaceScale="6" specularConstant="1.2" specularExponent="25" lighting-color="#ffe29c" result="specular">
-        <fePointLight x="40" y="40" z="50" />
-      </feSpecularLighting>
-      
-      <feComposite in="specular" in2="blurred" operator="in" result="lit" />
-      <feComposite in="lit" in2="blurred" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="final3d" />
-      
-      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.6"/>
-    </filter>
-
-    <radialGradient id="wax-color" cx="40%" cy="30%" r="60%">
-      <stop offset="0%" stop-color="#d4af37" />
-      <stop offset="40%" stop-color="#b58d22" />
-      <stop offset="80%" stop-color="#8a6610" />
-      <stop offset="100%" stop-color="#4a3505" />
-    </radialGradient>
-  </defs>
-
-  <!-- Base de lacre con forma orgánica y borde realista -->
-  <circle cx="60" cy="60" r="48" fill="url(#wax-color)" filter="url(#rough-edge)" />
-  
-  <!-- Anillos concéntricos estampados -->
-  <circle cx="60" cy="60" r="40" fill="none" stroke="#6b4a08" stroke-width="2.5" opacity="0.6" />
-  <circle cx="60" cy="60" r="38" fill="none" stroke="#ffe29c" stroke-width="1.2" opacity="0.5" />
-  
-  <!-- Monograma A & O esculpido con efecto de bajorrelieve -->
-  <text x="60" y="69" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="28" text-anchor="middle" fill="#ffe29c" opacity="0.85" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="34">&amp;</tspan> O</text>
-</svg>
-""".replace("\n", "").replace("\r", "")
-
 @st.cache_data
 def get_image_base64(path):
     if os.path.isfile(path):
@@ -133,110 +84,6 @@ st.markdown("""
         to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* ═══════════════════════════════════════
-       PANTALLA DEL SOBRE (NUEVO DISEÑO 3D)
-       ═══════════════════════════════════════ */
-
-    .envelope-container {
-        width: 100vw;
-        height: 100vh;
-        max-width: none;
-        position: relative;
-        margin: 0;
-        perspective: 1000px;
-        overflow: hidden;
-    }
-    .envelope-container.arrive {
-        animation: envelopeArrive 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-    @keyframes envelopeArrive {
-        0% { transform: translateY(100vh) scale(0.7) rotate(-5deg); opacity: 0; }
-        100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
-    }
-
-    .envelope {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background: #232C1E; /* Cartulina verde musgo muy oscuro */
-        border-radius: 0;
-    }
-
-    .flap-left {
-        position: absolute;
-        top: 0; left: 0;
-        width: 50%; height: 100%;
-        background: #2A3624;
-        clip-path: polygon(0 0, 100% 50%, 0 100%);
-        z-index: 2;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
-    }
-    .flap-right {
-        position: absolute;
-        top: 0; right: 0;
-        width: 50%; height: 100%;
-        background: #2A3624;
-        clip-path: polygon(100% 0, 0 50%, 100% 100%);
-        z-index: 2;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.2);
-    }
-    .flap-bottom {
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 60%;
-        background: #2E3A27;
-        clip-path: polygon(0 100%, 50% 0, 100% 100%);
-        z-index: 3;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
-    }
-    .flap-top-wrapper {
-        position: absolute;
-        top: 0; left: 0;
-        width: 100%; height: 65%;
-        z-index: 4;
-        transform-origin: top;
-    }
-    .flap-top-shape {
-        width: 100%; height: 100%;
-        background: #232C1E;
-        clip-path: polygon(0 0, 50% 100%, 100% 0);
-    }
-
-    @keyframes pulse-vibrate {
-        0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-        50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 25px 12px rgba(212, 175, 55, 0); }
-        100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-    }
-    .wax-seal {
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 120px;
-        height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        animation: pulse-vibrate 2s infinite ease-in-out;
-    }
-
-    /* Glow de Transición al abrir */
-    .glow-overlay {
-        position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: radial-gradient(circle, #ffffff 0%, #fff7d6 40%, rgba(212,175,55,0) 100%);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        animation: magicGlow 1.8s cubic-bezier(0.2, 0, 0, 1) forwards;
-        pointer-events: none;
-    }
-    @keyframes magicGlow {
-        0% { opacity: 1; transform: scale(1); }
-        100% { opacity: 0; transform: scale(1.2); }
-    }
 
     /* Hint */
     .open-hint {
@@ -516,302 +363,237 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ═════════════════════════════════════════════
-# PANTALLA 1: SOBRE ELEGANTE (INTERACTIVO)
-# ═════════════════════════════════════════════
-if st.session_state.envelope_state == "closed":
+st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
+if acuarela_bg:
+    st.markdown(f'<div class="watermark-bg" style="{acuarela_bg}"></div>', unsafe_allow_html=True)
 
-    # CSS para hacer el botón invisible a pantalla completa
-    st.markdown("""
-    <style>
-        .stButton[data-testid="stButton"] {
-            position: fixed !important;
-            inset: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 9999 !important;
-        }
-        .stButton[data-testid="stButton"] button {
-            width: 100% !important;
-            height: 100% !important;
-            background: transparent !important;
-            border: none !important;
-            color: transparent !important;
-            box-shadow: none !important;
-        }
-        .stButton[data-testid="stButton"] button:hover {
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-    envelope_class = "envelope-container arrive envelope-closed"
-    
-    # Renderizamos el sobre HTML
-    st.markdown(f"""
-    <div class="{envelope_class}">
-        <div class="envelope">
-            <div class="flap-left"></div>
-            <div class="flap-right"></div>
-            <div class="flap-bottom"></div>
-            <div class="flap-top-wrapper">
-                <div class="flap-top-shape"></div>
-                <div class="wax-seal">{SEAL_SVG}</div>
-            </div>
+# ── Título flotante ──
+st.markdown('<div class="floating-title">Nos Casamos</div>', unsafe_allow_html=True)
+st.markdown('<div class="ornament">✦ ✦ ✦</div>', unsafe_allow_html=True)
+st.markdown('<div class="shimmer-subtitle">Estáis Invitados</div>', unsafe_allow_html=True)
+
+# ── Iniciales ──
+st.markdown("""
+<div style="font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 6rem; color: #7a8c6e; text-align: center; margin: 1.5rem 0; line-height: 1; text-shadow: 0 2px 20px rgba(122, 140, 110, 0.15); letter-spacing: 5px;">
+    A <span style="font-family: 'Great Vibes', cursive; font-size: 4rem; color: #a3b899; margin: 0 0.5rem; font-weight: 400;">&amp;</span> O
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
+
+# ── Cuenta atrás ──
+wedding_date = datetime(2026, 10, 17)
+today = datetime.now()
+delta = wedding_date - today
+
+total_seconds = max(int(delta.total_seconds()), 0)
+days_left = total_seconds // 86400
+months_left = days_left // 30
+remaining_days = days_left % 30
+hours_left = (total_seconds % 86400) // 3600
+minutes_left = (total_seconds % 3600) // 60
+seconds_left = total_seconds % 60
+
+st.markdown(f"""
+<div class="info-card">
+    <div class="section-label">Cuenta Atrás</div>
+    <div class="countdown-container" style="gap: 1rem;">
+        <div class="countdown-item">
+            <div class="countdown-number" id="cd-months">{months_left}</div>
+            <div class="countdown-label">Meses</div>
+        </div>
+        <div class="countdown-item">
+            <div class="countdown-number" id="cd-days">{remaining_days}</div>
+            <div class="countdown-label">Días</div>
+        </div>
+        <div class="countdown-item">
+            <div class="countdown-number" id="cd-hours">{hours_left}</div>
+            <div class="countdown-label">Horas</div>
+        </div>
+        <div class="countdown-item">
+            <div class="countdown-number" id="cd-minutes">{minutes_left}</div>
+            <div class="countdown-label">Min</div>
+        </div>
+        <div class="countdown-item">
+            <div class="countdown-number" id="cd-seconds">{seconds_left}</div>
+            <div class="countdown-label">Seg</div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-    # Botón invisible a pantalla completa
-    if st.button(" ", key="open_envelope", use_container_width=True):
-        st.session_state.envelope_state = "opened"
-        st.session_state.show_opening_animation = True
-        st.rerun()
-
-# ═════════════════════════════════════════════
-# PANTALLA 2: INVITACIÓN COMPLETA
-# ═════════════════════════════════════════════
-elif st.session_state.envelope_state == "opened":
-    if st.session_state.get("show_opening_animation", False):
-        # Overlay de transición lumínica (solo se ejecuta al hacer clic en el sobre por primera vez)
-        st.markdown("""
-        <div class="glow-overlay"></div>
-        """, unsafe_allow_html=True)
-        # Desactivar la animación para futuras interacciones/refrescos en esta sesión
-        st.session_state.show_opening_animation = False
-
-    st.markdown('<div class="invitation-reveal">', unsafe_allow_html=True)
-    if acuarela_bg:
-        st.markdown(f'<div class="watermark-bg" style="{acuarela_bg}"></div>', unsafe_allow_html=True)
-
-    # ── Título flotante ──
-    st.markdown('<div class="floating-title">Nos Casamos</div>', unsafe_allow_html=True)
-    st.markdown('<div class="ornament">✦ ✦ ✦</div>', unsafe_allow_html=True)
-    st.markdown('<div class="shimmer-subtitle">Estáis Invitados</div>', unsafe_allow_html=True)
-
-    # ── Iniciales ──
-    st.markdown("""
-    <div style="font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 6rem; color: #7a8c6e; text-align: center; margin: 1.5rem 0; line-height: 1; text-shadow: 0 2px 20px rgba(122, 140, 110, 0.15); letter-spacing: 5px;">
-        A <span style="font-family: 'Great Vibes', cursive; font-size: 4rem; color: #a3b899; margin: 0 0.5rem; font-weight: 400;">&amp;</span> O
+# ── Fecha ──
+st.markdown("""
+<div class="info-card">
+    <div class="section-label">Fecha</div>
+    <div class="date-text">17 · 10 · 2026</div>
+    <div style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: #a3b899;
+                letter-spacing: 3px; text-transform: uppercase; margin-top: 0.3rem;">
+        Sábado
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-    st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
+# ── Lugar + Google Maps ──
+GOOGLE_MAPS_URL = "https://www.google.com/maps/search/Cortijo+El+Gallinero+Collado+Villalba+Madrid"
 
-    # ── Cuenta atrás ──
-    wedding_date = datetime(2026, 10, 17)
-    today = datetime.now()
-    delta = wedding_date - today
-    
-    total_seconds = max(int(delta.total_seconds()), 0)
-    days_left = total_seconds // 86400
-    months_left = days_left // 30
-    remaining_days = days_left % 30
-    hours_left = (total_seconds % 86400) // 3600
-    minutes_left = (total_seconds % 3600) // 60
-    seconds_left = total_seconds % 60
+st.markdown(f"""
+<div class="info-card">
+    <div class="section-label">Lugar de Celebración</div>
+    <div class="venue-name">Cortijo El Gallinero</div>
+    <div class="venue-address">Ctra. de Navacerrada, km 0,600 · Collado Villalba, Madrid</div>
+    <a href="{GOOGLE_MAPS_URL}" target="_blank" class="maps-btn">
+        📍&nbsp; Cómo Llegar
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="info-card">
-        <div class="section-label">Cuenta Atrás</div>
-        <div class="countdown-container" style="gap: 1rem;">
-            <div class="countdown-item">
-                <div class="countdown-number" id="cd-months">{months_left}</div>
-                <div class="countdown-label">Meses</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="cd-days">{remaining_days}</div>
-                <div class="countdown-label">Días</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="cd-hours">{hours_left}</div>
-                <div class="countdown-label">Horas</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="cd-minutes">{minutes_left}</div>
-                <div class="countdown-label">Min</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="cd-seconds">{seconds_left}</div>
-                <div class="countdown-label">Seg</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
 
-    # ── Fecha ──
-    st.markdown("""
-    <div class="info-card">
-        <div class="section-label">Fecha</div>
-        <div class="date-text">17 · 10 · 2026</div>
-        <div style="font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: #a3b899;
-                    letter-spacing: 3px; text-transform: uppercase; margin-top: 0.3rem;">
-            Sábado
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+# ── RSVP ──
+st.markdown('<div class="rsvp-title">Confirma tu Asistencia</div>', unsafe_allow_html=True)
+st.markdown('<div class="rsvp-subtitle">Esperamos contar contigo</div>', unsafe_allow_html=True)
 
-    # ── Lugar + Google Maps ──
-    GOOGLE_MAPS_URL = "https://www.google.com/maps/search/Cortijo+El+Gallinero+Collado+Villalba+Madrid"
+with st.form("rsvp_form", clear_on_submit=True):
+    nombre = st.text_input("Nombre completo", placeholder="Escribe tu nombre aquí...")
+    alergias = st.text_area(
+        "Alergias o intolerancias alimentarias",
+        placeholder="Indica si tienes alguna alergia o restricción alimentaria...",
+        height=100,
+    )
+    enviado = st.form_submit_button("Confirmar Asistencia")
 
-    st.markdown(f"""
-    <div class="info-card">
-        <div class="section-label">Lugar de Celebración</div>
-        <div class="venue-name">Cortijo El Gallinero</div>
-        <div class="venue-address">Ctra. de Navacerrada, km 0,600 · Collado Villalba, Madrid</div>
-        <a href="{GOOGLE_MAPS_URL}" target="_blank" class="maps-btn">
-            📍&nbsp; Cómo Llegar
-        </a>
-    </div>
-    """, unsafe_allow_html=True)
+    if enviado:
+        if not nombre.strip():
+            st.error("⚠️ Por favor, escribe tu nombre para confirmar la asistencia.")
+        else:
+            fila = [
+                nombre.strip(),
+                alergias.strip() if alergias.strip() else "Ninguna",
+                datetime.now().strftime("%d/%m/%Y %H:%M"),
+            ]
+            guardado = False
 
-    st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
+            # ── Intentar guardar en Google Sheets ──
+            if GSPREAD_AVAILABLE and "gcp_service_account" in st.secrets:
+                try:
+                    scope = [
+                        "https://spreadsheets.google.com/feeds",
+                        "https://www.googleapis.com/auth/drive",
+                    ]
+                    # Limpiar y reconstruir la clave privada para evitar cualquier error de formato o espaciado
+                    gcp_info = dict(st.secrets["gcp_service_account"])
+                    raw_key = gcp_info["private_key"]
+                    
+                    # Normalizar saltos de línea (reemplazar literal \n y \r por saltos de línea reales)
+                    normalized_key = raw_key.replace("\\n", "\n").replace("\\r", "\n")
+                    lines = normalized_key.split("\n")
+                    
+                    base64_lines = []
+                    for line in lines:
+                        line_stripped = line.strip()
+                        if not line_stripped:
+                            continue
+                        # Ignorar líneas que contengan BEGIN o END
+                        if "BEGIN" in line_stripped.upper() or "END" in line_stripped.upper():
+                            continue
+                        # Quitar espacios en blanco dentro de la línea de base64
+                        cleaned_line = "".join(line_stripped.split())
+                        base64_lines.append(cleaned_line)
+                    
+                    base64_content = "".join(base64_lines)
+                    # Reconstruir el PEM en formato estándar (líneas de 64 caracteres)
+                    wrapped_key = "\n".join([base64_content[i:i+64] for i in range(0, len(base64_content), 64)])
+                    gcp_info["private_key"] = f"-----BEGIN PRIVATE KEY-----\n{wrapped_key}\n-----END PRIVATE KEY-----"
 
-    # ── RSVP ──
-    st.markdown('<div class="rsvp-title">Confirma tu Asistencia</div>', unsafe_allow_html=True)
-    st.markdown('<div class="rsvp-subtitle">Esperamos contar contigo</div>', unsafe_allow_html=True)
-
-    with st.form("rsvp_form", clear_on_submit=True):
-        nombre = st.text_input("Nombre completo", placeholder="Escribe tu nombre aquí...")
-        alergias = st.text_area(
-            "Alergias o intolerancias alimentarias",
-            placeholder="Indica si tienes alguna alergia o restricción alimentaria...",
-            height=100,
-        )
-        enviado = st.form_submit_button("Confirmar Asistencia")
-
-        if enviado:
-            if not nombre.strip():
-                st.error("⚠️ Por favor, escribe tu nombre para confirmar la asistencia.")
-            else:
-                fila = [
-                    nombre.strip(),
-                    alergias.strip() if alergias.strip() else "Ninguna",
-                    datetime.now().strftime("%d/%m/%Y %H:%M"),
-                ]
-                guardado = False
-
-                # ── Intentar guardar en Google Sheets ──
-                if GSPREAD_AVAILABLE and "gcp_service_account" in st.secrets:
-                    try:
-                        scope = [
-                            "https://spreadsheets.google.com/feeds",
-                            "https://www.googleapis.com/auth/drive",
-                        ]
-                        # Limpiar y reconstruir la clave privada para evitar cualquier error de formato o espaciado
-                        gcp_info = dict(st.secrets["gcp_service_account"])
-                        raw_key = gcp_info["private_key"]
-                        
-                        # Normalizar saltos de línea (reemplazar literal \n y \r por saltos de línea reales)
-                        normalized_key = raw_key.replace("\\n", "\n").replace("\\r", "\n")
-                        lines = normalized_key.split("\n")
-                        
-                        base64_lines = []
-                        for line in lines:
-                            line_stripped = line.strip()
-                            if not line_stripped:
-                                continue
-                            # Ignorar líneas que contengan BEGIN o END
-                            if "BEGIN" in line_stripped.upper() or "END" in line_stripped.upper():
-                                continue
-                            # Quitar espacios en blanco dentro de la línea de base64
-                            cleaned_line = "".join(line_stripped.split())
-                            base64_lines.append(cleaned_line)
-                        
-                        base64_content = "".join(base64_lines)
-                        # Reconstruir el PEM en formato estándar (líneas de 64 caracteres)
-                        wrapped_key = "\n".join([base64_content[i:i+64] for i in range(0, len(base64_content), 64)])
-                        gcp_info["private_key"] = f"-----BEGIN PRIVATE KEY-----\n{wrapped_key}\n-----END PRIVATE KEY-----"
-
-                        creds = Credentials.from_service_account_info(
-                            gcp_info,
-                            scopes=scope,
-                        )
-                        client = gspread.authorize(creds)
-                        sheet = client.open(st.secrets["spreadsheet_name"]).sheet1
-                        sheet.append_row(fila)
-                        guardado = True
-                    except Exception as e:
-                        err_msg = str(e)
-                        try:
-                            pk = st.secrets["gcp_service_account"]["private_key"]
-                            # Encontrar índices de '=' en la clave procesada
-                            processed_key = gcp_info.get("private_key", "")
-                            eq_indices = [i for i, c in enumerate(processed_key) if c == "="]
-                            diag = (
-                                f"\n\n🔍 **Diagnóstico de Clave en Nube:**"
-                                f"\n* Longitud leída por Streamlit: {len(pk)}"
-                                f"\n* Inicio: `{repr(pk[:25])}`"
-                                f"\n* Fin: `{repr(pk[-25:])}`"
-                                f"\n* ¿Contiene 'ndVoTur'?: {'ndVoTur' in pk}"
-                                f"\n* Índices de '=' en clave procesada: {eq_indices}"
-                            )
-                        except Exception as diag_err:
-                            diag = f"\n\n❌ No se pudo generar el diagnóstico: {diag_err}"
-                        st.warning(f"⚠️ No se pudo guardar en Google Sheets: {err_msg}{diag}")
-
-                # ── Fallback: guardar en CSV local ──
-                if not guardado:
-                    csv_file = os.path.join(
-                        os.path.dirname(os.path.abspath(__file__)), "lista_boda.csv"
+                    creds = Credentials.from_service_account_info(
+                        gcp_info,
+                        scopes=scope,
                     )
-                    file_exists = os.path.isfile(csv_file)
-                    with open(csv_file, "a", newline="", encoding="utf-8") as f:
-                        writer = csv.writer(f)
-                        if not file_exists:
-                            writer.writerow(["Nombre", "Alergias", "Fecha de confirmación"])
-                        writer.writerow(fila)
+                    client = gspread.authorize(creds)
+                    sheet = client.open(st.secrets["spreadsheet_name"]).sheet1
+                    sheet.append_row(fila)
+                    guardado = True
+                except Exception as e:
+                    err_msg = str(e)
+                    try:
+                        pk = st.secrets["gcp_service_account"]["private_key"]
+                        # Encontrar índices de '=' en la clave procesada
+                        processed_key = gcp_info.get("private_key", "")
+                        eq_indices = [i for i, c in enumerate(processed_key) if c == "="]
+                        diag = (
+                            f"\n\n🔍 **Diagnóstico de Clave en Nube:**"
+                            f"\n* Longitud leída por Streamlit: {len(pk)}"
+                            f"\n* Inicio: `{repr(pk[:25])}`"
+                            f"\n* Fin: `{repr(pk[-25:])}`"
+                            f"\n* ¿Contiene 'ndVoTur'?: {'ndVoTur' in pk}"
+                            f"\n* Índices de '=' en clave procesada: {eq_indices}"
+                        )
+                    except Exception as diag_err:
+                        diag = f"\n\n❌ No se pudo generar el diagnóstico: {diag_err}"
+                    st.warning(f"⚠️ No se pudo guardar en Google Sheets: {err_msg}{diag}")
 
-                st.success(f"🎉 ¡Gracias, **{nombre.strip()}**! Tu asistencia ha sido confirmada.")
-                st.balloons()
+            # ── Fallback: guardar en CSV local ──
+            if not guardado:
+                csv_file = os.path.join(
+                    os.path.dirname(os.path.abspath(__file__)), "lista_boda.csv"
+                )
+                file_exists = os.path.isfile(csv_file)
+                with open(csv_file, "a", newline="", encoding="utf-8") as f:
+                    writer = csv.writer(f)
+                    if not file_exists:
+                        writer.writerow(["Nombre", "Alergias", "Fecha de confirmación"])
+                    writer.writerow(fila)
 
-    # ── Footer ──
-    st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="wedding-footer">
-        Con todo nuestro amor 💛<br>
-        <span style="font-size: 0.75rem; letter-spacing: 4px; font-family: 'Montserrat', sans-serif;">
-            #NuestraBoda2026
-        </span>
-    </div>
-    """, unsafe_allow_html=True)
+            st.success(f"🎉 ¡Gracias, **{nombre.strip()}**! Tu asistencia ha sido confirmada.")
+            st.balloons()
 
-    st.markdown('</div>', unsafe_allow_html=True)
+# ── Footer ──
+st.markdown('<div class="elegant-sep">─ ♡ ─</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="wedding-footer">
+    Con todo nuestro amor 💛<br>
+    <span style="font-size: 0.75rem; letter-spacing: 4px; font-family: 'Montserrat', sans-serif;">
+        #NuestraBoda2026
+    </span>
+</div>
+""", unsafe_allow_html=True)
 
-    # Inyección de JS para actualizar la cuenta atrás en tiempo real
-    components.html("""
-    <script>
-        const targetDate = new Date("2026-10-17T00:00:00").getTime();
+st.markdown('</div>', unsafe_allow_html=True)
+
+# Inyección de JS para actualizar la cuenta atrás en tiempo real
+components.html("""
+<script>
+    const targetDate = new Date("2026-10-17T00:00:00").getTime();
+    
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+        if (distance < 0) return;
         
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            if (distance < 0) return;
-            
-            const totalSeconds = Math.floor(distance / 1000);
-            const days = Math.floor(totalSeconds / 86400);
-            const months = Math.floor(days / 30);
-            const remDays = days % 30;
-            const hours = Math.floor((totalSeconds % 86400) / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = Math.floor(totalSeconds % 60);
-            
-            const doc = window.parent.document;
-            const elMonths = doc.getElementById("cd-months");
-            const elDays = doc.getElementById("cd-days");
-            const elHours = doc.getElementById("cd-hours");
-            const elMinutes = doc.getElementById("cd-minutes");
-            const elSeconds = doc.getElementById("cd-seconds");
-            
-            if (elMonths) elMonths.innerText = months;
-            if (elDays) elDays.innerText = remDays;
-            if (elHours) elHours.innerText = hours;
-            if (elMinutes) elMinutes.innerText = minutes;
-            if (elSeconds) elSeconds.innerText = seconds;
-        }
+        const totalSeconds = Math.floor(distance / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const months = Math.floor(days / 30);
+        const remDays = days % 30;
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = Math.floor(totalSeconds % 60);
         
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-    </script>
-    """, height=0, width=0)
+        const doc = window.parent.document;
+        const elMonths = doc.getElementById("cd-months");
+        const elDays = doc.getElementById("cd-days");
+        const elHours = doc.getElementById("cd-hours");
+        const elMinutes = doc.getElementById("cd-minutes");
+        const elSeconds = doc.getElementById("cd-seconds");
+        
+        if (elMonths) elMonths.innerText = months;
+        if (elDays) elDays.innerText = remDays;
+        if (elHours) elHours.innerText = hours;
+        if (elMinutes) elMinutes.innerText = minutes;
+        if (elSeconds) elSeconds.innerText = seconds;
+    }
+    
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+</script>
+""", height=0, width=0)
