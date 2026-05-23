@@ -34,47 +34,42 @@ if "show_opening_animation" not in st.session_state:
 
 # Sello de lacre SVG vectorial premium diseñado a medida (dorado envejecido/antiguo)
 SEAL_SVG = """
-<svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 120 120" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Degradado dorado envejecido y tridimensional para la base del sello -->
-    <radialGradient id="gold-base" cx="30%" cy="30%" r="70%">
-      <stop offset="0%" stop-color="#ffe29c" />
-      <stop offset="20%" stop-color="#cda03c" />
-      <stop offset="55%" stop-color="#936d22" />
-      <stop offset="80%" stop-color="#5a4210" />
-      <stop offset="95%" stop-color="#332405" />
-      <stop offset="100%" stop-color="#1c1301" />
-    </radialGradient>
-    
-    <!-- Degradado oxidado invertido para las iniciales grabadas (debossed) -->
-    <linearGradient id="gold-text" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#1c1301" />
-      <stop offset="35%" stop-color="#5a4210" />
-      <stop offset="75%" stop-color="#cda03c" />
-      <stop offset="100%" stop-color="#ffe29c" />
-    </linearGradient>
-    
-    <!-- Sombra suave para darle volumen sobre el sobre -->
-    <filter id="seal-shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.45"/>
+    <!-- Organic Edge Filter -->
+    <filter id="rough-edge" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+      <feGaussianBlur in="displaced" stdDeviation="0.4" result="blurred" />
+      
+      <!-- 3D Lighting for thickness -->
+      <feSpecularLighting in="blurred" surfaceScale="6" specularConstant="1.2" specularExponent="25" lighting-color="#ffe29c" result="specular">
+        <fePointLight x="40" y="40" z="50" />
+      </feSpecularLighting>
+      
+      <feComposite in="specular" in2="blurred" operator="in" result="lit" />
+      <feComposite in="lit" in2="blurred" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="final3d" />
+      
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.6"/>
     </filter>
+
+    <radialGradient id="wax-color" cx="40%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#d4af37" />
+      <stop offset="40%" stop-color="#b58d22" />
+      <stop offset="80%" stop-color="#8a6610" />
+      <stop offset="100%" stop-color="#4a3505" />
+    </radialGradient>
   </defs>
 
-  <!-- Base de lacre con forma orgánica e irregular (realista) -->
-  <path d="M 50,4 C 67,3 81,9 89,21 C 97,33 99,50 95,66 C 91,82 79,94 63,97 C 47,100 31,96 19,86 C 7,76 3,59 5,43 C 7,27 19,11 35,5 C 40,3 45,4 50,4 Z" fill="url(#gold-base)" filter="url(#seal-shadow)"/>
-
-  <!-- Anillo exterior con relieve tridimensional -->
-  <path d="M 50,9 A 41,41 0 1,1 49.9,9 Z" fill="none" stroke="#1c1301" stroke-width="2.5" opacity="0.45" />
-  <path d="M 50,10 A 40,40 0 1,1 49.9,10 Z" fill="none" stroke="#ffe29c" stroke-width="1.5" opacity="0.4" />
-
-  <!-- Corona de perlas/esferas grabadas para el borde floral clásico -->
-  <circle cx="50" cy="50" r="32" fill="none" stroke="#1c1301" stroke-width="3.2" stroke-dasharray="1,5.5" stroke-linecap="round" opacity="0.6" />
-  <circle cx="51" cy="51" r="32" fill="none" stroke="#ffe29c" stroke-width="3.2" stroke-dasharray="1,5.5" stroke-linecap="round" opacity="0.3" />
-
+  <!-- Base de lacre con forma orgánica y borde realista -->
+  <circle cx="60" cy="60" r="48" fill="url(#wax-color)" filter="url(#rough-edge)" />
+  
+  <!-- Anillos concéntricos estampados -->
+  <circle cx="60" cy="60" r="40" fill="none" stroke="#6b4a08" stroke-width="2.5" opacity="0.6" />
+  <circle cx="60" cy="60" r="38" fill="none" stroke="#ffe29c" stroke-width="1.2" opacity="0.5" />
+  
   <!-- Monograma A & O esculpido con efecto de bajorrelieve -->
-  <text x="49" y="58" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="#150e01" opacity="0.9">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
-  <text x="51" y="60" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="#ffe29c" opacity="0.6">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
-  <text x="50" y="59" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="21" text-anchor="middle" fill="url(#gold-text)">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="24">&amp;</tspan> O</text>
+  <text x="60" y="69" font-family="'Cormorant Garamond', serif" font-weight="bold" font-size="28" text-anchor="middle" fill="#ffe29c" opacity="0.85" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.7);">A <tspan font-family="'Great Vibes', cursive" font-weight="normal" font-size="34">&amp;</tspan> O</text>
 </svg>
 """.replace("\n", "").replace("\r", "")
 
@@ -143,12 +138,13 @@ st.markdown("""
        ═══════════════════════════════════════ */
 
     .envelope-container {
-        width: 90vw;
-        max-width: 400px;
-        aspect-ratio: 1.428;
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
         position: relative;
-        margin: 15vh auto 40px auto;
+        margin: 0;
         perspective: 1000px;
+        overflow: hidden;
     }
     .envelope-container.arrive {
         animation: envelopeArrive 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
@@ -162,80 +158,36 @@ st.markdown("""
         position: relative;
         width: 100%;
         height: 100%;
-        background: #4A5B46; 
-        border-radius: 8px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    }
-
-    .letter {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        height: 90%;
-        background: #fff;
-        border-radius: 8px;
-        z-index: 1;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        text-align: center;
-        background-image: linear-gradient(135deg, #fff 0%, #f9f5f0 100%);
-    }
-
-    .letter-content {
-        font-family: 'Cormorant Garamond', serif;
-        color: #7a8c6e;
-    }
-    .letter-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-weight: 600;
-        font-size: 3rem;
-        line-height: 1.2;
-        margin-bottom: 0.2rem;
-        color: #7a8c6e;
-        white-space: nowrap;
-    }
-    .letter-subtitle {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 0.7rem;
-        letter-spacing: 3px;
-        color: #a3b899;
-        text-transform: uppercase;
+        background: #232C1E; /* Cartulina verde musgo muy oscuro */
+        border-radius: 0;
     }
 
     .flap-left {
         position: absolute;
         top: 0; left: 0;
         width: 50%; height: 100%;
-        background: #556B51;
+        background: #2A3624;
         clip-path: polygon(0 0, 100% 50%, 0 100%);
         z-index: 2;
-        border-radius: 8px 0 0 8px;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
     }
     .flap-right {
         position: absolute;
         top: 0; right: 0;
         width: 50%; height: 100%;
-        background: #556B51;
+        background: #2A3624;
         clip-path: polygon(100% 0, 0 50%, 100% 100%);
         z-index: 2;
-        border-radius: 0 8px 8px 0;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+        box-shadow: -2px 0 5px rgba(0,0,0,0.2);
     }
     .flap-bottom {
         position: absolute;
         bottom: 0; left: 0;
         width: 100%; height: 60%;
-        background: #5E755A;
+        background: #2E3A27;
         clip-path: polygon(0 100%, 50% 0, 100% 100%);
         z-index: 3;
-        border-radius: 0 0 8px 8px;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
     }
     .flap-top-wrapper {
         position: absolute;
@@ -246,14 +198,13 @@ st.markdown("""
     }
     .flap-top-shape {
         width: 100%; height: 100%;
-        background: #3E4D3B;
+        background: #232C1E;
         clip-path: polygon(0 0, 50% 100%, 100% 0);
-        border-radius: 8px 8px 0 0;
     }
 
     @keyframes pulse-vibrate {
         0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-        50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 20px 10px rgba(212, 175, 55, 0); }
+        50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 25px 12px rgba(212, 175, 55, 0); }
         100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
     }
     .wax-seal {
@@ -261,8 +212,8 @@ st.markdown("""
         top: 100%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 95px;
-        height: 95px;
+        width: 120px;
+        height: 120px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -270,37 +221,21 @@ st.markdown("""
         animation: pulse-vibrate 2s infinite ease-in-out;
     }
 
-    /* Animaciones de apertura */
-    @keyframes openFlap {
-        0% { transform: rotateX(0deg); z-index: 4; }
-        100% { transform: rotateX(180deg); z-index: 0; }
-    }
-    @keyframes slideLetter {
-        0% { transform: translate(-50%, 0); z-index: 1; }
-        100% { transform: translate(-50%, -120px); z-index: 1; }
-    }
-
-    .envelope-opening .flap-top-wrapper {
-        animation: openFlap 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    .envelope-opening .letter {
-        animation: slideLetter 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.3s;
-    }
-
-    .envelope-overlay {
+    /* Glow de Transición al abrir */
+    .glow-overlay {
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(160deg, #fdf6f0 0%, #f5ebe0 30%, #faf3ed 60%, #f0e6d8 100%);
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: radial-gradient(circle, #ffffff 0%, #fff7d6 40%, rgba(212,175,55,0) 100%);
         z-index: 9999;
         display: flex;
         justify-content: center;
         align-items: center;
-        animation: hideOverlay 1.6s forwards;
+        animation: magicGlow 1.8s cubic-bezier(0.2, 0, 0, 1) forwards;
+        pointer-events: none;
     }
-    @keyframes hideOverlay {
-        0%, 75% { opacity: 1; visibility: visible; }
-        100% { opacity: 0; visibility: hidden; pointer-events: none; }
+    @keyframes magicGlow {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(1.2); }
     }
 
     /* Hint */
@@ -617,12 +552,6 @@ if st.session_state.envelope_state == "closed":
     st.markdown(f"""
     <div class="{envelope_class}">
         <div class="envelope">
-            <div class="letter">
-                <div class="letter-content">
-                    <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
-                    <div class="letter-subtitle">Estáis Invitados</div>
-                </div>
-            </div>
             <div class="flap-left"></div>
             <div class="flap-right"></div>
             <div class="flap-bottom"></div>
@@ -645,27 +574,9 @@ if st.session_state.envelope_state == "closed":
 # ═════════════════════════════════════════════
 elif st.session_state.envelope_state == "opened":
     if st.session_state.get("show_opening_animation", False):
-        # Overlay de animación fluida del sobre abriéndose (solo se ejecuta la primera vez al abrir)
-        st.markdown(f"""
-        <div class="envelope-overlay">
-            <div class="envelope-container envelope-opening">
-                <div class="envelope">
-                    <div class="letter">
-                        <div class="letter-content">
-                        <div class="letter-title">A <span style="font-family: 'Great Vibes', cursive; font-size: 2.5rem;">&amp;</span> O</div>
-                        <div class="letter-subtitle">Estáis Invitados</div>
-                    </div>
-                    </div>
-                    <div class="flap-left"></div>
-                    <div class="flap-right"></div>
-                    <div class="flap-bottom"></div>
-                    <div class="flap-top-wrapper">
-                        <div class="flap-top-shape"></div>
-                        <div class="wax-seal">{SEAL_SVG}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        # Overlay de transición lumínica (solo se ejecuta al hacer clic en el sobre por primera vez)
+        st.markdown("""
+        <div class="glow-overlay"></div>
         """, unsafe_allow_html=True)
         # Desactivar la animación para futuras interacciones/refrescos en esta sesión
         st.session_state.show_opening_animation = False
