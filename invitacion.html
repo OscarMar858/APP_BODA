@@ -710,11 +710,6 @@
   <h2 class="section-title">Tu hueco nos importa</h2>
 
   <form id="rsvp-form" autocomplete="on">
-    <!-- Web3Forms: estos campos se mandan ocultos en cada envío -->
-    <input type="hidden" name="access_key" value="REEMPLAZAR_CON_TU_ACCESS_KEY_DE_WEB3FORMS">
-    <input type="hidden" name="subject" value="Nueva confirmación · Alejandra & Óscar">
-    <input type="hidden" name="from_name" value="Invitación A&Ó">
-
     <!-- Honeypot anti-spam (oculto, los bots lo rellenan, los humanos no) -->
     <input type="checkbox" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off">
 
@@ -860,6 +855,9 @@
   document.querySelectorAll('section.content').forEach(s => observer.observe(s));
 
   // ==================== RSVP FORM ====================
+  // URL del script de Google Apps Script que recibe los datos y los guarda en tu Google Sheets
+  const SCRIPT_URL = 'REEMPLAZAR_CON_LA_URL_DE_TU_APPS_SCRIPT';
+
   const form = document.getElementById('rsvp-form');
   const submitBtn = document.getElementById('submit-btn');
   const message = document.getElementById('form-message');
@@ -872,25 +870,29 @@
     message.textContent = '';
 
     try {
+      // Convertimos FormData a URLSearchParams para que Apps Script lo lea bien
       const formData = new FormData(form);
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+
+      await fetch(SCRIPT_URL, {
         method: 'POST',
-        body: formData
+        body: params,
+        mode: 'no-cors'
       });
 
-      const result = await response.json();
+      // Con mode: 'no-cors' no podemos leer la respuesta, pero si fetch
+      // resuelve sin error la petición se envió correctamente
+      message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
+      message.className = 'form-message success';
+      form.reset();
+      submitBtn.textContent = 'Confirmación enviada';
+      // submitBtn queda disabled para evitar reenvíos accidentales
 
-      if (result.success) {
-        message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
-        message.className = 'form-message success';
-        form.reset();
-        submitBtn.textContent = 'Confirmación enviada';
-        // Mantener disabled para que no se reenvíe accidentalmente
-      } else {
-        throw new Error(result.message || 'Error al enviar');
-      }
     } catch (error) {
-      message.textContent = 'Ha habido un problema al enviar. Por favor, inténtalo de nuevo o escríbenos directamente.';
+      message.textContent = 'Ha habido un problema al enviar. Por favor, inténtalo de nuevo en unos minutos.';
       message.className = 'form-message error';
       submitBtn.disabled = false;
       submitBtn.textContent = 'Enviar confirmación';
