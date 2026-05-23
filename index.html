@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,328 +5,225 @@ HTML
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Óscar & Alejandra · 2026</title>
 
+<link rel="dns-prefetch" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
+<link rel="preconnect" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@300;400;500;600&family=Italiana&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html, body {
-    width: 100%; height: 100%;
-    overflow-x: hidden;
-    background: #EDE6D6;
-    font-family: 'Cormorant Garamond', serif;
-    color: #4A4530;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
-  body.noscroll { overflow: hidden; }
-
-  /* ═══════════════════════════════════════
-     PANTALLA 1: EL SOBRE (TU DISEÑO ORIGINAL)
-     ═══════════════════════════════════════ */
-  #envelope-stage {
-    position: fixed;
-    inset: 0; width: 100vw; height: 100vh;
+  body {
     background: #6B7C50;
-    z-index: 100;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
-  }
-
-  .v-line {
-    position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none;
-  }
-  .line-top {
-    border-top: 50vh solid #5A6A43; border-left: 50vw solid transparent; border-right: 50vw solid transparent;
-    z-index: 4; transform-origin: top; transition: transform 0.8s ease-in-out;
-  }
-  .line-bottom {
-    border-bottom: 50vh solid #768959; border-left: 50vw solid transparent; border-right: 50vw solid transparent;
-    z-index: 3;
-  }
-  .line-left {
-    border-left: 50vw solid #64754B; border-top: 50vh solid transparent; border-bottom: 50vh solid transparent;
-    z-index: 2;
-  }
-  .line-right {
-    border-right: 50vw solid #607048; border-top: 50vh solid transparent; border-bottom: 50vh solid transparent;
-    z-index: 2;
-  }
-
-  /* Tu sello original */
-  .seal-container {
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 95px; height: 95px;
-    z-index: 10; pointer-events: none;
-    filter: drop-shadow(2px 5px 8px rgba(0,0,0,0.45));
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  /* Estados de Animación */
-  body.opening .line-top { transform: scaleY(-1) translateY(1px); z-index: 1; }
-  body.opening #envelope-stage { transform: translateY(-100vh); opacity: 0; pointer-events: none; }
-
-  /* Luz de Transición */
-  .light-overlay {
-    position: fixed; inset: 0; width: 100vw; height: 100vh;
-    background: #ffffff; z-index: 1000; opacity: 0; pointer-events: none;
-    transition: opacity 0.6s ease-in-out;
-  }
-  .light-overlay.expand { opacity: 1; }
-
-  /* ═══════════════════════════════════════
-     PANTALLA 2: LA INVITACIÓN REAL
-     ═══════════════════════════════════════ */
-  #invitation-stage {
-    min-height: 100vh;
-    width: 100%;
     position: relative;
-    padding: 4rem 1rem;
-    display: none; /* Se activa tras abrir el sobre */
-    justify-content: center;
-    align-items: flex-start;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
-  /* Tu acuarela aplicada con elegancia como fondo */
-  .watermark-bg {
-    position: fixed; inset: 0; width: 100%; height: 100%;
-    background: url('acuarela.jpg') center center no-repeat;
-    background-size: cover;
-    opacity: 0.25; /* Suave para que se pueda leer el texto */
-    z-index: 0; pointer-events: none;
+  /* Línea V de la solapa - de esquinas superiores al centro */
+  .v-line {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Sello redondo antiguo */
+  .seal {
+    position: fixed;
+    top: 62%;
+    left: 50%;
+    width: min(24vw, 24vh, 200px);
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    animation: sealVibrate 2.8s ease-in-out infinite;
+    filter: drop-shadow(0 10px 18px rgba(20, 30, 10, 0.55))
+            drop-shadow(0 4px 6px rgba(40, 30, 5, 0.4));
+  }
+
+  .seal svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Vibración periódica del sello */
+  @keyframes sealVibrate {
+    0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+    3%   { transform: translate(-50%, -50%) rotate(-2.5deg) scale(1.03); }
+    6%   { transform: translate(-50%, -50%) rotate(2.5deg) scale(1.03); }
+    9%   { transform: translate(-50%, -50%) rotate(-2deg) scale(1.03); }
+    12%  { transform: translate(-50%, -50%) rotate(2deg) scale(1.03); }
+    15%  { transform: translate(-50%, -50%) rotate(-1deg) scale(1.02); }
+    18%  { transform: translate(-50%, -50%) rotate(1deg) scale(1.02); }
+    21%  { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+    100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  }
+
+  /* Estado abriendo: el sello "salta" y se desvanece */
+  body.opening { cursor: default; }
+
+  body.opening .seal {
+    animation: sealPop 0.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  }
+
+  @keyframes sealPop {
+    0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+    25%  { transform: translate(-50%, -50%) scale(1.18) rotate(-3deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.4) rotate(20deg); opacity: 0; }
+  }
+
+  /* Luz a pantalla completa para la transición */
+  .light {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      #ffffff 0%, #fff4d6 40%, #ffd98a 70%,
+      rgba(255, 200, 100, 0.5) 90%, transparent 100%);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
     filter: blur(2px);
   }
 
-  .content-wrapper {
-    max-width: 500px; width: 100%; margin: 0 auto; text-align: center; position: relative; z-index: 1;
+  .light.expand {
+    animation: lightExpand 0.8s cubic-bezier(0.4, 0, 0.6, 1) forwards;
   }
 
-  .main-title { font-family: 'Allura', cursive; font-size: 4.5rem; color: #7E8F60; margin-bottom: 0.5rem; }
-  .subtitle { font-family: 'Italiana', serif; font-size: 1.3rem; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 2rem; }
-  .elegant-sep { font-size: 1.4rem; color: #7E8F60; margin: 2rem 0; letter-spacing: 8px; }
-
-  .card {
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(126, 143, 96, 0.2);
-    border-radius: 20px; padding: 2.2rem 1.5rem; margin: 1.5rem 0;
-    box-shadow: 0 10px 30px rgba(74, 69, 48, 0.05);
+  @keyframes lightExpand {
+    0%   { width: 0; height: 0; opacity: 0; }
+    30%  { opacity: 1; }
+    100% { width: 350vmax; height: 350vmax; opacity: 1; filter: blur(0); background: #ffffff; }
   }
 
-  .label { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #7E8F60; margin-bottom: 1rem; }
-  
-  /* Cuenta atrás */
-  .countdown { display: flex; justify-content: center; gap: 1.2rem; }
-  .cd-num { font-size: 2.2rem; font-weight: 300; color: #7E8F60; }
-  .cd-lbl { font-family: 'Montserrat', sans-serif; font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
-
-  /* Pestañas */
-  .tabs-header { display: flex; justify-content: center; gap: 8px; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(126, 143, 96, 0.2); padding-bottom: 0.5rem; }
-  .tab-btn { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: #4A4530; opacity: 0.5; cursor: pointer; padding: 0.5rem 0.3rem; transition: all 0.3s; }
-  .tab-btn.active { opacity: 1; color: #7E8F60; font-weight: 600; border-bottom: 2px solid #7E8F60; }
-  .tab-content { display: none; font-size: 1.1rem; line-height: 1.6; }
-  .tab-content.active { display: block; animation: softIn 0.4s ease; }
-
-  @keyframes softIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-  .maps-btn { display: inline-block; margin-top: 1rem; padding: 0.6rem 1.8rem; background: #7E8F60; color: white; text-decoration: none; border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(126,143,96,0.3); }
-
-  /* Formulario */
-  .form-group { text-align: left; margin-bottom: 1.2rem; }
-  .form-group label { display: block; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 0.4rem; text-transform: uppercase; opacity: 0.9; }
-  .form-control { width: 100%; padding: 0.8rem; border: 1px solid rgba(126, 143, 96, 0.3); background: rgba(255,255,255,0.85); border-radius: 12px; font-family: inherit; font-size: 1.05rem; color: #4A4530; }
-  .form-control:focus { outline: none; border-color: #7E8F60; background: #fff; }
-  .submit-btn { width: 100%; padding: 0.95rem; background: #7E8F60; color: white; border: none; border-radius: 30px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; box-shadow: 0 5px 15px rgba(126,143,96,0.4); transition: all 0.3s; }
-  .submit-btn:disabled { background: #A3B899; cursor: not-allowed; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 </style>
 </head>
-<body class="noscroll">
+<body>
 
-<div id="envelope-stage" onclick="openInvitation()">
-  <div class="v-line line-top"></div>
-  <div class="v-line line-left"></div>
-  <div class="v-line line-right"></div>
-  <div class="v-line line-bottom"></div>
-  
-  <div class="envelope-text">
-    Óscar & Alejandra<br>
-    <span style="font-size:0.65rem; letter-spacing:4px; opacity:0.7;">17 · 10 · 2026</span>
-  </div>
+<!-- La V de la solapa: empieza un poco más abajo de las esquinas -->
+<svg class="v-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <line x1="0" y1="20" x2="50" y2="62"
+        stroke="rgba(0,0,0,0.22)"
+        stroke-width="1.5"
+        vector-effect="non-scaling-stroke"/>
+  <line x1="50" y1="62" x2="100" y2="20"
+        stroke="rgba(0,0,0,0.22)"
+        stroke-width="1.5"
+        vector-effect="non-scaling-stroke"/>
+</svg>
 
-  <div class="seal-container" id="seal">
-    <svg viewBox="0 0 100 100" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="wax-grad" cx=\"30%\" cy=\"30%\" r=\"70%\">
-          <stop offset="0%" stop-color="#ffe29c" />
-          <stop offset="30%" stop-color="#cf9e43" />
-          <stop offset="70%" stop-color="#a3762b" />
-          <stop offset="100%" stop-color="#614413" />
-        </radialGradient>
-        <filter id="refe">
-          <feGaussianBlur stdDeviation="1.2" result="blur" />
-          <feSpecularLighting in="blur" surfaceScale="4" specularConstant="1.4" specularExponent="22" lighting-color="#fff" result="spec">
-            <feDistantLight azimuth="225" elevation="45" />
-          </feSpecularLighting>
-          <feComposite in="SourceGraphic" in2="spec" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
-        </filter>
-      </defs>
-      <path d="M50,8 C75,6 94,22 91,48 C88,74 72,93 47,91 C22,89 7,69 9,44 C11,19 25,10 50,8 Z" fill="url(#wax-grad)" filter="url(#refe)" />
-      <circle cx="50" cy="50" r="32" fill="none" stroke="#7d581a" stroke-width="1.5" opacity="0.4" />
-      <circle cx="50" cy="50" r="30" fill="none" stroke="#ffe29c" stroke-width="1" opacity="0.3" />
-      <text x="50" y="58" font-family="'Allura', cursive" font-size="28" fill="#523910" text-anchor="middle" style="filter:drop-shadow(1px 1px 0px rgba(255,255,255,0.2));">A&amp;O</text>
-    </svg>
-  </div>
+<!-- Sello redondo antiguo de bronce -->
+<div class="seal" id="seal">
+  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bronze" cx="32%" cy="28%" r="80%">
+        <stop offset="0%"  stop-color="#D4B074"/>
+        <stop offset="30%" stop-color="#A8843E"/>
+        <stop offset="65%" stop-color="#7A5C24"/>
+        <stop offset="100%" stop-color="#3E2C0E"/>
+      </radialGradient>
+      <radialGradient id="innerBronze" cx="35%" cy="30%" r="80%">
+        <stop offset="0%"  stop-color="#B89048"/>
+        <stop offset="100%" stop-color="#6B502A"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Cuerpo redondo con ligeras imperfecciones para look antiguo hecho a mano -->
+    <path d="M 100,7
+             C 132,8 158,22 175,46
+             C 190,68 196,98 189,127
+             C 182,156 159,180 130,189
+             C 100,196 67,188 44,168
+             C 21,147 9,117 13,86
+             C 18,55 39,28 69,15
+             C 79,10 90,8 100,7 Z"
+          fill="url(#bronze)"
+          stroke="#2D1F08" stroke-width="0.6" stroke-opacity="0.55"/>
+
+    <!-- Anillo interior fino -->
+    <circle cx="100" cy="100" r="72"
+            fill="none"
+            stroke="#5A4318" stroke-width="1.2" stroke-opacity="0.5"/>
+
+    <!-- Círculo interior estampado -->
+    <circle cx="100" cy="100" r="68" fill="url(#innerBronze)"/>
+
+    <!-- Sombra sutil de profundidad -->
+    <circle cx="100" cy="100" r="68"
+            fill="none"
+            stroke="#2D1F08" stroke-width="2.5" stroke-opacity="0.13"/>
+
+    <!-- A&O en caligrafía Allura, embossed -->
+    <text x="100" y="128"
+          font-family="'Allura', cursive"
+          font-size="76"
+          fill="#4A3614"
+          text-anchor="middle"
+          style="filter: drop-shadow(1.5px 1.5px 0 rgba(15,8,0,0.6)) drop-shadow(-1px -1px 0 rgba(215,175,120,0.5));">A&amp;O</text>
+  </svg>
 </div>
 
-<div class="light-overlay" id="light"></div>
-
-<div id="invitation-stage">
-  <div class="watermark-bg"></div>
-  
-  <div class="content-wrapper">
-    <div class="main-title">Nos Casamos</div>
-    <div class="subtitle">Óscar & Alejandra</div>
-    <div class="elegant-sep">✦ ── ♡ ── ✦</div>
-
-    <div class="card">
-      <div class="label">Tiempo Restante</div>
-      <div class="countdown">
-        <div><div class="cd-num" id="days">00</div><div class="cd-lbl">Días</div></div>
-        <div style="font-size:1.8rem; color:#7E8F60;">:</div>
-        <div><div class="cd-num" id="hours">00</div><div class="cd-lbl">Horas</div></div>
-        <div style="font-size:1.8rem; color:#7E8F60;">:</div>
-        <div><div class="cd-num" id="min">00</div><div class="cd-lbl">Min</div></div>
-        <div style="font-size:1.8rem; color:#7E8F60;">:</div>
-        <div><div class="cd-num" id="sec">00</div><div class="cd-lbl">Seg</div></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="label">Fecha y Hora</div>
-      <div style="font-size: 2.8rem; font-weight: 300; letter-spacing: 2px;">17 . 10 . 26</div>
-      <div style="font-family:'Montserrat'; font-size:0.75rem; letter-spacing:3px; margin-top:0.4rem; text-transform:uppercase;">Sábado · 18:00 Horas</div>
-    </div>
-
-    <div class="card">
-      <div class="tabs-header">
-        <button class="tab-btn active" onclick="switchTab(event, 'tab-lugar')">📍 Ubicación</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-menu')">🍽️ Menú</button>
-        <button class="tab-btn" onclick="switchTab(event, 'tab-regalo')">🎁 Detalles</button>
-      </div>
-
-      <div id="tab-lugar" class="tab-content active">
-        <p style="font-weight:600; font-size:1.2rem; color:#4A4530;">Cortijo El Gallinero</p>
-        <p style="font-size:0.95rem; opacity:0.8; margin-top:0.2rem;">Ctra. de Navacerrada, km 0,600 · Collado Villalba</p>
-        <a href="https://maps.google.com" target="_blank" class="maps-btn">📍 Cómo Llegar</a>
-      </div>
-
-      <div id="tab-menu" class="tab-content">
-        <p>Hemos diseñado una experiencia gastronómica increíble para disfrutar juntos.</p>
-        <p style="font-size:0.95rem; opacity:0.8; margin-top:0.6rem; font-style:italic;">Si requieres un menú especial por alergias o intolerancias, indícalo en el formulario inferior.</p>
-      </div>
-
-      <div id="tab-regalo" class="tab-content">
-        <p>Vuestra presencia es nuestro mejor regalo. Si deseáis tener un detalle con nosotros, os dejamos nuestra cuenta:</p>
-        <p style="font-family:'Montserrat'; font-size:0.9rem; font-weight:500; margin-top:0.8rem; letter-spacing:1px; background:#F4EFE6; padding:0.6rem; border-radius:10px;">
-          ES21 0000 0000 0000 0000 0000
-        </p>
-      </div>
-    </div>
-
-    <div class="elegant-sep">─ ♡ ─</div>
-
-    <div class="card">
-      <div class="label" style="margin-bottom:1.5rem;">Confirmación de Asistencia</div>
-      
-      <form id="weddingForm" action="AQUÍ_PEGAS_TU_URL_DE_APPS_SCRIPT" method="POST">
-        <div class="form-group">
-          <label>Nombre y Apellidos</label>
-          <input type="text" name="nombre" class="form-control" required placeholder="Ej: Juan Pérez">
-        </div>
-        <div class="form-group">
-          <label>¿Alergias o notas sobre el menú?</label>
-          <textarea name="alergias" class="form-control" rows="3" placeholder="Ej: Celíaco, Vegano, sin lactosa..."></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Confirmar Asistencia</button>
-      </form>
-    </div>
-  </div>
-</div>
+<!-- Capa de luz para la transición -->
+<div class="light" id="light"></div>
 
 <script>
+  const seal = document.getElementById('seal');
+  const light = document.getElementById('light');
+  const DESTINATION = 'https://invitacionbodaoscaryalejandra2026.streamlit.app/';
+
   let opened = false;
+
+  // Prefetch de la app
+  const prefetch = document.createElement('link');
+  prefetch.rel = 'prefetch';
+  prefetch.href = DESTINATION;
+  document.head.appendChild(prefetch);
+
+  // Warmup: cargamos Streamlit en un iframe invisible para despertarlo
+  window.addEventListener('load', () => {
+    const warmer = document.createElement('iframe');
+    warmer.src = DESTINATION;
+    warmer.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-9999px;';
+    document.body.appendChild(warmer);
+  });
 
   function openInvitation() {
     if (opened) return;
     opened = true;
-    
     document.body.classList.add('opening');
-    const light = document.getElementById('light');
-    
-    // Disparo del flash de luz
-    setTimeout(() => { light.classList.add('expand'); }, 400);
-
-    // Cambio invisible de pantallas en medio del destello blanco
-    setTimeout(() => {
-      document.getElementById('envelope-stage').style.display = 'none';
-      document.getElementById('invitation-stage').style.display = 'flex';
-      document.body.classList.remove('noscroll');
-      light.classList.remove('expand');
-    }, 1100);
+    setTimeout(() => light.classList.add('expand'), 300);
+    setTimeout(() => { window.location.href = DESTINATION; }, 950);
   }
 
-  function switchTab(evt, tabId) {
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    evt.currentTarget.classList.add('active');
-  }
-
-  // Reloj Cuenta Atrás para el 17 de Octubre de 2026
-  const targetDate = new Date("2026-10-17T18:00:00").getTime();
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const dist = targetDate - now;
-    if (dist < 0) return;
-
-    const d = Math.floor(dist / (1000 * 60 * 60 * 24));
-    const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((dist % (1000 * 60)) / 1000);
-
-    document.getElementById('days').innerText = String(d).padStart(2, '0');
-    document.getElementById('hours').innerText = String(h).padStart(2, '0');
-    document.getElementById('min').innerText = String(m).padStart(2, '0');
-    document.getElementById('sec').innerText = String(s).padStart(2, '0');
-  }
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  // Envío síncrono nativo directo a Google Sheets
-  document.getElementById('weddingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const form = this;
-    const button = form.querySelector('.submit-btn');
-    button.innerText = 'Enviando confirmación...';
-    button.disabled = true;
-
-    fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form)
-    })
-    .then(res => {
-      button.innerText = '¡Asistencia Confirmada! 🎉';
-      button.style.background = '#7E8F60';
-      form.reset();
-    })
-    .catch(err => {
-      alert('Hubo un pequeño inconveniente técnico al guardar. Por favor, inténtalo de nuevo.');
-      button.innerText = 'Confirmar Asistencia';
-      button.disabled = false;
-    });
+  document.body.addEventListener('click', openInvitation);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openInvitation();
+    }
   });
 </script>
 
