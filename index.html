@@ -120,7 +120,7 @@
 </head>
 <body>
 
-<!-- Pliegue de la solapa: V que baja desde las esquinas superiores al centro -->
+<!-- Pliegue de la solapa: V que sale desde los lados (mitad de altura) al centro -->
 <svg class="v-line" viewBox="0 0 100 100" preserveAspectRatio="none">
   <defs>
     <filter id="lineShadow" x="-10%" y="-10%" width="120%" height="120%">
@@ -135,15 +135,15 @@
       </feMerge>
     </filter>
   </defs>
-  <!-- Solapa: triángulo superior un poco más oscuro para simular el papel doblado encima -->
-  <polygon points="0,0 100,0 50,50" fill="rgba(0,0,0,0.06)"/>
-  <!-- Dos líneas del pliegue, con sombra suave -->
-  <line x1="0" y1="0" x2="50" y2="50"
+  <!-- Solapa: zona superior ligeramente más oscura (papel doblado encima) -->
+  <polygon points="0,0 100,0 100,32 50,50 0,32" fill="rgba(0,0,0,0.06)"/>
+  <!-- Dos líneas del pliegue, salen desde los lados al centro -->
+  <line x1="0" y1="32" x2="50" y2="50"
         stroke="rgba(0,0,0,0.35)"
         stroke-width="3"
         filter="url(#lineShadow)"
         vector-effect="non-scaling-stroke"/>
-  <line x1="50" y1="50" x2="100" y2="0"
+  <line x1="50" y1="50" x2="100" y2="32"
         stroke="rgba(0,0,0,0.35)"
         stroke-width="3"
         filter="url(#lineShadow)"
