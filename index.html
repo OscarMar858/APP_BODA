@@ -8,10 +8,6 @@
 <link rel="dns-prefetch" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
 <link rel="preconnect" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
-
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -55,10 +51,11 @@
             drop-shadow(0 4px 6px rgba(40, 30, 5, 0.4));
   }
 
-  .seal svg {
+  .seal img {
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: contain;
   }
 
   /* Vibración periódica del sello */
@@ -135,55 +132,9 @@
         vector-effect="non-scaling-stroke"/>
 </svg>
 
-<!-- Sello redondo antiguo de bronce -->
+<!-- Sello (imagen real con A&O y corazón) -->
 <div class="seal" id="seal">
-  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="bronze" cx="32%" cy="28%" r="80%">
-        <stop offset="0%"  stop-color="#D4B074"/>
-        <stop offset="30%" stop-color="#A8843E"/>
-        <stop offset="65%" stop-color="#7A5C24"/>
-        <stop offset="100%" stop-color="#3E2C0E"/>
-      </radialGradient>
-      <radialGradient id="innerBronze" cx="35%" cy="30%" r="80%">
-        <stop offset="0%"  stop-color="#B89048"/>
-        <stop offset="100%" stop-color="#6B502A"/>
-      </radialGradient>
-    </defs>
-
-    <!-- Cuerpo redondo con ligeras imperfecciones para look antiguo hecho a mano -->
-    <path d="M 100,7
-             C 132,8 158,22 175,46
-             C 190,68 196,98 189,127
-             C 182,156 159,180 130,189
-             C 100,196 67,188 44,168
-             C 21,147 9,117 13,86
-             C 18,55 39,28 69,15
-             C 79,10 90,8 100,7 Z"
-          fill="url(#bronze)"
-          stroke="#2D1F08" stroke-width="0.6" stroke-opacity="0.55"/>
-
-    <!-- Anillo interior fino -->
-    <circle cx="100" cy="100" r="72"
-            fill="none"
-            stroke="#5A4318" stroke-width="1.2" stroke-opacity="0.5"/>
-
-    <!-- Círculo interior estampado -->
-    <circle cx="100" cy="100" r="68" fill="url(#innerBronze)"/>
-
-    <!-- Sombra sutil de profundidad -->
-    <circle cx="100" cy="100" r="68"
-            fill="none"
-            stroke="#2D1F08" stroke-width="2.5" stroke-opacity="0.13"/>
-
-    <!-- A&O en caligrafía Allura, embossed -->
-    <text x="100" y="128"
-          font-family="'Allura', cursive"
-          font-size="76"
-          fill="#4A3614"
-          text-anchor="middle"
-          style="filter: drop-shadow(1.5px 1.5px 0 rgba(15,8,0,0.6)) drop-shadow(-1px -1px 0 rgba(215,175,120,0.5));">A&amp;O</text>
-  </svg>
+  <img src="sello.png" alt="Sello A&amp;O">
 </div>
 
 <!-- Capa de luz para la transición -->
