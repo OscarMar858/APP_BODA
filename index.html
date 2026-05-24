@@ -120,14 +120,14 @@
 </head>
 <body>
 
-<!-- Línea divisoria horizontal en el medio - el sello la rompe visualmente -->
+<!-- Pliegue de la solapa: V que baja desde las esquinas superiores al centro -->
 <svg class="v-line" viewBox="0 0 100 100" preserveAspectRatio="none">
   <defs>
-    <filter id="lineShadow" x="-5%" y="-200%" width="110%" height="500%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="0.4"/>
-      <feOffset dy="0.5" result="offsetblur"/>
+    <filter id="lineShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.35"/>
+      <feOffset dy="0.6" result="offsetblur"/>
       <feComponentTransfer>
-        <feFuncA type="linear" slope="0.55"/>
+        <feFuncA type="linear" slope="0.6"/>
       </feComponentTransfer>
       <feMerge>
         <feMergeNode/>
@@ -135,8 +135,16 @@
       </feMerge>
     </filter>
   </defs>
-  <line x1="0" y1="50" x2="100" y2="50"
-        stroke="rgba(0,0,0,0.32)"
+  <!-- Solapa: triángulo superior un poco más oscuro para simular el papel doblado encima -->
+  <polygon points="0,0 100,0 50,50" fill="rgba(0,0,0,0.06)"/>
+  <!-- Dos líneas del pliegue, con sombra suave -->
+  <line x1="0" y1="0" x2="50" y2="50"
+        stroke="rgba(0,0,0,0.35)"
+        stroke-width="3"
+        filter="url(#lineShadow)"
+        vector-effect="non-scaling-stroke"/>
+  <line x1="50" y1="50" x2="100" y2="0"
+        stroke="rgba(0,0,0,0.35)"
         stroke-width="3"
         filter="url(#lineShadow)"
         vector-effect="non-scaling-stroke"/>
