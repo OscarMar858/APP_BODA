@@ -40,15 +40,15 @@
   /* Sello redondo antiguo */
   .seal {
     position: fixed;
-    top: 62%;
+    top: 50%;
     left: 50%;
-    width: min(24vw, 24vh, 200px);
+    width: min(38vw, 38vh, 320px);
     aspect-ratio: 1 / 1;
     transform: translate(-50%, -50%);
     z-index: 10;
     animation: sealVibrate 2.8s ease-in-out infinite;
-    filter: drop-shadow(0 10px 18px rgba(20, 30, 10, 0.55))
-            drop-shadow(0 4px 6px rgba(40, 30, 5, 0.4));
+    filter: drop-shadow(0 3px 5px rgba(20, 30, 10, 0.35))
+            drop-shadow(0 1px 2px rgba(40, 30, 5, 0.25));
   }
 
   .seal img {
@@ -120,15 +120,25 @@
 </head>
 <body>
 
-<!-- La V de la solapa: empieza un poco más abajo de las esquinas -->
+<!-- Línea divisoria horizontal en el medio - el sello la rompe visualmente -->
 <svg class="v-line" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <line x1="0" y1="20" x2="50" y2="62"
-        stroke="rgba(0,0,0,0.22)"
-        stroke-width="1.5"
-        vector-effect="non-scaling-stroke"/>
-  <line x1="50" y1="62" x2="100" y2="20"
-        stroke="rgba(0,0,0,0.22)"
-        stroke-width="1.5"
+  <defs>
+    <filter id="lineShadow" x="-5%" y="-200%" width="110%" height="500%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="0.4"/>
+      <feOffset dy="0.5" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.55"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <line x1="0" y1="50" x2="100" y2="50"
+        stroke="rgba(0,0,0,0.32)"
+        stroke-width="3"
+        filter="url(#lineShadow)"
         vector-effect="non-scaling-stroke"/>
 </svg>
 
