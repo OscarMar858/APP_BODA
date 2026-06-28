@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestro álbum · Alejandra & Óscar</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --olive: #5D6E45;
+    --olive-dark: #3D4A2A;
+    --olive-light: #8A9968;
+    --cream: #F5F0E3;
+    --cream-deep: #ECE3CD;
+    --ink: #3D3829;
+    --bronze: #8B6B2F;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== MENÚ HAMBURGUESA (igual que la principal) ===== */
+  .menu-toggle {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 50;
+    width: 46px;
+    height: 46px;
+    background: rgba(245, 240, 227, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(61, 74, 42, 0.18);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+    transition: background 0.3s ease;
+  }
+  .menu-toggle:hover { background: rgba(245, 240, 227, 0.98); }
+  .menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--olive-dark);
+    border-radius: 1px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  }
+  .menu-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-toggle.open span:nth-child(2) { opacity: 0; }
+  .menu-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .menu-panel {
+    position: fixed;
+    top: 0; left: 0;
+    width: min(82vw, 340px);
+    height: 100vh;
+    height: 100dvh;
+    background: var(--cream);
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 90px 36px 36px;
+    overflow-y: auto;
+  }
+  .menu-panel.open {
+    transform: translateX(0);
+    box-shadow: 4px 0 30px rgba(0, 0, 0, 0.18);
+  }
+  .menu-nav-eyebrow {
+    font-family: 'Italiana', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--olive);
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 20px;
+  }
+  .menu-nav { display: flex; flex-direction: column; gap: 4px; }
+  .menu-nav a {
+    display: block;
+    padding: 16px 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 24px;
+    color: var(--olive-dark);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(61, 74, 42, 0.12);
+    transition: color 0.25s ease, padding-left 0.25s ease;
+  }
+  .menu-nav a:hover { color: var(--bronze); padding-left: 16px; }
+  .menu-nav a.current { color: var(--bronze); font-weight: 500; }
+
+  .menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(61, 56, 41, 0.4);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 35;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .menu-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== CONTENIDO ===== */
+  .album-hero {
+    text-align: center;
+    padding: clamp(90px, 18vw, 140px) 24px clamp(40px, 8vw, 60px);
+    position: relative;
+  }
+
+  .album-eyebrow {
+    font-family: 'Italiana', serif;
+    font-size: clamp(10px, 2.4vw, 12px);
+    letter-spacing: 0.55em;
+    color: var(--olive);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .album-title {
+    font-family: 'Allura', cursive;
+    font-size: clamp(52px, 14vw, 96px);
+    color: var(--olive-dark);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .album-divider {
+    width: clamp(60px, 15vw, 100px);
+    height: 1px;
+    background: var(--bronze);
+    margin: clamp(20px, 5vw, 32px) auto;
+    opacity: 0.6;
+  }
+
+  .album-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 4.4vw, 23px);
+    line-height: 1.65;
+    color: var(--ink);
+    max-width: 480px;
+    margin: 0 auto clamp(36px, 8vw, 52px);
+    opacity: 0.9;
+  }
+
+  .photo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 18px 44px;
+    font-family: 'Italiana', serif;
+    font-size: clamp(11px, 2.5vw, 13px);
+    letter-spacing: 0.4em;
+    color: var(--cream);
+    background: var(--olive-dark);
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid var(--olive-dark);
+    transition: all 0.35s cubic-bezier(0.2, 0, 0.2, 1);
+    border-radius: 2px;
+    text-align: center;
+  }
+  .btn:hover { background: var(--bronze); border-color: var(--bronze); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--olive-dark);
+  }
+  .btn-ghost:hover {
+    background: var(--olive-dark);
+    color: var(--cream);
+    border-color: var(--olive-dark);
+  }
+
+  /* Marco decorativo con icono de cámara dibujado */
+  .album-icon {
+    width: clamp(54px, 12vw, 72px);
+    height: auto;
+    margin: 0 auto clamp(28px, 6vw, 40px);
+    color: var(--olive);
+    opacity: 0.7;
+    display: block;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: clamp(40px, 9vw, 64px);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--olive);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(93, 110, 69, 0.4);
+    padding-bottom: 2px;
+    transition: color 0.25s ease;
+  }
+  .back-link:hover { color: var(--bronze); }
+</style>
+</head>
+<body>
+
+<!-- MENÚ HAMBURGUESA -->
+<button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<aside class="menu-panel" id="menu-panel" aria-hidden="true">
+  <div class="menu-nav-eyebrow">Alejandra &amp; Óscar</div>
+  <nav class="menu-nav">
+    <a href="invitacion.html#intro">Nuestra historia</a>
+    <a href="invitacion.html#programa">El gran día</a>
+    <a href="invitacion.html#countdown">La cuenta atrás</a>
+    <a href="invitacion.html#ubicacion">Cómo llegar</a>
+    <a href="invitacion.html#confirmar">Confirmar asistencia</a>
+    <a href="fotos.html" class="current">Nuestro álbum</a>
+  </nav>
+</aside>
+
+<!-- CONTENIDO ÁLBUM -->
+<section class="album-hero">
+  <div class="album-eyebrow">Antes, durante y después</div>
+  <h1 class="album-title">Nuestro álbum</h1>
+  <div class="album-divider"></div>
+
+  <!-- Icono cámara dibujado -->
+  <svg class="album-icon" viewBox="0 0 64 50" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="12" width="60" height="36" rx="5"/>
+    <path d="M 20,12 L 24,5 L 40,5 L 44,12"/>
+    <circle cx="32" cy="30" r="11"/>
+    <circle cx="32" cy="30" r="5" fill="currentColor" stroke="none" opacity="0.5"/>
+    <circle cx="53" cy="20" r="1.6" fill="currentColor" stroke="none"/>
+  </svg>
+
+  <p class="album-text">
+    ¿Nos ayudas a recoger todos los momentos del día? Sube aquí tus fotos y vídeos, y míralos junto a los de todos los invitados.
+  </p>
+
+  <div class="photo-actions">
+    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn">
+      Subir mis fotos
+    </a>
+    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn btn-ghost">
+      Ver el álbum
+    </a>
+  </div>
+
+  <br>
+  <a href="invitacion.html" class="back-link">← Volver a la invitación</a>
+</section>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function toggleMenu(force) {
+    const open = (typeof force === 'boolean') ? force : !menuToggle.classList.contains('open');
+    menuToggle.classList.toggle('open', open);
+    menuPanel.classList.toggle('open', open);
+    menuBackdrop.classList.toggle('open', open);
+    menuToggle.setAttribute('aria-expanded', String(open));
+    menuPanel.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  menuToggle.addEventListener('click', () => toggleMenu());
+  menuBackdrop.addEventListener('click', () => toggleMenu(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuPanel.classList.contains('open')) toggleMenu(false);
+  });
+</script>
+
+</body>
+</html>

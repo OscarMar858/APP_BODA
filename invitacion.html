@@ -495,25 +495,6 @@
     letter-spacing: 0.55em;
   }
 
-  /* Botones del álbum de fotos */
-  .photo-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    align-items: center;
-    margin-top: 8px;
-  }
-  .photo-actions .btn { min-width: 240px; }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--olive-dark);
-  }
-  .btn-ghost:hover {
-    background: var(--olive-dark);
-    color: var(--cream);
-  }
-
   /* Imagen "cómo llegar" */
   .directions {
     margin: clamp(40px, 8vw, 60px) auto 0;
@@ -828,7 +809,7 @@
     <a href="#countdown" class="menu-link">La cuenta atrás</a>
     <a href="#ubicacion" class="menu-link">Cómo llegar</a>
     <a href="#confirmar" class="menu-link">Confirmar asistencia</a>
-    <a href="#fotos" class="menu-link">Nuestro álbum</a>
+    <a href="fotos.html" class="menu-link menu-link-page">Nuestro álbum</a>
   </nav>
 </aside>
 
@@ -1008,21 +989,6 @@
 
     <div class="form-message" id="form-message"></div>
   </form>
-</section>
-
-<!-- ÁLBUM DE FOTOS -->
-<section class="content" id="fotos">
-  <div class="section-eyebrow">Nuestro álbum</div>
-  <h2 class="section-title">Comparte tus fotos</h2>
-  <p class="location-name">¿Nos ayudas a recoger todos los momentos del día? Sube aquí tus fotos y vídeos, y míralos junto a los de todos.</p>
-  <div class="photo-actions">
-    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn">
-      Subir mis fotos
-    </a>
-    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn btn-ghost">
-      Ver el álbum
-    </a>
-  </div>
 </section>
 
 <!-- FOOTER -->
