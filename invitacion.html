@@ -620,6 +620,20 @@
     gap: 10px;
   }
 
+  /* Variante vertical para opciones largas (paradas de bus) */
+  .radio-group.vertical {
+    flex-direction: column;
+  }
+
+  .radio-group.vertical .radio-option label {
+    text-align: left;
+    letter-spacing: 0.08em;
+    text-transform: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    padding: 15px 18px;
+  }
+
   .radio-option {
     flex: 1;
     position: relative;
@@ -919,15 +933,19 @@
     </div>
 
     <div class="field">
-      <label class="field-label">¿Necesitarás autobús?</label>
-      <div class="radio-group">
+      <label class="field-label">Autobús · ¿Dónde te recogemos?</label>
+      <div class="radio-group vertical">
         <div class="radio-option">
-          <input type="radio" id="bus-si" name="autobus" value="Sí, autobús" required>
-          <label for="bus-si">Sí</label>
+          <input type="radio" id="bus-moncloa" name="autobus" value="Autobús desde Moncloa" required>
+          <label for="bus-moncloa">Autobús desde Moncloa</label>
         </div>
         <div class="radio-option">
-          <input type="radio" id="bus-no" name="autobus" value="No, voy por mi cuenta" required>
-          <label for="bus-no">No</label>
+          <input type="radio" id="bus-suances" name="autobus" value="Autobús desde Suances / Ciudad Lineal">
+          <label for="bus-suances">Autobús desde Suances / Ciudad Lineal</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="bus-no" name="autobus" value="No necesitaré bus">
+          <label for="bus-no">No necesitaré bus</label>
         </div>
       </div>
     </div>
