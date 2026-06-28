@@ -303,6 +303,29 @@
     line-height: 1.15;
   }
 
+  .intro-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 4.4vw, 24px);
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: clamp(18px, 4vw, 26px);
+    font-weight: 400;
+  }
+
+  .intro-text em {
+    font-style: italic;
+    color: var(--olive-dark);
+  }
+
+  .intro-highlight {
+    font-family: 'Italiana', serif;
+    font-style: normal;
+    letter-spacing: 0.1em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    font-size: 0.92em;
+  }
+
   /* Ornament olive branch */
   .ornament {
     display: block;
@@ -636,13 +659,26 @@
     <div class="hero-divider"></div>
     <div class="hero-date">17 · Octubre · 2026</div>
   </div>
-  <a href="#countdown" class="scroll-hint">Descubre&nbsp;más</a>
+  <a href="#intro" class="scroll-hint">Descubre&nbsp;más</a>
+</section>
+
+<!-- INTRO / HISTORIA -->
+<section class="content" id="intro">
+  <div class="section-eyebrow">¡Nos casamos!</div>
+  <p class="intro-text">
+    Nuestra historia comenzó el <em>30 de diciembre de 2019</em> en Madrid, cuando decidimos darnos la oportunidad de conocernos.
+  </p>
+  <p class="intro-text">
+    Han pasado los años, hemos sumado un montón de aventuras increíbles, y ahora solo queremos celebrar este gran momento con nuestra familia y amigos.
+  </p>
+  <p class="intro-text">
+    Porque toda gran aventura comienza con un <span class="intro-highlight">«Sí, quiero»</span>, y queremos que estéis ahí para celebrarlo con nosotros.
+  </p>
 </section>
 
 <!-- COUNTDOWN -->
 <section class="content" id="countdown">
   <div class="section-eyebrow">La cuenta atrás</div>
-  <h2 class="section-title">Nos vemos en</h2>
   <div class="countdown">
     <div class="countdown-unit">
       <span class="countdown-num" id="cd-days">--</span>
@@ -697,8 +733,8 @@
 <!-- LOCATION -->
 <section class="content">
   <div class="section-eyebrow">Cómo llegar</div>
-  <h2 class="section-title">Te esperamos aquí</h2>
-  <p class="location-name">Pincha el botón y te llevará a la finca en Google Maps</p>
+  <h2 class="section-title">Te esperamos en la<br>Finca Cortijo el Gallinero</h2>
+  <p class="location-name">Collado Villalba</p>
   <a href="https://share.google/O62nZiOw4sIHrsvAh" target="_blank" rel="noopener" class="btn">
     Ver ubicación
   </a>
@@ -714,13 +750,8 @@
     <input type="checkbox" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off">
 
     <div class="field">
-      <label class="field-label" for="nombre">Nombre y apellidos</label>
+      <label class="field-label" for="nombre">Nombre completo</label>
       <input type="text" id="nombre" name="nombre" required autocomplete="name">
-    </div>
-
-    <div class="field">
-      <label class="field-label" for="email">Tu email</label>
-      <input type="email" id="email" name="email" required autocomplete="email">
     </div>
 
     <div class="field">
