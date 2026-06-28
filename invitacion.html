@@ -111,14 +111,36 @@
     box-shadow: 4px 0 30px rgba(0, 0, 0, 0.18);
   }
 
-  .menu-panel-placeholder {
+  .menu-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .menu-nav a {
+    display: block;
+    padding: 16px 8px;
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 16px;
+    font-size: 24px;
+    color: var(--olive-dark);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(61, 74, 42, 0.12);
+    transition: color 0.25s ease, padding-left 0.25s ease;
+  }
+  .menu-nav a:hover {
+    color: var(--bronze);
+    padding-left: 16px;
+  }
+
+  .menu-nav-eyebrow {
+    font-family: 'Italiana', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
     color: var(--olive);
-    opacity: 0.55;
-    text-align: center;
-    margin-top: 30vh;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 20px;
   }
 
   /* Fondo oscuro cuando el menú está abierto */
@@ -473,6 +495,25 @@
     letter-spacing: 0.55em;
   }
 
+  /* Botones del álbum de fotos */
+  .photo-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .photo-actions .btn { min-width: 240px; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--olive-dark);
+  }
+  .btn-ghost:hover {
+    background: var(--olive-dark);
+    color: var(--cream);
+  }
+
   /* Imagen "cómo llegar" */
   .directions {
     margin: clamp(40px, 8vw, 60px) auto 0;
@@ -780,7 +821,15 @@
 <div class="menu-backdrop" id="menu-backdrop" aria-hidden="true"></div>
 
 <aside class="menu-panel" id="menu-panel" aria-label="Menú principal" aria-hidden="true">
-  <p class="menu-panel-placeholder">Próximamente</p>
+  <div class="menu-nav-eyebrow">Alejandra &amp; Óscar</div>
+  <nav class="menu-nav">
+    <a href="#intro" class="menu-link">Nuestra historia</a>
+    <a href="#programa" class="menu-link">El gran día</a>
+    <a href="#countdown" class="menu-link">La cuenta atrás</a>
+    <a href="#ubicacion" class="menu-link">Cómo llegar</a>
+    <a href="#confirmar" class="menu-link">Confirmar asistencia</a>
+    <a href="#fotos" class="menu-link">Nuestro álbum</a>
+  </nav>
 </aside>
 
 <!-- HERO -->
@@ -810,7 +859,7 @@
 </section>
 
 <!-- SCHEDULE -->
-<section class="content">
+<section class="content" id="programa">
   <div class="section-eyebrow">El gran día</div>
   <h2 class="section-title">Sábado, 17 de Octubre</h2>
 
@@ -866,7 +915,7 @@
 </section>
 
 <!-- LOCATION -->
-<section class="content">
+<section class="content" id="ubicacion">
   <div class="section-eyebrow">Cómo llegar</div>
   <h2 class="section-title">Te esperamos en la<br>Finca Cortijo el Gallinero</h2>
   <p class="location-name">Collado Villalba</p>
@@ -890,7 +939,7 @@
 </div>
 
 <!-- RSVP FORM -->
-<section class="content rsvp-section">
+<section class="content rsvp-section" id="confirmar">
   <div class="section-eyebrow">Confirma tu asistencia</div>
   <h2 class="section-title">Tu hueco nos importa</h2>
 
@@ -961,6 +1010,21 @@
   </form>
 </section>
 
+<!-- ÁLBUM DE FOTOS -->
+<section class="content" id="fotos">
+  <div class="section-eyebrow">Nuestro álbum</div>
+  <h2 class="section-title">Comparte tus fotos</h2>
+  <p class="location-name">¿Nos ayudas a recoger todos los momentos del día? Sube aquí tus fotos y vídeos, y míralos junto a los de todos.</p>
+  <div class="photo-actions">
+    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn">
+      Subir mis fotos
+    </a>
+    <a href="https://photos.app.goo.gl/WXLqKbHzsPRuv7SC6" target="_blank" rel="noopener" class="btn btn-ghost">
+      Ver el álbum
+    </a>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-names">Alejandra<span class="footer-amp">&amp;</span>Óscar</div>
@@ -988,6 +1052,11 @@
 
   menuToggle.addEventListener('click', () => toggleMenu());
   menuBackdrop.addEventListener('click', () => toggleMenu(false));
+
+  // Al pulsar un enlace del menú, cerrarlo (el scroll suave lo hace el CSS)
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menuPanel.classList.contains('open')) {
