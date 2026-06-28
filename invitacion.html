@@ -34,17 +34,12 @@
     position: relative;
   }
 
-  /* Acuarela fija de fondo para toda la página */
+  /* Fondo general crema liso (la acuarela solo va en el hero) */
   .page-bg {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background-image:
-      linear-gradient(rgba(245, 240, 227, 0.80), rgba(245, 240, 227, 0.84)),
-      url('acuarela.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: var(--cream);
   }
 
   /* ==================== HAMBURGER MENU ==================== */
@@ -163,9 +158,10 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('acuarela.jpg');
+    background-image: url('fondo.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     z-index: 1;
     animation: heroZoom 25s ease-out forwards;
   }
@@ -180,9 +176,10 @@
     inset: 0;
     background:
       linear-gradient(180deg,
-        rgba(245, 240, 227, 0.05) 0%,
-        rgba(245, 240, 227, 0.25) 60%,
-        rgba(245, 240, 227, 0.78) 100%);
+        rgba(245, 240, 227, 0.30) 0%,
+        rgba(245, 240, 227, 0.15) 45%,
+        rgba(245, 240, 227, 0.55) 80%,
+        rgba(245, 240, 227, 0.95) 100%);
     z-index: 2;
   }
 
@@ -236,14 +233,6 @@
     background: var(--olive-dark);
     margin: clamp(20px, 5vw, 36px) auto;
     opacity: 0.45;
-  }
-
-  .hero-date {
-    font-family: 'Italiana', serif;
-    font-size: clamp(20px, 5.5vw, 32px);
-    letter-spacing: 0.35em;
-    color: var(--olive-dark);
-    text-transform: uppercase;
   }
 
   .scroll-hint {
@@ -324,6 +313,15 @@
     color: var(--olive-dark);
     text-transform: uppercase;
     font-size: 0.92em;
+  }
+
+  .intro-date {
+    font-family: 'Italiana', serif;
+    font-size: clamp(22px, 6vw, 36px);
+    letter-spacing: 0.3em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    margin-top: clamp(36px, 8vw, 56px);
   }
 
   /* Ornament olive branch */
@@ -657,7 +655,6 @@
     <div class="hero-preamble">Os invitamos a nuestra boda</div>
     <h1 class="hero-names">Alejandra<span class="hero-amp">&amp;</span>Óscar</h1>
     <div class="hero-divider"></div>
-    <div class="hero-date">17 · Octubre · 2026</div>
   </div>
   <a href="#intro" class="scroll-hint">Descubre&nbsp;más</a>
 </section>
@@ -674,6 +671,7 @@
   <p class="intro-text">
     Porque toda gran aventura comienza con un <span class="intro-highlight">«Sí, quiero»</span>, y queremos que estéis ahí para celebrarlo con nosotros.
   </p>
+  <div class="intro-date">17 · Octubre · 2026</div>
 </section>
 
 <!-- COUNTDOWN -->
