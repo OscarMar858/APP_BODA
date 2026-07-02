@@ -235,18 +235,37 @@
     opacity: 0.3;
   }
 
-  /* Texto de la vuelta - mismo estilo que la nota/intro */
-  .return-text {
+  /* Tarjeta verde de la vuelta con luna */
+  .return-card {
+    background: var(--olive-dark);
+    color: var(--cream);
+    border-radius: 6px;
+    padding: clamp(30px, 6vw, 42px) clamp(26px, 5vw, 36px);
     text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 500;
-    font-size: clamp(18px, 4.4vw, 22px);
-    color: var(--ink);
-    line-height: 1.6;
-    max-width: 460px;
+    box-shadow: 0 16px 36px -16px rgba(61, 74, 42, 0.5);
+    max-width: 480px;
     margin: 0 auto;
   }
-  .return-text strong { color: var(--olive-dark); font-weight: 600; }
+  .return-card .rc-icon {
+    font-size: 32px;
+    margin-bottom: 14px;
+  }
+  .return-card .rc-label {
+    font-family: 'Italiana', serif;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--olive-light);
+    margin-bottom: 14px;
+  }
+  .return-card .rc-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(19px, 4.6vw, 24px);
+    line-height: 1.5;
+  }
+  .return-card .rc-text strong { color: #F0D9A8; font-weight: 500; font-style: normal; }
 
   /* Nota final */
   .note {
@@ -330,7 +349,11 @@
 
   <!-- VUELTA -->
   <h2 class="block-title">La vuelta</h2>
-  <p class="return-text">Al terminar la fiesta, el autobús os llevará de vuelta a Madrid. No os preocupéis por el camino de regreso: <strong>bailad hasta el final.</strong></p>
+  <div class="return-card">
+    <div class="rc-icon">🌙</div>
+    <div class="rc-label">Y para la vuelta…</div>
+    <div class="rc-text">Al terminar la fiesta, el autobús os llevará de vuelta a Madrid. No os preocupéis por el camino de regreso: <strong>bailad hasta el final.</strong></div>
+  </div>
 
   <div class="section-sep"></div>
 
