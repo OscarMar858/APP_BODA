@@ -35,26 +35,6 @@
     position: relative;
   }
 
-  /* Estela de luz al deslizar el dedo */
-  .trail-dot {
-    position: fixed;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(200, 160, 70, 0.95) 0%, rgba(139, 107, 47, 0.7) 45%, transparent 72%);
-    box-shadow: 0 0 8px 2px rgba(180, 140, 60, 0.4);
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%, -50%);
-    animation: trailFade 0.9s ease-out forwards;
-    will-change: transform, opacity;
-  }
-
-  @keyframes trailFade {
-    0%   { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) translateY(8px); }
-  }
-
   /* Fondo general crema liso (la acuarela solo va en el hero) */
   .page-bg {
     position: fixed;
@@ -1273,43 +1253,6 @@
       submitBtn.textContent = 'Enviar confirmación';
     }
   });
-
-  // ==================== ESTELA AL DESLIZAR EL DEDO ====================
-  (function () {
-    let lastTime = 0;
-    const throttle = 28; // ms entre partículas, para no saturar
-
-    function spawnDot(x, y) {
-      const now = Date.now();
-      if (now - lastTime < throttle) return;
-      lastTime = now;
-
-      const dot = document.createElement('div');
-      dot.className = 'trail-dot';
-      // pequeña variación de posición y tamaño para que parezca orgánico
-      const jitter = 6;
-      dot.style.left = (x + (Math.random() * jitter - jitter / 2)) + 'px';
-      dot.style.top = (y + (Math.random() * jitter - jitter / 2)) + 'px';
-      const size = 7 + Math.random() * 7;
-      dot.style.width = size + 'px';
-      dot.style.height = size + 'px';
-      document.body.appendChild(dot);
-
-      // eliminar tras la animación
-      setTimeout(() => dot.remove(), 950);
-    }
-
-    // Táctil (móvil)
-    window.addEventListener('touchmove', (e) => {
-      const t = e.touches[0];
-      if (t) spawnDot(t.clientX, t.clientY);
-    }, { passive: true });
-
-    // Ratón (escritorio) - solo si se mueve, sutil
-    window.addEventListener('mousemove', (e) => {
-      spawnDot(e.clientX, e.clientY);
-    }, { passive: true });
-  })();
 </script>
 
 </body>
