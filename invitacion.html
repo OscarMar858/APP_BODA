@@ -45,11 +45,11 @@
   }
   .firefly {
     position: absolute;
-    width: 5px;
-    height: 5px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 240, 190, 0.95) 0%, rgba(232, 195, 106, 0.6) 40%, transparent 70%);
-    box-shadow: 0 0 8px 2px rgba(232, 195, 106, 0.5);
+    background: radial-gradient(circle, rgba(255, 245, 210, 1) 0%, rgba(240, 205, 120, 0.85) 45%, transparent 72%);
+    box-shadow: 0 0 14px 4px rgba(240, 205, 120, 0.7), 0 0 24px 8px rgba(232, 195, 106, 0.35);
     opacity: 0;
     animation: fireflyFloat var(--fdur, 14s) ease-in-out var(--fdelay, 0s) infinite,
                fireflyGlow var(--gdur, 3s) ease-in-out var(--fdelay, 0s) infinite;
@@ -64,7 +64,7 @@
   }
   @keyframes fireflyGlow {
     0%, 100% { opacity: 0; }
-    50%      { opacity: 1; }
+    50%      { opacity: 0.95; }
   }
 
   /* Fondo general crema liso (la acuarela solo va en el hero) */
@@ -269,8 +269,9 @@
     font-family: 'Allura', cursive;
     font-size: clamp(50px, 13.5vw, 110px);
     color: var(--olive-dark);
-    line-height: 0.95;
-    margin-bottom: clamp(20px, 4vw, 32px);
+    line-height: 1.15;
+    padding-bottom: 0.12em;
+    margin-bottom: clamp(16px, 3.5vw, 28px);
     font-weight: 400;
     text-shadow:
       0 2px 14px rgba(255, 253, 245, 0.95),
@@ -476,6 +477,20 @@
     line-height: 1;
     font-variant-numeric: tabular-nums;
     font-weight: 400;
+    display: inline-block;
+    transform-origin: center;
+  }
+
+  /* Animación tipo tablero de aeropuerto al cambiar el número */
+  .countdown-num.flip {
+    animation: numFlip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes numFlip {
+    0%   { transform: rotateX(0deg);   opacity: 1; }
+    45%  { transform: rotateX(-90deg); opacity: 0.2; }
+    55%  { transform: rotateX(90deg);  opacity: 0.2; }
+    100% { transform: rotateX(0deg);   opacity: 1; }
   }
 
   .countdown-label {
@@ -1159,14 +1174,27 @@
 
   function pad(n) { return String(n).padStart(2, '0'); }
 
+  // Actualiza un dígito solo si cambió, y le aplica la animación de giro
+  function setNum(id, value) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.textContent !== value) {
+      el.textContent = value;
+      el.classList.remove('flip');
+      // forzar reflow para reiniciar la animación
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+
   function updateCountdown() {
     const diff = TARGET_DATE - Date.now();
 
     if (diff <= 0) {
-      document.getElementById('cd-days').textContent    = '0';
-      document.getElementById('cd-hours').textContent   = '00';
-      document.getElementById('cd-minutes').textContent = '00';
-      document.getElementById('cd-seconds').textContent = '00';
+      setNum('cd-days', '0');
+      setNum('cd-hours', '00');
+      setNum('cd-minutes', '00');
+      setNum('cd-seconds', '00');
       return;
     }
 
@@ -1175,10 +1203,10 @@
     const minutes = Math.floor((diff / 60000) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
 
-    document.getElementById('cd-days').textContent    = days;
-    document.getElementById('cd-hours').textContent   = pad(hours);
-    document.getElementById('cd-minutes').textContent = pad(minutes);
-    document.getElementById('cd-seconds').textContent = pad(seconds);
+    setNum('cd-days', String(days));
+    setNum('cd-hours', pad(hours));
+    setNum('cd-minutes', pad(minutes));
+    setNum('cd-seconds', pad(seconds));
   }
 
   updateCountdown();
@@ -1216,15 +1244,15 @@
   // ==================== LUCIÉRNAGAS ====================
   const firefliesContainer = document.getElementById('fireflies');
   if (firefliesContainer) {
-    const count = window.innerWidth < 600 ? 14 : 22;
+    const count = window.innerWidth < 600 ? 22 : 34;
     for (let i = 0; i < count; i++) {
       const f = document.createElement('div');
       f.className = 'firefly';
       f.style.left = Math.random() * 100 + '%';
-      f.style.top = (40 + Math.random() * 60) + '%'; // más en la mitad inferior
+      f.style.top = (25 + Math.random() * 72) + '%';
       f.style.setProperty('--fdur', (10 + Math.random() * 10) + 's');
-      f.style.setProperty('--gdur', (2.5 + Math.random() * 3) + 's');
-      f.style.setProperty('--fdelay', (Math.random() * 8) + 's');
+      f.style.setProperty('--gdur', (3.5 + Math.random() * 3) + 's');
+      f.style.setProperty('--fdelay', (Math.random() * 6) + 's');
       f.style.setProperty('--fx1', (Math.random() * 60 - 30) + 'px');
       f.style.setProperty('--fy1', (-Math.random() * 40 - 10) + 'px');
       f.style.setProperty('--fx2', (Math.random() * 60 - 30) + 'px');
