@@ -35,36 +35,22 @@
     position: relative;
   }
 
-  /* Luciérnagas flotando */
-  .fireflies {
+  /* Estela de luz al deslizar el dedo */
+  .trail-dot {
     position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .firefly {
-    position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 245, 210, 1) 0%, rgba(240, 205, 120, 0.85) 45%, transparent 72%);
-    box-shadow: 0 0 14px 4px rgba(240, 205, 120, 0.7), 0 0 24px 8px rgba(232, 195, 106, 0.35);
-    opacity: 0;
-    animation: fireflyFloat var(--fdur, 14s) ease-in-out var(--fdelay, 0s) infinite,
-               fireflyGlow var(--gdur, 3s) ease-in-out var(--fdelay, 0s) infinite;
+    background: radial-gradient(circle, rgba(255, 240, 190, 0.9) 0%, rgba(212, 176, 116, 0.55) 45%, transparent 72%);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    animation: trailFade 0.9s ease-out forwards;
   }
 
-  @keyframes fireflyFloat {
-    0%   { transform: translate(0, 0); }
-    25%  { transform: translate(var(--fx1, 20px), var(--fy1, -30px)); }
-    50%  { transform: translate(var(--fx2, -15px), var(--fy2, -60px)); }
-    75%  { transform: translate(var(--fx3, 25px), var(--fy3, -30px)); }
-    100% { transform: translate(0, 0); }
-  }
-  @keyframes fireflyGlow {
-    0%, 100% { opacity: 0; }
-    50%      { opacity: 0.95; }
+  @keyframes trailFade {
+    0%   { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) translateY(8px); }
   }
 
   /* Fondo general crema liso (la acuarela solo va en el hero) */
@@ -898,7 +884,6 @@
 
 <!-- Fondo de acuarela fijo en toda la página -->
 <div class="page-bg"></div>
-<div class="fireflies" id="fireflies"></div>
 
 <!-- MENÚ HAMBURGUESA -->
 <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu-panel">
@@ -917,6 +902,7 @@
     <a href="#countdown" class="menu-link">La cuenta atrás</a>
     <a href="#ubicacion" class="menu-link">Cómo llegar</a>
     <a href="#confirmar" class="menu-link">Confirmar asistencia</a>
+    <a href="bus.html" class="menu-link menu-link-page">Autobús</a>
     <a href="hotel.html" class="menu-link menu-link-page">Alojamiento</a>
     <a href="fotos.html" class="menu-link menu-link-page">Nuestro álbum</a>
   </nav>
@@ -1241,28 +1227,6 @@
     introObserver.observe(introSection);
   }
 
-  // ==================== LUCIÉRNAGAS ====================
-  const firefliesContainer = document.getElementById('fireflies');
-  if (firefliesContainer) {
-    const count = window.innerWidth < 600 ? 22 : 34;
-    for (let i = 0; i < count; i++) {
-      const f = document.createElement('div');
-      f.className = 'firefly';
-      f.style.left = Math.random() * 100 + '%';
-      f.style.top = (25 + Math.random() * 72) + '%';
-      f.style.setProperty('--fdur', (10 + Math.random() * 10) + 's');
-      f.style.setProperty('--gdur', (3.5 + Math.random() * 3) + 's');
-      f.style.setProperty('--fdelay', (Math.random() * 6) + 's');
-      f.style.setProperty('--fx1', (Math.random() * 60 - 30) + 'px');
-      f.style.setProperty('--fy1', (-Math.random() * 40 - 10) + 'px');
-      f.style.setProperty('--fx2', (Math.random() * 60 - 30) + 'px');
-      f.style.setProperty('--fy2', (-Math.random() * 70 - 20) + 'px');
-      f.style.setProperty('--fx3', (Math.random() * 60 - 30) + 'px');
-      f.style.setProperty('--fy3', (-Math.random() * 40 - 10) + 'px');
-      firefliesContainer.appendChild(f);
-    }
-  }
-
   // ==================== RSVP FORM ====================
   // URL del script de Google Apps Script que recibe los datos y los guarda en tu Google Sheets
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzsOZqpOvhId5xbwqgPqNnZYEyt9QI8-35O6A9XLHd2nexZfpFLU3WQLx7XoFumlg/exec';
@@ -1307,6 +1271,43 @@
       submitBtn.textContent = 'Enviar confirmación';
     }
   });
+
+  // ==================== ESTELA AL DESLIZAR EL DEDO ====================
+  (function () {
+    let lastTime = 0;
+    const throttle = 28; // ms entre partículas, para no saturar
+
+    function spawnDot(x, y) {
+      const now = Date.now();
+      if (now - lastTime < throttle) return;
+      lastTime = now;
+
+      const dot = document.createElement('div');
+      dot.className = 'trail-dot';
+      // pequeña variación de posición y tamaño para que parezca orgánico
+      const jitter = 6;
+      dot.style.left = (x + (Math.random() * jitter - jitter / 2)) + 'px';
+      dot.style.top = (y + (Math.random() * jitter - jitter / 2)) + 'px';
+      const size = 7 + Math.random() * 7;
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      document.body.appendChild(dot);
+
+      // eliminar tras la animación
+      setTimeout(() => dot.remove(), 950);
+    }
+
+    // Táctil (móvil)
+    window.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      if (t) spawnDot(t.clientX, t.clientY);
+    }, { passive: true });
+
+    // Ratón (escritorio) - solo si se mueve, sutil
+    window.addEventListener('mousemove', (e) => {
+      spawnDot(e.clientX, e.clientY);
+    }, { passive: true });
+  })();
 </script>
 
 </body>
