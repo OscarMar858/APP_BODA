@@ -1315,45 +1315,62 @@
     }
   });
 
-  // ==================== HOJAS DE OLIVO CAYENDO ====================
+  // ==================== HOJAS DE ACUARELA CAYENDO ====================
   (function () {
     const container = document.getElementById('leaves');
     if (!container) return;
 
-    const leafSVGs = [
-      `<svg width="22" height="10" viewBox="0 0 44 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10 C 12 2, 32 2, 42 10 C 32 18, 12 18, 2 10 Z" fill="COLOR"/><path d="M4 10 L 40 10" stroke="VEIN" stroke-width="0.8" fill="none"/></svg>`,
-      `<svg width="20" height="12" viewBox="0 0 40 24" xmlns="http://www.w3.org/2000/svg"><path d="M2 12 C 10 3, 30 3, 38 12 C 30 21, 10 21, 2 12 Z" fill="COLOR"/><path d="M4 12 L 36 12" stroke="VEIN" stroke-width="0.8" fill="none"/></svg>`
-    ];
-    const colors = [
-      { fill: '#5D6E45', vein: '#3D4A2A' },
-      { fill: '#7E9B5C', vein: '#4F5E3B' },
-      { fill: '#6B8A4A', vein: '#3D4A2A' },
-      { fill: '#8A9968', vein: '#5D6E45' }
+    // Paleta extraída de la acuarela real del árbol (verdes suaves y ocres)
+    const palettes = [
+      ['#B4B496', '#96B496', '#789678'],
+      ['#A8B888', '#88A878', '#6B8A5A'],
+      ['#C0BC9C', '#A0B482', '#84986A'],
+      ['#98A878', '#7E9B5C', '#5D6E45']
     ];
 
-    function createLeaf() {
+    function createLeaf(i) {
       const leaf = document.createElement('div');
       leaf.className = 'leaf';
       const inner = document.createElement('div');
       inner.className = 'leaf-inner';
-      const svg = leafSVGs[Math.floor(Math.random() * leafSVGs.length)];
-      const c = colors[Math.floor(Math.random() * colors.length)];
-      inner.innerHTML = svg.replace('COLOR', c.fill).replace('VEIN', c.vein);
+
+      const pal = palettes[Math.floor(Math.random() * palettes.length)];
+      const w = 26 + Math.random() * 14;
+      const h = w * 0.5;
+      const gradId = 'lg' + i, roughId = 'lr' + i;
+
+      // Hoja de acuarela: degradado de 3 tonos + textura irregular en los bordes
+      inner.innerHTML = `
+        <svg width="${w}" height="${h}" viewBox="0 0 50 26" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="${gradId}" cx="42%" cy="38%" r="70%">
+              <stop offset="0%" stop-color="${pal[0]}"/>
+              <stop offset="50%" stop-color="${pal[1]}"/>
+              <stop offset="100%" stop-color="${pal[2]}"/>
+            </radialGradient>
+            <filter id="${roughId}">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
+            </filter>
+          </defs>
+          <path d="M3 13 C 14 3, 36 3, 47 13 C 36 23, 14 23, 3 13 Z"
+                fill="url(#${gradId})" filter="url(#${roughId})" opacity="0.88"/>
+          <path d="M8 13 Q 25 ${11 + Math.random() * 2} 42 13" stroke="${pal[2]}" stroke-width="0.7" fill="none" opacity="0.45"/>
+        </svg>`;
+
       leaf.appendChild(inner);
       leaf.style.left = Math.random() * 100 + '%';
       leaf.style.animationDuration = (9 + Math.random() * 7) + 's';
-      leaf.style.animationDelay = Math.random() * 10 + 's';
-      leaf.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+      leaf.style.animationDelay = Math.random() * 9 + 's';
+      leaf.style.setProperty('--drift', (Math.random() * 130 - 65) + 'px');
       leaf.style.setProperty('--spin', (Math.random() * 360 + 120) + 'deg');
-      inner.style.animationDuration = (2 + Math.random() * 2) + 's';
-      const scale = 0.75 + Math.random() * 0.6;
-      inner.style.transform = `scale(${scale})`;
+      inner.style.animationDuration = (2.2 + Math.random() * 2) + 's';
       container.appendChild(leaf);
     }
 
-    // Menos hojas que en la muestra, más elegante
-    const count = window.innerWidth < 600 ? 6 : 9;
-    for (let i = 0; i < count; i++) createLeaf();
+    // Pocas hojas, elegante
+    const count = window.innerWidth < 600 ? 7 : 11;
+    for (let i = 0; i < count; i++) createLeaf(i);
   })();
 </script>
 
