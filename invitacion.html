@@ -56,19 +56,19 @@
   }
   .leaf {
     position: absolute;
-    top: 0;
+    top: -40px;
     will-change: transform;
     opacity: 0;
     animation-name: leafFall;
-    animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
   .leaf svg { display: block; }
   @keyframes leafFall {
     0%   { opacity: 0; transform: translateY(0) translateX(0) rotate(0deg); }
-    8%   { opacity: 0.9; }
-    88%  { opacity: 0.9; }
-    100% { opacity: 0; transform: translateY(var(--fall-dist, 90vh)) translateX(var(--drift, 40px)) rotate(var(--spin, 220deg)); }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.8; }
+    100% { opacity: 0; transform: translateY(105vh) translateX(var(--drift, 40px)) rotate(var(--spin, 220deg)); }
   }
   .leaf-inner {
     animation-name: leafSway;
@@ -77,8 +77,8 @@
     transform-origin: center;
   }
   @keyframes leafSway {
-    0%, 100% { transform: translateX(-14px) rotate(-10deg); }
-    50%      { transform: translateX(14px) rotate(10deg); }
+    0%, 100% { transform: translateX(-12px) rotate(-8deg); }
+    50%      { transform: translateX(12px) rotate(8deg); }
   }
 
   /* ==================== HAMBURGER MENU ==================== */
@@ -1359,27 +1359,10 @@
         </svg>`;
 
       leaf.appendChild(inner);
-
-      // Las hojas NACEN en la zona de la copa del árbol (franja central-superior),
-      // no repartidas por todo el ancho. Así parece que brotan del árbol.
-      // La copa está aproximadamente entre el 22% y 78% del ancho, arriba.
-      const startX = 22 + Math.random() * 56;  // 22% - 78% (zona de la copa)
-      const startY = 12 + Math.random() * 22;   // 12% - 34% de altura (donde está el follaje)
-      leaf.style.left = startX + '%';
-      leaf.style.top = startY + '%';
-
-      // Al caer se dispersan hacia los lados (drift amplio) desde el centro
-      // Las que nacen a la izquierda derivan más a la izq, las de la derecha a la der
-      const centerBias = (startX - 50) / 50;  // -1 (izq) a +1 (der)
-      const baseDrift = centerBias * 80;       // empuja según su posición
-      const randomDrift = (Math.random() * 100 - 50);
-      leaf.style.setProperty('--drift', (baseDrift + randomDrift) + 'px');
-
-      // Distancia de caída: desde donde nace hasta abajo del todo
-      leaf.style.setProperty('--fall-dist', (100 - startY + 8) + 'vh');
-
-      leaf.style.animationDuration = (8 + Math.random() * 6) + 's';
+      leaf.style.left = Math.random() * 100 + '%';
+      leaf.style.animationDuration = (9 + Math.random() * 7) + 's';
       leaf.style.animationDelay = Math.random() * 9 + 's';
+      leaf.style.setProperty('--drift', (Math.random() * 130 - 65) + 'px');
       leaf.style.setProperty('--spin', (Math.random() * 360 + 120) + 'deg');
       inner.style.animationDuration = (2.2 + Math.random() * 2) + 's';
       container.appendChild(leaf);
