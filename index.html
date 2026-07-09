@@ -13,58 +13,170 @@
   :root {
     --olive: #5D6E45;
     --olive-dark: #3D4A2A;
+    --olive-deep: #2E3820;
     --olive-light: #8A9968;
     --cream: #F5F0E3;
-    --paper: #FBF8F0;
-    --paper-shade: #EFE9D9;
     --ink: #3D3829;
     --bronze: #8B6B2F;
+    --gold-soft: #D4B074;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html, body { height: 100%; overflow: hidden; }
 
   body {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 500;
-    background-color: var(--cream);
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.29 0 0 0 0 0.16 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23paper)'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: var(--olive-dark);
+    color: var(--cream);
     min-height: 100vh;
     min-height: 100dvh;
-    padding: 20px;
     -webkit-font-smoothing: antialiased;
+    perspective: 1600px;
   }
 
-  .stage {
-    perspective: 1400px;
+  /* ============ EL SOBRE: PANTALLA COMPLETA ============ */
+  .envelope-wrap {
+    position: fixed;
+    inset: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+  }
+
+  /* Cuerpo verde del sobre con textura de papel */
+  .envelope-body {
+    position: absolute;
+    inset: 0;
+    background-color: var(--olive-dark);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 0.94 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23paper)'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Viñeteado: oscurece los bordes, ilumina el centro */
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 85% 70% at 50% 42%,
+      rgba(255,255,255,0.07) 0%,
+      rgba(255,255,255,0.02) 35%,
+      rgba(0,0,0,0.10) 72%,
+      rgba(0,0,0,0.28) 100%);
+    pointer-events: none;
+  }
+
+  /* PLIEGUES LATERALES con sombra (los triángulos del sobre) */
+  .fold {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .fold-left {
+    left: 0;
+    background: linear-gradient(100deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.07) 50%, transparent 100%);
+    clip-path: polygon(0 0, 100% 60%, 0 100%);
+  }
+  .fold-right {
+    right: 0;
+    background: linear-gradient(260deg, rgba(0,0,0,0.24) 0%, rgba(0,0,0,0.09) 50%, transparent 100%);
+    clip-path: polygon(100% 0, 0 60%, 100% 100%);
+  }
+  /* Solapa inferior */
+  .fold-bottom {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 52%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.22) 100%);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    pointer-events: none;
+  }
+
+  /* Líneas doradas finas de los pliegues */
+  .fold-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .fold-lines .line {
+    position: absolute;
+    height: 1px;
+    background: linear-gradient(90deg,
+      rgba(212, 176, 116, 0) 0%,
+      rgba(212, 176, 116, 0.28) 30%,
+      rgba(212, 176, 116, 0.28) 70%,
+      rgba(212, 176, 116, 0) 100%);
+    transform-origin: left center;
+  }
+
+  /* ============ SOLAPA SUPERIOR (se abre) ============ */
+  .flap {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 60%;
+    background-color: #43512F;
+    background-image:
+      linear-gradient(178deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.08) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 0.94 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23p2)'/%3E%3C/svg%3E");
+    background-size: auto, 220px 220px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 1.1s cubic-bezier(0.55, 0, 0.35, 1);
+    z-index: 6;
+    backface-visibility: hidden;
+    box-shadow: 0 6px 22px -8px rgba(0, 0, 0, 0.45);
+  }
+  .envelope-wrap.open .flap {
+    transform: rotateX(-179deg);
+    z-index: 1;
+    box-shadow: none;
+  }
+
+  /* Borde dorado de la solapa */
+  .flap-edge {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .envelope-wrap.open .flap-edge { opacity: 0; }
+
+  /* ============ CONTENIDO SOBRE EL SOBRE ============ */
+  .content {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-  }
-
-  /* ============ INICIALES ARRIBA ============ */
-  .initials {
-    text-align: center;
-    margin-bottom: clamp(26px, 5vh, 48px);
-    animation: fadeDown 1.4s cubic-bezier(0.2, 0, 0.2, 1) 0.2s both;
+    justify-content: space-between;
+    padding: clamp(48px, 11vh, 90px) 24px clamp(40px, 8vh, 70px);
+    pointer-events: none;
     transition: opacity 0.6s ease;
   }
-  .initials.fade-out { opacity: 0; }
+  .envelope-wrap.open .content { opacity: 0; }
+
+  /* INICIALES ARRIBA, sobre la solapa */
+  .initials {
+    text-align: center;
+    animation: fadeDown 1.5s cubic-bezier(0.2, 0, 0.2, 1) 0.3s both;
+  }
 
   .initials-mark {
     font-family: 'Allura', cursive;
-    font-size: clamp(56px, 15vw, 82px);
-    color: var(--olive-dark);
-    line-height: 1.25;
+    font-size: clamp(70px, 19vw, 108px);
+    color: var(--cream);
+    line-height: 1.2;
     padding-bottom: 0.06em;
+    text-shadow:
+      0 2px 20px rgba(0, 0, 0, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.25);
   }
   .initials-mark .amp {
     font-family: 'Cormorant Garamond', serif;
@@ -74,9 +186,9 @@
     vertical-align: 0.16em;
     padding: 0 0.06em;
     background: linear-gradient(100deg,
-      var(--bronze) 0%, var(--bronze) 40%,
-      #F4E0A8 50%,
-      var(--bronze) 60%, var(--bronze) 100%);
+      var(--gold-soft) 0%, var(--gold-soft) 40%,
+      #FBEFC8 50%,
+      var(--gold-soft) 60%, var(--gold-soft) 100%);
     background-size: 250% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -93,127 +205,59 @@
   .initials-date {
     font-family: 'Cinzel', serif;
     font-weight: 600;
-    font-size: clamp(10px, 2.6vw, 12px);
-    letter-spacing: 0.4em;
-    color: var(--olive);
+    font-size: clamp(10px, 2.7vw, 12px);
+    letter-spacing: 0.42em;
+    color: var(--gold-soft);
     text-transform: uppercase;
-    margin-top: 10px;
-    opacity: 0.8;
+    margin-top: 14px;
+    opacity: 0.85;
   }
 
   @keyframes fadeDown {
-    0%   { opacity: 0; transform: translateY(-14px); }
+    0%   { opacity: 0; transform: translateY(-16px); }
     100% { opacity: 1; transform: translateY(0); }
   }
 
-  /* ============ EL SOBRE ============ */
-  .envelope-wrap {
-    position: relative;
-    width: min(84vw, 330px);
-    aspect-ratio: 1 / 0.68;
-    cursor: pointer;
-    animation: envelopeIn 1.5s cubic-bezier(0.2, 0, 0.2, 1) 0.5s both;
-    -webkit-tap-highlight-color: transparent;
+  /* PIE: solo "Pulsa el sello" */
+  .hint-cta {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(11px, 2.9vw, 13px);
+    letter-spacing: 0.3em;
+    color: var(--cream);
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.85;
+    animation: fadeUp 1.5s cubic-bezier(0.2, 0, 0.2, 1) 1.3s both,
+               nudge 2.8s ease-in-out 2.8s infinite;
+  }
+  .hint-cta .arrow { font-size: 1.35em; line-height: 1; color: var(--gold-soft); }
+
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); opacity: 0.8; }
+    50%      { transform: translateY(-4px); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 0.85; transform: translateY(0); }
   }
 
-  @keyframes envelopeIn {
-    0%   { opacity: 0; transform: translateY(24px) scale(0.96); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .envelope {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(158deg, var(--paper) 0%, #F7F2E6 55%, var(--paper-shade) 100%);
-    border-radius: 3px;
-    box-shadow:
-      0 30px 60px -28px rgba(61, 74, 42, 0.42),
-      0 12px 24px -12px rgba(61, 74, 42, 0.22),
-      0 1px 2px rgba(61, 74, 42, 0.1),
-      inset 0 0 0 1px rgba(93, 110, 69, 0.12);
-    overflow: hidden;
-    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.9s ease;
-  }
-
-  /* Pliegues laterales con sombra */
-  .fold {
-    position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
-  }
-  .fold-left {
-    left: 0;
-    background: linear-gradient(100deg, rgba(0,0,0,0.045) 0%, rgba(0,0,0,0.012) 55%, transparent 100%);
-    clip-path: polygon(0 0, 100% 74%, 0 100%);
-  }
-  .fold-right {
-    right: 0;
-    background: linear-gradient(260deg, rgba(0,0,0,0.055) 0%, rgba(0,0,0,0.015) 55%, transparent 100%);
-    clip-path: polygon(100% 0, 0 74%, 100% 100%);
-  }
-  .fold-bottom {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 62%;
-    background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.055) 100%);
-    clip-path: polygon(0 100%, 50% 0, 100% 100%);
-  }
-
-  /* Líneas finas de los pliegues */
-  .fold-lines { position: absolute; inset: 0; pointer-events: none; }
-  .fold-lines::before,
-  .fold-lines::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    border-top: 1px solid rgba(93, 110, 69, 0.14);
-  }
-  .fold-lines::before {
-    left: 0;
-    transform-origin: top left;
-    transform: rotate(36.2deg) scaleX(1.24);
-  }
-  .fold-lines::after {
-    right: 0;
-    transform-origin: top right;
-    transform: rotate(-36.2deg) scaleX(1.24);
-  }
-
-  /* SOLAPA SUPERIOR */
-  .flap {
-    position: absolute;
-    left: 0; right: 0; top: 0;
-    height: 74%;
-    background: linear-gradient(172deg, #FCFAF3 0%, var(--paper) 48%, #F2ECDD 100%);
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    transform-origin: top center;
-    transform: rotateX(0deg);
-    transition: transform 1.05s cubic-bezier(0.55, 0, 0.35, 1);
-    z-index: 3;
-    box-shadow: 0 3px 10px -4px rgba(61, 74, 42, 0.18);
-    backface-visibility: hidden;
-  }
-  .envelope-wrap.open .flap {
-    transform: rotateX(-178deg);
-    z-index: 1;
-    box-shadow: none;
-  }
-
-  /* EL SELLO */
+  /* ============ EL SELLO ============ */
   .seal {
     position: absolute;
     left: 50%;
-    top: 74%;
+    top: 60%;
     transform: translate(-50%, -50%);
-    width: clamp(74px, 21vw, 94px);
-    z-index: 5;
-    filter: drop-shadow(0 8px 16px rgba(61, 74, 42, 0.4))
-            drop-shadow(0 2px 4px rgba(61, 74, 42, 0.25));
+    width: clamp(96px, 27vw, 132px);
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: auto;
+    filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.5))
+            drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
     transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
-    animation: sealPulse 4s ease-in-out 2.2s infinite;
+    animation: sealPulse 4s ease-in-out 2.4s infinite;
   }
   .seal img { width: 100%; height: auto; display: block; }
 
@@ -228,49 +272,42 @@
     animation: none;
     transform: translate(-50%, -50%) scale(1.06);
   }
-
   .envelope-wrap.open .seal {
     animation: none;
-    transform: translate(-50%, -50%) scale(0.4) rotate(24deg);
+    transform: translate(-50%, -50%) scale(0.35) rotate(28deg);
     opacity: 0;
     transition: transform 0.6s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.5s ease;
   }
 
-  /* LUZ AL ABRIR */
+  /* ============ LUZ AL ABRIR ============ */
   .light {
     position: absolute;
     left: 50%;
-    top: 40%;
-    transform: translate(-50%, -50%) scale(0.2);
-    width: 130%;
-    aspect-ratio: 1;
+    top: 45%;
+    transform: translate(-50%, -50%) scale(0.15);
+    width: 140vmax;
+    height: 140vmax;
     border-radius: 50%;
     background: radial-gradient(circle,
       rgba(255, 253, 245, 1) 0%,
-      rgba(252, 246, 228, 0.9) 22%,
-      rgba(244, 224, 168, 0.45) 45%,
-      rgba(244, 224, 168, 0) 70%);
+      rgba(253, 247, 228, 0.95) 16%,
+      rgba(244, 224, 168, 0.55) 34%,
+      rgba(244, 224, 168, 0.15) 52%,
+      rgba(244, 224, 168, 0) 68%);
     opacity: 0;
     pointer-events: none;
-    z-index: 4;
+    z-index: 5;
   }
   .envelope-wrap.open .light {
-    animation: lightBurst 1.2s cubic-bezier(0.2, 0, 0.3, 1) 0.45s forwards;
+    animation: lightBurst 1.3s cubic-bezier(0.2, 0, 0.3, 1) 0.5s forwards;
   }
   @keyframes lightBurst {
-    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-    40%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); }
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
+    35%  { opacity: 1; transform: translate(-50%, -50%) scale(0.75); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
   }
 
-  .envelope-wrap.open .envelope {
-    transform: scale(0.97);
-    box-shadow:
-      0 40px 70px -30px rgba(61, 74, 42, 0.3),
-      inset 0 0 0 1px rgba(93, 110, 69, 0.08);
-  }
-
-  /* Fundido final */
+  /* Fundido final a crema antes de redirigir */
   .whiteout {
     position: fixed;
     inset: 0;
@@ -279,78 +316,51 @@
     pointer-events: none;
     z-index: 50;
   }
-  .whiteout.go { animation: whiteFade 0.7s ease forwards; }
+  .whiteout.go { animation: whiteFade 0.8s ease forwards; }
   @keyframes whiteFade { to { opacity: 1; } }
-
-  /* ============ PIE ============ */
-  .footer-hint {
-    text-align: center;
-    margin-top: clamp(30px, 5vh, 52px);
-    animation: fadeUp 1.4s cubic-bezier(0.2, 0, 0.2, 1) 1.1s both;
-    transition: opacity 0.5s ease;
-  }
-  .footer-hint.fade-out { opacity: 0; }
-
-  .hint-line {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: clamp(17px, 4.4vw, 21px);
-    color: var(--ink);
-    opacity: 0.85;
-    margin-bottom: 14px;
-  }
-
-  .hint-cta {
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
-    font-size: clamp(11px, 2.9vw, 13px);
-    letter-spacing: 0.26em;
-    color: var(--olive-dark);
-    text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    animation: nudge 2.6s ease-in-out infinite;
-  }
-  .hint-cta .arrow { font-size: 1.3em; line-height: 1; color: var(--bronze); }
-
-  @keyframes nudge {
-    0%, 100% { opacity: 0.75; transform: translateY(0); }
-    50%      { opacity: 1;    transform: translateY(-3px); }
-  }
-  @keyframes fadeUp {
-    0%   { opacity: 0; transform: translateY(14px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
 </style>
 </head>
 <body>
 
-<div class="stage">
-  <div class="initials" id="initials">
-    <div class="initials-mark">A<span class="amp">&amp;</span>O</div>
-    <div class="initials-date">17 · 10 · 2026</div>
+<div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Abrir la invitación">
+
+  <!-- Cuerpo verde del sobre -->
+  <div class="envelope-body">
+    <div class="fold fold-left"></div>
+    <div class="fold fold-right"></div>
+    <div class="fold-bottom"></div>
+    <div class="vignette"></div>
   </div>
 
-  <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Abrir la invitación">
-    <div class="envelope">
-      <div class="fold fold-left"></div>
-      <div class="fold fold-right"></div>
-      <div class="fold-bottom"></div>
-      <div class="fold-lines"></div>
-    </div>
-    <div class="light"></div>
-    <div class="flap"></div>
-    <div class="seal">
-      <img src="sello.png" alt="Sello de lacre A&amp;O">
-    </div>
-  </div>
+  <!-- Líneas doradas de los pliegues -->
+  <svg class="fold-lines" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="0" x2="50" y2="60" stroke="rgba(212,176,116,0.30)" stroke-width="0.25" vector-effect="non-scaling-stroke"/>
+    <line x1="100" y1="0" x2="50" y2="60" stroke="rgba(212,176,116,0.30)" stroke-width="0.25" vector-effect="non-scaling-stroke"/>
+    <line x1="0" y1="100" x2="50" y2="60" stroke="rgba(212,176,116,0.16)" stroke-width="0.25" vector-effect="non-scaling-stroke"/>
+    <line x1="100" y1="100" x2="50" y2="60" stroke="rgba(212,176,116,0.16)" stroke-width="0.25" vector-effect="non-scaling-stroke"/>
+  </svg>
 
-  <div class="footer-hint" id="footer-hint">
-    <div class="hint-line">Tenemos una noticia…</div>
+  <!-- Luz que sale al abrir -->
+  <div class="light"></div>
+
+  <!-- Solapa que se abre -->
+  <div class="flap"></div>
+
+  <!-- Contenido: iniciales arriba, hint abajo -->
+  <div class="content">
+    <div class="initials">
+      <div class="initials-mark">A<span class="amp">&amp;</span>O</div>
+      <div class="initials-date">17 · 10 · 2026</div>
+    </div>
+
     <div class="hint-cta">Pulsa el sello <span class="arrow">›</span></div>
   </div>
+
+  <!-- El sello -->
+  <div class="seal" id="seal">
+    <img src="sello.png" alt="Sello de lacre A&amp;O">
+  </div>
+
 </div>
 
 <div class="whiteout" id="whiteout"></div>
@@ -358,8 +368,6 @@
 <script>
   const DESTINATION = 'invitacion.html';
   const envelope = document.getElementById('envelope');
-  const initials = document.getElementById('initials');
-  const footerHint = document.getElementById('footer-hint');
   const whiteout = document.getElementById('whiteout');
   let opened = false;
 
@@ -372,10 +380,8 @@
     if (opened) return;
     opened = true;
     envelope.classList.add('open');
-    initials.classList.add('fade-out');
-    footerHint.classList.add('fade-out');
-    setTimeout(() => whiteout.classList.add('go'), 900);
-    setTimeout(() => { window.location.href = DESTINATION; }, 1600);
+    setTimeout(() => whiteout.classList.add('go'), 1000);
+    setTimeout(() => { window.location.href = DESTINATION; }, 1750);
   }
 
   envelope.addEventListener('click', openEnvelope);
