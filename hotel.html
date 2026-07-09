@@ -154,6 +154,16 @@
     opacity: 0.6;
   }
 
+  /* Dibujo decorativo de la página */
+  .page-icon {
+    width: clamp(72px, 17vw, 96px);
+    height: auto;
+    margin: clamp(8px, 2vw, 14px) auto clamp(4px, 1vw, 8px);
+    display: block;
+    color: var(--olive);
+    opacity: 0.75;
+  }
+
   /* Tarjeta destacada cortesía */
   .highlight-card {
     background: var(--olive-dark);
@@ -216,6 +226,19 @@
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(93, 110, 69, 0.25);
     border-radius: 4px;
+  }
+  .price-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+  }
+  .price-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    color: var(--olive);
+    opacity: 0.8;
   }
   .price-name {
     font-family: 'Cormorant Garamond', serif;
@@ -343,6 +366,16 @@
   }
   .back-link:hover { color: var(--bronze); }
 
+  /* Ramillete de olivo separador */
+  .olive-sep {
+    display: block;
+    width: clamp(70px, 16vw, 100px);
+    height: auto;
+    margin: clamp(36px, 7vw, 52px) auto;
+    color: var(--olive);
+    opacity: 0.55;
+  }
+
   .section-sep {
     width: 30px;
     height: 1px;
@@ -380,6 +413,31 @@
     <div class="eyebrow">Dónde dormir</div>
     <h1 class="page-title">Alojamiento</h1>
     <div class="divider"></div>
+
+    <!-- Hotel dibujado -->
+    <svg class="page-icon" viewBox="0 0 76 70" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tejado -->
+      <path d="M 6,26 L 38,10 L 70,26"/>
+      <path d="M 10,26 L 10,64 M 66,26 L 66,64"/>
+      <!-- Base -->
+      <path d="M 4,64 L 72,64"/>
+      <!-- Ventanas fila 1 -->
+      <rect x="18" y="32" width="10" height="9" rx="1"/>
+      <rect x="33" y="32" width="10" height="9" rx="1"/>
+      <rect x="48" y="32" width="10" height="9" rx="1"/>
+      <!-- Ventanas fila 2 -->
+      <rect x="18" y="46" width="10" height="9" rx="1"/>
+      <rect x="48" y="46" width="10" height="9" rx="1"/>
+      <!-- Puerta -->
+      <path d="M 32,64 L 32,49 Q 32,46 38,46 Q 44,46 44,49 L 44,64"/>
+      <!-- Toldo sobre la puerta -->
+      <path d="M 28,46 L 48,46" stroke-width="1.6"/>
+      <!-- Banderola en el tejado -->
+      <path d="M 38,10 L 38,3" stroke-width="1.2"/>
+      <path d="M 38,4 L 47,6.5 L 38,9" stroke-width="1.2"/>
+      <!-- Detalle -->
+      <circle cx="38" cy="22" r="1.4" fill="currentColor" stroke="none" opacity="0.55"/>
+    </svg>
   </div>
 
   <!-- Hotel principal -->
@@ -401,18 +459,47 @@
     <p>No supone ningún compromiso, pero os garantiza que no os quedéis sin sitio más adelante.</p>
   </div>
 
-  <div class="section-sep"></div>
+  <svg class="olive-sep" viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M20 15 Q 60 15 100 15"/>
+    <path d="M38 15 Q 44 8 52 11 Q 46 17 38 15"/>
+    <path d="M50 15 Q 56 22 64 19 Q 58 13 50 15"/>
+    <path d="M62 15 Q 68 8 76 11 Q 70 17 62 15"/>
+    <path d="M74 15 Q 80 22 88 19 Q 82 13 74 15"/>
+    <ellipse cx="30" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+    <ellipse cx="94" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+  </svg>
 
   <!-- Precios -->
   <div class="block">
     <h2 class="block-title">Precios para el 17 de Octubre</h2>
     <div class="prices">
       <div class="price-row">
-        <div class="price-name">Habitación doble<small>o uso individual · solo alojamiento</small></div>
+        <div class="price-left">
+          <!-- Cama doble -->
+          <svg class="price-icon" viewBox="0 0 40 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 22 L3 8 M37 22 L37 14"/>
+            <path d="M3 22 L37 22 M3 26 L3 22 M37 26 L37 22"/>
+            <path d="M3 14 L37 14"/>
+            <rect x="7" y="8" width="12" height="6" rx="2"/>
+            <rect x="21" y="8" width="12" height="6" rx="2"/>
+          </svg>
+          <div class="price-name">Habitación doble<small>o uso individual · solo alojamiento</small></div>
+        </div>
         <div class="price-value">92 €</div>
       </div>
       <div class="price-row">
-        <div class="price-name">Habitación triple<small>solo alojamiento · plazas limitadas</small></div>
+        <div class="price-left">
+          <!-- Cama triple -->
+          <svg class="price-icon" viewBox="0 0 40 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 22 L3 8 M37 22 L37 14"/>
+            <path d="M3 22 L37 22 M3 26 L3 22 M37 26 L37 22"/>
+            <path d="M3 14 L37 14"/>
+            <rect x="6" y="9" width="8" height="5" rx="1.6"/>
+            <rect x="16" y="9" width="8" height="5" rx="1.6"/>
+            <rect x="26" y="9" width="8" height="5" rx="1.6"/>
+          </svg>
+          <div class="price-name">Habitación triple<small>solo alojamiento · plazas limitadas</small></div>
+        </div>
         <div class="price-value">138 €</div>
       </div>
     </div>
@@ -420,7 +507,15 @@
     <p style="font-size:14px; font-style:italic; opacity:0.7; text-align:center; margin-top:16px;">Precios con IVA incluido, vigentes a día de hoy. El precio se garantiza para quien reserve antes de 45 días de la boda.</p>
   </div>
 
-  <div class="section-sep"></div>
+  <svg class="olive-sep" viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M20 15 Q 60 15 100 15"/>
+    <path d="M38 15 Q 44 8 52 11 Q 46 17 38 15"/>
+    <path d="M50 15 Q 56 22 64 19 Q 58 13 50 15"/>
+    <path d="M62 15 Q 68 8 76 11 Q 70 17 62 15"/>
+    <path d="M74 15 Q 80 22 88 19 Q 82 13 74 15"/>
+    <ellipse cx="30" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+    <ellipse cx="94" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+  </svg>
 
   <!-- Cómo reservar -->
   <div class="block">
@@ -451,7 +546,15 @@
     <p style="font-size:15px; font-style:italic; opacity:0.8; text-align:center; margin-top:18px;">Las reservas deben confirmarse antes de 45 días de la boda para garantizar el precio.</p>
   </div>
 
-  <div class="section-sep"></div>
+  <svg class="olive-sep" viewBox="0 0 120 30" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M20 15 Q 60 15 100 15"/>
+    <path d="M38 15 Q 44 8 52 11 Q 46 17 38 15"/>
+    <path d="M50 15 Q 56 22 64 19 Q 58 13 50 15"/>
+    <path d="M62 15 Q 68 8 76 11 Q 70 17 62 15"/>
+    <path d="M74 15 Q 80 22 88 19 Q 82 13 74 15"/>
+    <ellipse cx="30" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+    <ellipse cx="94" cy="15" rx="2.6" ry="3.4" fill="currentColor" stroke="none" opacity="0.8"/>
+  </svg>
 
   <!-- Buenos saber -->
   <div class="block">
