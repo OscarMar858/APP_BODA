@@ -828,6 +828,167 @@
     pointer-events: none;
   }
 
+  /* ===== ACOMPAÑANTES ===== */
+  .companion-card {
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(93, 110, 69, 0.28);
+    border-radius: 6px;
+    padding: 20px 18px 18px;
+    margin-bottom: 14px;
+    position: relative;
+    animation: companionIn 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  @keyframes companionIn {
+    0%   { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .companion-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .companion-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+  .remove-companion {
+    background: transparent;
+    border: none;
+    color: var(--olive);
+    opacity: 0.6;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: opacity 0.25s ease, color 0.25s ease;
+  }
+  .remove-companion:hover { opacity: 1; color: #A85A5A; }
+
+  .companion-card .sub-field { margin-bottom: 14px; }
+  .companion-card .sub-field:last-child { margin-bottom: 0; }
+
+  .sub-label {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--olive-dark);
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .companion-card input[type="text"],
+  .companion-card textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 17px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(93, 110, 69, 0.3);
+    border-radius: 3px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .companion-card input[type="text"]:focus,
+  .companion-card textarea:focus { border-color: var(--olive-dark); }
+  .companion-card textarea { resize: vertical; min-height: 52px; }
+
+  /* Selector niño / adulto */
+  .type-toggle {
+    display: flex;
+    gap: 8px;
+  }
+  .type-toggle label {
+    flex: 1;
+    text-align: center;
+    padding: 11px 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--olive-dark);
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(93, 110, 69, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .type-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+  .type-toggle input:checked + label {
+    background: var(--olive-dark);
+    color: var(--cream);
+    border-color: var(--olive-dark);
+  }
+
+  /* Selector de bus compacto dentro de la ficha */
+  .bus-select {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(93, 110, 69, 0.3);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  .bus-select:focus { border-color: var(--olive-dark); }
+
+  /* Botón añadir acompañante */
+  .add-companion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--olive-dark);
+    background: transparent;
+    border: 1.5px dashed rgba(93, 110, 69, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .add-companion-btn:hover {
+    background: rgba(93, 110, 69, 0.08);
+    border-color: var(--olive-dark);
+  }
+  .acb-plus {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 400;
+  }
+
+  .companion-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--olive);
+    opacity: 0.75;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  /* Ocultar campos si dice que NO viene */
+  #si-fields.hidden { display: none; }
+
   .submit-btn {
     display: block;
     width: 100%;
@@ -1067,7 +1228,7 @@
     <input type="checkbox" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off">
 
     <div class="field">
-      <label class="field-label" for="nombre">Nombre completo</label>
+      <label class="field-label" for="nombre">Nombre y apellidos</label>
       <input type="text" id="nombre" name="nombre" required autocomplete="name">
     </div>
 
@@ -1085,37 +1246,42 @@
       </div>
     </div>
 
-    <div class="field">
-      <label class="field-label" for="acompanantes">Nº de personas (incluyéndote)</label>
-      <input type="number" id="acompanantes" name="num_personas" min="1" max="10" value="1">
-    </div>
+    <!-- Todo lo siguiente solo aparece si dice que SÍ -->
+    <div id="si-fields">
 
-    <div class="field">
-      <label class="field-label" for="nombres-acomp">Nombres de tus acompañantes</label>
-      <textarea id="nombres-acomp" name="nombres_acompanantes" placeholder="Si vienes acompañado/a, escribe aquí los nombres"></textarea>
-    </div>
+      <div class="field">
+        <label class="field-label" for="alergias">Tus alergias o intolerancias</label>
+        <textarea id="alergias" name="alergias" placeholder="Escribe «Ninguna» si no tienes"></textarea>
+      </div>
 
-    <div class="field">
-      <label class="field-label" for="alergias">Alergias o intolerancias</label>
-      <textarea id="alergias" name="alergias" placeholder="Indícanos cualquier alergia o restricción alimentaria"></textarea>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Autobús · ¿Dónde te recogemos?</label>
-      <div class="radio-group vertical">
-        <div class="radio-option">
-          <input type="radio" id="bus-moncloa" name="autobus" value="Autobús desde Moncloa" required>
-          <label for="bus-moncloa">Autobús desde Moncloa</label>
-        </div>
-        <div class="radio-option">
-          <input type="radio" id="bus-suances" name="autobus" value="Autobús desde Suanzes">
-          <label for="bus-suances">Autobús desde Suanzes</label>
-        </div>
-        <div class="radio-option">
-          <input type="radio" id="bus-no" name="autobus" value="No necesitaré bus">
-          <label for="bus-no">No necesitaré bus</label>
+      <div class="field">
+        <label class="field-label">Autobús · ¿Dónde te recogemos?</label>
+        <div class="radio-group vertical">
+          <div class="radio-option">
+            <input type="radio" id="bus-moncloa" name="autobus" value="Autobús desde Moncloa">
+            <label for="bus-moncloa">Autobús desde Moncloa</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="bus-suances" name="autobus" value="Autobús desde Suanzes">
+            <label for="bus-suances">Autobús desde Suanzes</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="bus-no" name="autobus" value="No necesitaré bus">
+            <label for="bus-no">No necesitaré bus</label>
+          </div>
         </div>
       </div>
+
+      <!-- ACOMPAÑANTES DINÁMICOS -->
+      <div class="field">
+        <label class="field-label">¿Vienes con alguien?</label>
+        <div id="companions-list"></div>
+        <button type="button" class="add-companion-btn" id="add-companion">
+          <span class="acb-plus">+</span> Añadir acompañante
+        </button>
+        <p class="companion-hint">Añade una ficha por cada persona que venga contigo.</p>
+      </div>
+
     </div>
 
     <div class="field">
@@ -1278,6 +1444,113 @@
   const submitBtn = document.getElementById('submit-btn');
   const message = document.getElementById('form-message');
 
+  // ---- Mostrar / ocultar campos según si viene o no ----
+  const siFields = document.getElementById('si-fields');
+  const asistSi = document.getElementById('asist-si');
+  const asistNo = document.getElementById('asist-no');
+
+  function toggleFields() {
+    const viene = asistSi.checked;
+    siFields.classList.toggle('hidden', !viene);
+    // El bus solo es obligatorio si viene
+    document.querySelectorAll('input[name="autobus"]').forEach(r => r.required = viene);
+  }
+  asistSi.addEventListener('change', toggleFields);
+  asistNo.addEventListener('change', toggleFields);
+  siFields.classList.add('hidden'); // oculto hasta que elija
+
+  // ---- Acompañantes dinámicos ----
+  const companionsList = document.getElementById('companions-list');
+  const addCompanionBtn = document.getElementById('add-companion');
+  let companionCount = 0;
+
+  function renumberCompanions() {
+    companionsList.querySelectorAll('.companion-card').forEach((card, i) => {
+      card.querySelector('.companion-title').textContent = 'Acompañante ' + (i + 1);
+    });
+  }
+
+  function addCompanion() {
+    companionCount++;
+    const id = companionCount;
+    const card = document.createElement('div');
+    card.className = 'companion-card';
+    card.innerHTML = `
+      <div class="companion-head">
+        <span class="companion-title">Acompañante</span>
+        <button type="button" class="remove-companion" aria-label="Quitar acompañante">&times;</button>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-nombre-${id}">Nombre y apellidos</label>
+        <input type="text" id="c-nombre-${id}" class="c-nombre" required>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label">¿Adulto o niño?</label>
+        <div class="type-toggle">
+          <input type="radio" id="c-adulto-${id}" name="c-tipo-${id}" class="c-tipo" value="Adulto" checked>
+          <label for="c-adulto-${id}">Adulto</label>
+          <input type="radio" id="c-nino-${id}" name="c-tipo-${id}" class="c-tipo" value="Niño">
+          <label for="c-nino-${id}">Niño</label>
+        </div>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-bus-${id}">¿Necesita autobús?</label>
+        <select id="c-bus-${id}" class="bus-select c-bus">
+          <option value="No necesitaré bus">No necesita bus</option>
+          <option value="Autobús desde Moncloa">Autobús desde Moncloa</option>
+          <option value="Autobús desde Suanzes">Autobús desde Suanzes</option>
+        </select>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-alergias-${id}">Alergias o intolerancias</label>
+        <textarea id="c-alergias-${id}" class="c-alergias" placeholder="Escribe «Ninguna» si no tiene"></textarea>
+      </div>
+    `;
+
+    card.querySelector('.remove-companion').addEventListener('click', () => {
+      card.remove();
+      renumberCompanions();
+    });
+
+    companionsList.appendChild(card);
+    renumberCompanions();
+    card.querySelector('.c-nombre').focus();
+  }
+
+  addCompanionBtn.addEventListener('click', addCompanion);
+
+  // ---- Recoger todos los invitados (titular + acompañantes) ----
+  function buildGuestList() {
+    const guests = [];
+
+    // Titular
+    guests.push({
+      nombre: document.getElementById('nombre').value.trim(),
+      tipo: 'Adulto',
+      bus: (document.querySelector('input[name="autobus"]:checked') || {}).value || '',
+      alergias: document.getElementById('alergias').value.trim() || 'Ninguna',
+      titular: 'Sí'
+    });
+
+    // Acompañantes
+    companionsList.querySelectorAll('.companion-card').forEach(card => {
+      const tipoInput = card.querySelector('.c-tipo:checked');
+      guests.push({
+        nombre: card.querySelector('.c-nombre').value.trim(),
+        tipo: tipoInput ? tipoInput.value : 'Adulto',
+        bus: card.querySelector('.c-bus').value,
+        alergias: card.querySelector('.c-alergias').value.trim() || 'Ninguna',
+        titular: 'No'
+      });
+    });
+
+    return guests;
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitBtn.disabled = true;
@@ -1286,11 +1559,27 @@
     message.textContent = '';
 
     try {
-      // Convertimos FormData a URLSearchParams para que Apps Script lo lea bien
-      const formData = new FormData(form);
+      const viene = asistSi.checked;
       const params = new URLSearchParams();
-      for (const [key, value] of formData.entries()) {
-        params.append(key, value);
+
+      params.append('botcheck', form.botcheck.checked ? 'on' : '');
+      params.append('asistencia', viene ? 'Sí, allí estaré' : 'No podré ir');
+      params.append('mensaje', document.getElementById('mensaje').value.trim());
+
+      if (viene) {
+        const guests = buildGuestList();
+        params.append('num_personas', String(guests.length));
+        // Enviamos los invitados como JSON: el script creará una fila por cada uno
+        params.append('invitados', JSON.stringify(guests));
+      } else {
+        params.append('num_personas', '0');
+        params.append('invitados', JSON.stringify([{
+          nombre: document.getElementById('nombre').value.trim(),
+          tipo: 'Adulto',
+          bus: '',
+          alergias: '',
+          titular: 'Sí'
+        }]));
       }
 
       await fetch(SCRIPT_URL, {
@@ -1299,13 +1588,12 @@
         mode: 'no-cors'
       });
 
-      // Con mode: 'no-cors' no podemos leer la respuesta, pero si fetch
-      // resuelve sin error la petición se envió correctamente
       message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
       message.className = 'form-message success';
       form.reset();
+      companionsList.innerHTML = '';
+      siFields.classList.add('hidden');
       submitBtn.textContent = 'Confirmación enviada';
-      // submitBtn queda disabled para evitar reenvíos accidentales
 
     } catch (error) {
       message.textContent = 'Ha habido un problema al enviar. Por favor, inténtalo de nuevo en unos minutos.';
