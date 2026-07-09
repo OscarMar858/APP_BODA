@@ -3,188 +3,384 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Óscar & Alejandra · 2026</title>
+<title>Alejandra &amp; Óscar · 17 · 10 · 2026</title>
 
-<link rel="dns-prefetch" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
-<link rel="preconnect" href="https://invitacionbodaoscaryalejandra2026.streamlit.app">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+  :root {
+    --olive: #5D6E45;
+    --olive-dark: #3D4A2A;
+    --olive-light: #8A9968;
+    --cream: #F5F0E3;
+    --paper: #FBF8F0;
+    --paper-shade: #EFE9D9;
+    --ink: #3D3829;
+    --bronze: #8B6B2F;
+  }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
+  html, body { height: 100%; overflow: hidden; }
 
   body {
-    background: #6B7C50;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    background-color: var(--cream);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.29 0 0 0 0 0.16 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23paper)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
     min-height: 100dvh;
+    padding: 20px;
+    -webkit-font-smoothing: antialiased;
   }
 
-  /* Línea V de la solapa - de esquinas superiores al centro */
-  .v-line {
-    position: fixed;
+  .stage {
+    perspective: 1400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* ============ INICIALES ARRIBA ============ */
+  .initials {
+    text-align: center;
+    margin-bottom: clamp(26px, 5vh, 48px);
+    animation: fadeDown 1.4s cubic-bezier(0.2, 0, 0.2, 1) 0.2s both;
+    transition: opacity 0.6s ease;
+  }
+  .initials.fade-out { opacity: 0; }
+
+  .initials-mark {
+    font-family: 'Allura', cursive;
+    font-size: clamp(56px, 15vw, 82px);
+    color: var(--olive-dark);
+    line-height: 1.25;
+    padding-bottom: 0.06em;
+  }
+  .initials-mark .amp {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.5em;
+    vertical-align: 0.16em;
+    padding: 0 0.06em;
+    background: linear-gradient(100deg,
+      var(--bronze) 0%, var(--bronze) 40%,
+      #F4E0A8 50%,
+      var(--bronze) 60%, var(--bronze) 100%);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: goldShimmer 6s ease-in-out 2.5s infinite;
+  }
+
+  @keyframes goldShimmer {
+    0%   { background-position: 150% 0; }
+    18%  { background-position: -50% 0; }
+    100% { background-position: -50% 0; }
+  }
+
+  .initials-date {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(10px, 2.6vw, 12px);
+    letter-spacing: 0.4em;
+    color: var(--olive);
+    text-transform: uppercase;
+    margin-top: 10px;
+    opacity: 0.8;
+  }
+
+  @keyframes fadeDown {
+    0%   { opacity: 0; transform: translateY(-14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============ EL SOBRE ============ */
+  .envelope-wrap {
+    position: relative;
+    width: min(84vw, 330px);
+    aspect-ratio: 1 / 0.68;
+    cursor: pointer;
+    animation: envelopeIn 1.5s cubic-bezier(0.2, 0, 0.2, 1) 0.5s both;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @keyframes envelopeIn {
+    0%   { opacity: 0; transform: translateY(24px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .envelope {
+    position: absolute;
     inset: 0;
-    width: 100%;
+    background: linear-gradient(158deg, var(--paper) 0%, #F7F2E6 55%, var(--paper-shade) 100%);
+    border-radius: 3px;
+    box-shadow:
+      0 30px 60px -28px rgba(61, 74, 42, 0.42),
+      0 12px 24px -12px rgba(61, 74, 42, 0.22),
+      0 1px 2px rgba(61, 74, 42, 0.1),
+      inset 0 0 0 1px rgba(93, 110, 69, 0.12);
+    overflow: hidden;
+    transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.9s ease;
+  }
+
+  /* Pliegues laterales con sombra */
+  .fold {
+    position: absolute;
+    top: 0;
+    width: 50%;
     height: 100%;
-    pointer-events: none;
+  }
+  .fold-left {
+    left: 0;
+    background: linear-gradient(100deg, rgba(0,0,0,0.045) 0%, rgba(0,0,0,0.012) 55%, transparent 100%);
+    clip-path: polygon(0 0, 100% 74%, 0 100%);
+  }
+  .fold-right {
+    right: 0;
+    background: linear-gradient(260deg, rgba(0,0,0,0.055) 0%, rgba(0,0,0,0.015) 55%, transparent 100%);
+    clip-path: polygon(100% 0, 0 74%, 100% 100%);
+  }
+  .fold-bottom {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 62%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.055) 100%);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  }
+
+  /* Líneas finas de los pliegues */
+  .fold-lines { position: absolute; inset: 0; pointer-events: none; }
+  .fold-lines::before,
+  .fold-lines::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    border-top: 1px solid rgba(93, 110, 69, 0.14);
+  }
+  .fold-lines::before {
+    left: 0;
+    transform-origin: top left;
+    transform: rotate(36.2deg) scaleX(1.24);
+  }
+  .fold-lines::after {
+    right: 0;
+    transform-origin: top right;
+    transform: rotate(-36.2deg) scaleX(1.24);
+  }
+
+  /* SOLAPA SUPERIOR */
+  .flap {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 74%;
+    background: linear-gradient(172deg, #FCFAF3 0%, var(--paper) 48%, #F2ECDD 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 1.05s cubic-bezier(0.55, 0, 0.35, 1);
+    z-index: 3;
+    box-shadow: 0 3px 10px -4px rgba(61, 74, 42, 0.18);
+    backface-visibility: hidden;
+  }
+  .envelope-wrap.open .flap {
+    transform: rotateX(-178deg);
     z-index: 1;
+    box-shadow: none;
   }
 
-  /* Sello redondo antiguo */
+  /* EL SELLO */
   .seal {
-    position: fixed;
-    top: 50%;
+    position: absolute;
     left: 50%;
-    width: min(38vw, 38vh, 320px);
-    aspect-ratio: 1 / 1;
+    top: 74%;
     transform: translate(-50%, -50%);
-    z-index: 10;
-    animation: sealVibrate 2.8s ease-in-out infinite;
-    filter: drop-shadow(0 3px 5px rgba(20, 30, 10, 0.35))
-            drop-shadow(0 1px 2px rgba(40, 30, 5, 0.25));
+    width: clamp(74px, 21vw, 94px);
+    z-index: 5;
+    filter: drop-shadow(0 8px 16px rgba(61, 74, 42, 0.4))
+            drop-shadow(0 2px 4px rgba(61, 74, 42, 0.25));
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+    animation: sealPulse 4s ease-in-out 2.2s infinite;
+  }
+  .seal img { width: 100%; height: auto; display: block; }
+
+  @keyframes sealPulse {
+    0%, 90%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+    93%  { transform: translate(-50%, -50%) scale(1.05) rotate(-2.5deg); }
+    96%  { transform: translate(-50%, -50%) scale(1.05) rotate(2.5deg); }
+    98%  { transform: translate(-50%, -50%) scale(1.02) rotate(-1deg); }
   }
 
-  .seal img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
+  .envelope-wrap:hover .seal {
+    animation: none;
+    transform: translate(-50%, -50%) scale(1.06);
   }
 
-  /* Vibración periódica del sello */
-  @keyframes sealVibrate {
-    0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-    3%   { transform: translate(-50%, -50%) rotate(-2.5deg) scale(1.03); }
-    6%   { transform: translate(-50%, -50%) rotate(2.5deg) scale(1.03); }
-    9%   { transform: translate(-50%, -50%) rotate(-2deg) scale(1.03); }
-    12%  { transform: translate(-50%, -50%) rotate(2deg) scale(1.03); }
-    15%  { transform: translate(-50%, -50%) rotate(-1deg) scale(1.02); }
-    18%  { transform: translate(-50%, -50%) rotate(1deg) scale(1.02); }
-    21%  { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-    100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  .envelope-wrap.open .seal {
+    animation: none;
+    transform: translate(-50%, -50%) scale(0.4) rotate(24deg);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.5s ease;
   }
 
-  /* Estado abriendo: el sello "salta" y se desvanece */
-  body.opening { cursor: default; }
-
-  body.opening .seal {
-    animation: sealPop 0.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
-  }
-
-  @keyframes sealPop {
-    0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
-    25%  { transform: translate(-50%, -50%) scale(1.18) rotate(-3deg); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(0.4) rotate(20deg); opacity: 0; }
-  }
-
-  /* Luz a pantalla completa para la transición */
+  /* LUZ AL ABRIR */
   .light {
-    position: fixed;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%) scale(0.2);
+    width: 130%;
+    aspect-ratio: 1;
     border-radius: 50%;
     background: radial-gradient(circle,
-      #ffffff 0%, #fff4d6 40%, #ffd98a 70%,
-      rgba(255, 200, 100, 0.5) 90%, transparent 100%);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    z-index: 100;
+      rgba(255, 253, 245, 1) 0%,
+      rgba(252, 246, 228, 0.9) 22%,
+      rgba(244, 224, 168, 0.45) 45%,
+      rgba(244, 224, 168, 0) 70%);
     opacity: 0;
-    filter: blur(2px);
+    pointer-events: none;
+    z-index: 4;
+  }
+  .envelope-wrap.open .light {
+    animation: lightBurst 1.2s cubic-bezier(0.2, 0, 0.3, 1) 0.45s forwards;
+  }
+  @keyframes lightBurst {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+    40%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); }
   }
 
-  .light.expand {
-    animation: lightExpand 0.8s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  .envelope-wrap.open .envelope {
+    transform: scale(0.97);
+    box-shadow:
+      0 40px 70px -30px rgba(61, 74, 42, 0.3),
+      inset 0 0 0 1px rgba(93, 110, 69, 0.08);
   }
 
-  @keyframes lightExpand {
-    0%   { width: 0; height: 0; opacity: 0; }
-    30%  { opacity: 1; }
-    100% { width: 350vmax; height: 350vmax; opacity: 1; filter: blur(0); background: #ffffff; }
+  /* Fundido final */
+  .whiteout {
+    position: fixed;
+    inset: 0;
+    background: var(--cream);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .whiteout.go { animation: whiteFade 0.7s ease forwards; }
+  @keyframes whiteFade { to { opacity: 1; } }
+
+  /* ============ PIE ============ */
+  .footer-hint {
+    text-align: center;
+    margin-top: clamp(30px, 5vh, 52px);
+    animation: fadeUp 1.4s cubic-bezier(0.2, 0, 0.2, 1) 1.1s both;
+    transition: opacity 0.5s ease;
+  }
+  .footer-hint.fade-out { opacity: 0; }
+
+  .hint-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(17px, 4.4vw, 21px);
+    color: var(--ink);
+    opacity: 0.85;
+    margin-bottom: 14px;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
+  .hint-cta {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(11px, 2.9vw, 13px);
+    letter-spacing: 0.26em;
+    color: var(--olive-dark);
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    animation: nudge 2.6s ease-in-out infinite;
+  }
+  .hint-cta .arrow { font-size: 1.3em; line-height: 1; color: var(--bronze); }
+
+  @keyframes nudge {
+    0%, 100% { opacity: 0.75; transform: translateY(0); }
+    50%      { opacity: 1;    transform: translateY(-3px); }
+  }
+  @keyframes fadeUp {
+    0%   { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
 <body>
 
-<!-- Pliegue de la solapa: V que sale desde los lados (mitad de altura) al centro -->
-<svg class="v-line" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <defs>
-    <filter id="lineShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="0.35"/>
-      <feOffset dy="0.6" result="offsetblur"/>
-      <feComponentTransfer>
-        <feFuncA type="linear" slope="0.6"/>
-      </feComponentTransfer>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  <!-- Solapa: zona superior ligeramente más oscura (papel doblado encima) -->
-  <polygon points="0,0 100,0 100,32 50,50 0,32" fill="rgba(0,0,0,0.06)"/>
-  <!-- Dos líneas del pliegue, salen desde los lados al centro -->
-  <line x1="0" y1="32" x2="50" y2="50"
-        stroke="rgba(0,0,0,0.35)"
-        stroke-width="3"
-        filter="url(#lineShadow)"
-        vector-effect="non-scaling-stroke"/>
-  <line x1="50" y1="50" x2="100" y2="32"
-        stroke="rgba(0,0,0,0.35)"
-        stroke-width="3"
-        filter="url(#lineShadow)"
-        vector-effect="non-scaling-stroke"/>
-</svg>
+<div class="stage">
+  <div class="initials" id="initials">
+    <div class="initials-mark">A<span class="amp">&amp;</span>O</div>
+    <div class="initials-date">17 · 10 · 2026</div>
+  </div>
 
-<!-- Sello (imagen real con A&O y corazón) -->
-<div class="seal" id="seal">
-  <img src="sello.png" alt="Sello A&amp;O">
+  <div class="envelope-wrap" id="envelope" role="button" tabindex="0" aria-label="Abrir la invitación">
+    <div class="envelope">
+      <div class="fold fold-left"></div>
+      <div class="fold fold-right"></div>
+      <div class="fold-bottom"></div>
+      <div class="fold-lines"></div>
+    </div>
+    <div class="light"></div>
+    <div class="flap"></div>
+    <div class="seal">
+      <img src="sello.png" alt="Sello de lacre A&amp;O">
+    </div>
+  </div>
+
+  <div class="footer-hint" id="footer-hint">
+    <div class="hint-line">Tenemos una noticia…</div>
+    <div class="hint-cta">Pulsa el sello <span class="arrow">›</span></div>
+  </div>
 </div>
 
-<!-- Capa de luz para la transición -->
-<div class="light" id="light"></div>
+<div class="whiteout" id="whiteout"></div>
 
 <script>
-  const seal = document.getElementById('seal');
-  const light = document.getElementById('light');
   const DESTINATION = 'invitacion.html';
-
+  const envelope = document.getElementById('envelope');
+  const initials = document.getElementById('initials');
+  const footerHint = document.getElementById('footer-hint');
+  const whiteout = document.getElementById('whiteout');
   let opened = false;
 
-  // Prefetch de la página de invitación
   const prefetch = document.createElement('link');
   prefetch.rel = 'prefetch';
   prefetch.href = DESTINATION;
   document.head.appendChild(prefetch);
 
-  function openInvitation() {
+  function openEnvelope() {
     if (opened) return;
     opened = true;
-    document.body.classList.add('opening');
-    setTimeout(() => light.classList.add('expand'), 300);
-    setTimeout(() => { window.location.href = DESTINATION; }, 950);
+    envelope.classList.add('open');
+    initials.classList.add('fade-out');
+    footerHint.classList.add('fade-out');
+    setTimeout(() => whiteout.classList.add('go'), 900);
+    setTimeout(() => { window.location.href = DESTINATION; }, 1600);
   }
 
-  document.body.addEventListener('click', openInvitation);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openInvitation();
-    }
+  envelope.addEventListener('click', openEnvelope);
+  envelope.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); }
   });
 </script>
 
