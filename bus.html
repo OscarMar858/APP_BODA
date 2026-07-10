@@ -252,6 +252,49 @@
     font-style: italic;
   }
 
+  /* Etiqueta del metro */
+  .stop-metro {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 0.88em;
+    color: var(--olive);
+    opacity: 0.9;
+    white-space: nowrap;
+  }
+
+  /* Enlace elegante a Google Maps */
+  .stop-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+    padding: 7px 15px 7px 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--olive-dark);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(93, 110, 69, 0.32);
+    border-radius: 100px;
+    transition: all 0.28s ease;
+  }
+  .stop-map svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    transition: transform 0.28s ease;
+  }
+  .stop-map:hover {
+    background: var(--olive-dark);
+    border-color: var(--olive-dark);
+    color: var(--cream);
+  }
+  .stop-map:hover svg { transform: translateY(-1px); }
+
   /* Ramillete de olivo separador */
   .olive-sep {
     display: block;
@@ -406,8 +449,15 @@
         </svg>
       </div>
       <div class="stop-time">12:00 h</div>
-      <div class="stop-place">Madrid · C/ Alcalá 527</div>
-      <div class="stop-detail">Primera parada, salida puntual.</div>
+      <div class="stop-place">Madrid · C/ Alcalá 527 <span class="stop-metro">(Metro Suanzes)</span></div>
+      <div class="stop-detail">Primera parada de recogida.</div>
+      <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Calle%20de%20Alcal%C3%A1%20527%2C%20Madrid&query_place_id=ChIJQxtGUgkvQg0R1lqrM_WhiiY" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z"/>
+          <circle cx="12" cy="9.5" r="2.4"/>
+        </svg>
+        Ver en el mapa
+      </a>
     </div>
     <div class="stop">
       <div class="stop-dot">
@@ -420,6 +470,13 @@
       <div class="stop-time">12:30 h</div>
       <div class="stop-place">Moncloa · Paseo Moret 1</div>
       <div class="stop-detail">Segunda parada de recogida.</div>
+      <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Paseo%20de%20Moret%201%2C%20Madrid&query_place_id=ChIJ43Z0SEAoQg0R1osWjqwOH2w" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z"/>
+          <circle cx="12" cy="9.5" r="2.4"/>
+        </svg>
+        Ver en el mapa
+      </a>
     </div>
     <div class="stop">
       <div class="stop-dot">
@@ -432,6 +489,13 @@
       <div class="stop-time">≈ 13:15 h</div>
       <div class="stop-place">Finca Cortijo el Gallinero</div>
       <div class="stop-detail">Llegada a la finca.</div>
+      <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Finca%20Cortijo%20el%20Gallinero%2C%20Carretera%20de%20Navacerrada%20Km%201%2C%2028400%20Collado%20Villalba&query_place_id=ChIJBeVGh3V0QQ0RwEc5bqXE_OU" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z"/>
+          <circle cx="12" cy="9.5" r="2.4"/>
+        </svg>
+        Ver en el mapa
+      </a>
     </div>
   </div>
 
