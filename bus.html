@@ -199,6 +199,15 @@
   }
   .stop:last-child { padding-bottom: 0; }
 
+  /* Tarjeta de contenido de cada parada */
+  .stop-body {
+    background: rgba(255, 255, 255, 0.38);
+    border: 1px solid rgba(93, 110, 69, 0.2);
+    border-radius: 6px;
+    padding: 16px 18px 18px;
+    text-align: left;
+  }
+
   /* Línea vertical que une las paradas */
   .stop::before {
     content: '';
@@ -233,11 +242,13 @@
   }
 
   .stop-time {
-    font-family: 'Italiana', serif;
-    font-size: clamp(26px, 6.5vw, 36px);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(24px, 6vw, 32px);
     color: var(--olive-dark);
-    line-height: 1;
-    margin-bottom: 6px;
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+    margin-bottom: 8px;
   }
   .stop-place {
     font-family: 'Cormorant Garamond', serif;
@@ -448,7 +459,9 @@
           <circle cx="12" cy="9.5" r="2.4"/>
         </svg>
       </div>
-      <div class="stop-time">12:00 h</div>
+      
+      <div class="stop-body">
+        <div class="stop-time">12:00 h</div>
       <div class="stop-place">Madrid · C/ Alcalá 527 <span class="stop-metro">(Metro Suanzes)</span></div>
       <div class="stop-detail">Primera parada de recogida.</div>
       <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Calle%20de%20Alcal%C3%A1%20527%2C%20Madrid&query_place_id=ChIJQxtGUgkvQg0R1lqrM_WhiiY" target="_blank" rel="noopener">
@@ -458,6 +471,7 @@
         </svg>
         Ver en el mapa
       </a>
+      </div>
     </div>
     <div class="stop">
       <div class="stop-dot">
@@ -467,7 +481,9 @@
           <circle cx="12" cy="9.5" r="2.4"/>
         </svg>
       </div>
-      <div class="stop-time">12:30 h</div>
+      
+      <div class="stop-body">
+        <div class="stop-time">12:30 h</div>
       <div class="stop-place">Moncloa · Paseo Moret 1</div>
       <div class="stop-detail">Segunda parada de recogida.</div>
       <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Paseo%20de%20Moret%201%2C%20Madrid&query_place_id=ChIJ43Z0SEAoQg0R1osWjqwOH2w" target="_blank" rel="noopener">
@@ -477,6 +493,7 @@
         </svg>
         Ver en el mapa
       </a>
+      </div>
     </div>
     <div class="stop">
       <div class="stop-dot">
@@ -486,7 +503,9 @@
           <path d="M12 16c-3.6 0-6-2.2-6-5.2C6 7 8.8 4 12 4s6 3 6 6.8c0 3-2.4 5.2-6 5.2z"/>
         </svg>
       </div>
-      <div class="stop-time">≈ 13:15 h</div>
+      
+      <div class="stop-body">
+        <div class="stop-time">≈ 13:15 h</div>
       <div class="stop-place">Finca Cortijo el Gallinero</div>
       <div class="stop-detail">Llegada a la finca.</div>
       <a class="stop-map" href="https://www.google.com/maps/search/?api=1&query=Finca%20Cortijo%20el%20Gallinero%2C%20Carretera%20de%20Navacerrada%20Km%201%2C%2028400%20Collado%20Villalba&query_place_id=ChIJBeVGh3V0QQ0RwEc5bqXE_OU" target="_blank" rel="noopener">
@@ -496,6 +515,7 @@
         </svg>
         Ver en el mapa
       </a>
+      </div>
     </div>
   </div>
 
