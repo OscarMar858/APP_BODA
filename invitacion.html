@@ -724,6 +724,12 @@
     -webkit-backdrop-filter: blur(1px);
   }
 
+  /* Tono ligeramente más cálido en secciones alternas,
+     para que los bloques se distingan sin cortar la página */
+  .section-warm {
+    background: rgba(236, 227, 205, 0.38);
+  }
+
   form {
     max-width: 500px;
     margin: 0 auto;
@@ -1152,7 +1158,7 @@
 </section>
 
 <!-- SCHEDULE -->
-<section class="content" id="programa">
+<section class="content section-warm" id="programa">
   <div class="section-eyebrow">El gran día</div>
   <h2 class="section-title">Sábado, 17 de Octubre</h2>
 
@@ -1208,7 +1214,7 @@
 </section>
 
 <!-- LOCATION -->
-<section class="content" id="ubicacion">
+<section class="content section-warm" id="ubicacion">
   <div class="section-eyebrow">Cómo llegar</div>
   <h2 class="section-title">Te esperamos en la<br>Finca Cortijo el Gallinero</h2>
   <p class="location-name">Collado Villalba</p>

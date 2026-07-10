@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -332,20 +332,25 @@
     max-width: 320px;
     margin: 14px auto 0;
     padding: 18px 30px;
-    font-family: 'Italiana', serif;
-    font-size: clamp(11px, 2.5vw, 13px);
-    letter-spacing: 0.35em;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(12px, 2.8vw, 14px);
+    letter-spacing: 0.16em;
     color: var(--cream);
     background: var(--olive-dark);
     text-decoration: none;
     text-transform: uppercase;
     border: 1px solid var(--olive-dark);
     transition: all 0.35s cubic-bezier(0.2, 0, 0.2, 1);
-    border-radius: 2px;
+    border-radius: 3px;
     text-align: center;
   }
   .btn:hover { background: var(--bronze); border-color: var(--bronze); }
-  .btn-ghost { background: transparent; color: var(--olive-dark); }
+  .btn-ghost {
+    background: rgba(255, 255, 255, 0.35);
+    color: var(--olive-dark);
+    border: 1.5px solid var(--olive-dark);
+  }
   .btn-ghost:hover { background: var(--olive-dark); color: var(--cream); border-color: var(--olive-dark); }
 
   .contact-box {
