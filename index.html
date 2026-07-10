@@ -155,68 +155,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     padding: clamp(48px, 11vh, 90px) 24px clamp(40px, 8vh, 70px);
     pointer-events: none;
     transition: opacity 0.6s ease;
   }
   .envelope-wrap.open .content { opacity: 0; }
-
-  /* INICIALES ARRIBA, sobre la solapa */
-  .initials {
-    text-align: center;
-    animation: fadeDown 1.5s cubic-bezier(0.2, 0, 0.2, 1) 0.3s both;
-  }
-
-  .initials-mark {
-    font-family: 'Allura', cursive;
-    font-size: clamp(70px, 19vw, 108px);
-    color: var(--cream);
-    line-height: 1.2;
-    padding-bottom: 0.06em;
-    text-shadow:
-      0 2px 20px rgba(0, 0, 0, 0.3),
-      0 1px 3px rgba(0, 0, 0, 0.25);
-  }
-  .initials-mark .amp {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 400;
-    font-size: 0.5em;
-    vertical-align: 0.16em;
-    padding: 0 0.06em;
-    background: linear-gradient(100deg,
-      var(--gold-soft) 0%, var(--gold-soft) 40%,
-      #FBEFC8 50%,
-      var(--gold-soft) 60%, var(--gold-soft) 100%);
-    background-size: 250% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: goldShimmer 6s ease-in-out 2.5s infinite;
-  }
-
-  @keyframes goldShimmer {
-    0%   { background-position: 150% 0; }
-    18%  { background-position: -50% 0; }
-    100% { background-position: -50% 0; }
-  }
-
-  .initials-date {
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
-    font-size: clamp(10px, 2.7vw, 12px);
-    letter-spacing: 0.42em;
-    color: var(--gold-soft);
-    text-transform: uppercase;
-    margin-top: 14px;
-    opacity: 0.85;
-  }
-
-  @keyframes fadeDown {
-    0%   { opacity: 0; transform: translateY(-16px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
 
   /* PIE: solo "Pulsa el sello" */
   .hint-cta {
@@ -346,13 +290,8 @@
   <!-- Solapa que se abre -->
   <div class="flap"></div>
 
-  <!-- Contenido: iniciales arriba, hint abajo -->
+  <!-- Contenido: solo el hint abajo -->
   <div class="content">
-    <div class="initials">
-      <div class="initials-mark">A<span class="amp">&amp;</span>O</div>
-      <div class="initials-date">17 · 10 · 2026</div>
-    </div>
-
     <div class="hint-cta">Pulsa el sello <span class="arrow">›</span></div>
   </div>
 
