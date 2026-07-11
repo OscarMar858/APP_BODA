@@ -335,7 +335,13 @@
     opened = true;
     envelope.classList.add('open');
     // Marcar que el invitado abrió el sobre → la invitación arrancará la música
-    try { sessionStorage.setItem('playMusic', '1'); } catch (e) {}
+    try {
+      sessionStorage.setItem('playMusic', '1');
+      localStorage.setItem('playMusic', '1');
+      sessionStorage.setItem('musicPlaying', '1');
+      sessionStorage.setItem('musicTime', '0');
+      sessionStorage.setItem('musicStamp', String(Date.now()));
+    } catch (e) {}
     setTimeout(() => whiteout.classList.add('go'), 1000);
     setTimeout(() => { window.location.href = DESTINATION; }, 1750);
   }

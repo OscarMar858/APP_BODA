@@ -674,29 +674,36 @@
     const btn = document.getElementById('music-toggle');
     if (!music || !btn) return;
 
-    music.volume = 0.6;
+    const VOL = 0.6;
+    const DUR = 25; // duración del loop en segundos
+    music.volume = VOL;
     let isPlaying = false;
+
+    // --- Almacenamiento robusto (session + local como respaldo) ---
+    function save(key, val) {
+      try { sessionStorage.setItem(key, val); } catch (e) {}
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+    function load(key) {
+      try {
+        const s = sessionStorage.getItem(key);
+        if (s !== null) return s;
+      } catch (e) {}
+      try { return localStorage.getItem(key); } catch (e) {}
+      return null;
+    }
 
     function updateButton() {
       btn.classList.toggle('muted', !isPlaying);
       btn.classList.toggle('playing', isPlaying);
     }
 
-    // Guardar estado continuamente para que otras páginas lo retomen
     function saveState() {
-      try {
-        sessionStorage.setItem('musicTime', String(music.currentTime));
-        sessionStorage.setItem('musicPlaying', isPlaying ? '1' : '0');
-      } catch (e) {}
+      // Guardar el segundo exacto y si está sonando, con marca de tiempo real
+      save('musicTime', String(music.currentTime || 0));
+      save('musicPlaying', isPlaying ? '1' : '0');
+      save('musicStamp', String(Date.now()));
     }
-    setInterval(() => { if (isPlaying) saveState(); }, 500);
-    window.addEventListener('pagehide', saveState);
-    window.addEventListener('beforeunload', saveState);
-    // Al pinchar cualquier enlace interno, guardar justo antes de irse
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest && e.target.closest('a[href]');
-      if (a) saveState();
-    }, true);
 
     function play() {
       music.play().then(() => {
@@ -715,32 +722,74 @@
       saveState();
     }
 
-    // ¿Retomar desde otra página, o venir del sobre?
-    let resumeTime = 0, wasPlaying = false, cameFromEnvelope = false;
-    try {
-      resumeTime = parseFloat(sessionStorage.getItem('musicTime') || '0') || 0;
-      wasPlaying = sessionStorage.getItem('musicPlaying') === '1';
-      cameFromEnvelope = sessionStorage.getItem('playMusic') === '1';
-    } catch (e) {}
+    // Guardar el progreso muy a menudo mientras suena
+    setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
 
-    // Colocar la canción donde iba
-    if (resumeTime > 0 && resumeTime < 24) {
-      music.addEventListener('loadedmetadata', () => { try { music.currentTime = resumeTime; } catch(e){} }, { once: true });
-      try { music.currentTime = resumeTime; } catch (e) {}
+    // Guardar SIEMPRE justo antes de salir de la página (varios eventos por seguridad)
+    ['pagehide', 'beforeunload', 'visibilitychange'].forEach(ev => {
+      window.addEventListener(ev, () => {
+        if (isPlaying && !music.paused) {
+          save('musicTime', String(music.currentTime || 0));
+          save('musicPlaying', '1');
+          save('musicStamp', String(Date.now()));
+        }
+      });
+    });
+    // Al pinchar cualquier enlace (cambio de pestaña), guardar en ese instante
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (a && isPlaying && !music.paused) {
+        save('musicTime', String(music.currentTime || 0));
+        save('musicPlaying', '1');
+        save('musicStamp', String(Date.now()));
+      }
+    }, true);
+
+    // --- Al cargar la página: decidir si suena y desde dónde ---
+    const cameFromEnvelope = load('playMusic') === '1';
+    const wasPlaying = load('musicPlaying') === '1';
+    let resumeTime = parseFloat(load('musicTime') || '0') || 0;
+
+    // Compensar el tiempo que pasó durante la transición entre páginas
+    const stamp = parseFloat(load('musicStamp') || '0') || 0;
+    if (stamp > 0 && wasPlaying) {
+      const elapsed = (Date.now() - stamp) / 1000;
+      if (elapsed > 0 && elapsed < 5) resumeTime += elapsed;
+    }
+    // Mantener dentro del loop
+    if (resumeTime >= DUR || resumeTime < 0) resumeTime = resumeTime % DUR;
+
+    function seekTo(t) {
+      try { music.currentTime = t; } catch (e) {}
+    }
+
+    if (resumeTime > 0.1) {
+      if (music.readyState >= 1) {
+        seekTo(resumeTime);
+      } else {
+        music.addEventListener('loadedmetadata', () => seekTo(resumeTime), { once: true });
+      }
     }
 
     if (cameFromEnvelope || wasPlaying) {
-      try { sessionStorage.removeItem('playMusic'); } catch (e) {}
-      setTimeout(play, cameFromEnvelope ? 300 : 0);
-
-      // Red de seguridad: si el navegador bloqueó, el primer toque lo activa
+      try { sessionStorage.removeItem('playMusic'); localStorage.removeItem('playMusic'); } catch (e) {}
+      // Arrancar en cuanto se pueda
+      if (music.readyState >= 2) {
+        play();
+      } else {
+        music.addEventListener('canplay', () => { if (!isPlaying) play(); }, { once: true });
+        setTimeout(() => { if (!isPlaying) play(); }, 400);
+      }
+      // Red de seguridad: el primer toque/scroll activa la música si el navegador la bloqueó
       const kickstart = () => {
         if (!isPlaying && music.paused) play();
         document.removeEventListener('click', kickstart);
         document.removeEventListener('touchstart', kickstart);
+        document.removeEventListener('scroll', kickstart);
       };
       document.addEventListener('click', kickstart, { once: true });
       document.addEventListener('touchstart', kickstart, { once: true });
+      document.addEventListener('scroll', kickstart, { once: true, passive: true });
     } else {
       updateButton();
     }

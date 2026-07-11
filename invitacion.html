@@ -1753,66 +1753,136 @@
     for (let i = 0; i < count; i++) createLeaf(i);
   })();
 
-  // ==================== MÚSICA DE FONDO ====================
+  // ==================== MÚSICA DE FONDO (sincronizada entre páginas) ====================
   (function () {
     const music = document.getElementById('bg-music');
     const btn = document.getElementById('music-toggle');
     if (!music || !btn) return;
 
-    music.volume = 0.6;
+    const VOL = 0.6;
+    const DUR = 25; // duración del loop en segundos
+    music.volume = VOL;
     let isPlaying = false;
+
+    // --- Almacenamiento robusto (session + local como respaldo) ---
+    function save(key, val) {
+      try { sessionStorage.setItem(key, val); } catch (e) {}
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+    function load(key) {
+      try {
+        const s = sessionStorage.getItem(key);
+        if (s !== null) return s;
+      } catch (e) {}
+      try { return localStorage.getItem(key); } catch (e) {}
+      return null;
+    }
 
     function updateButton() {
       btn.classList.toggle('muted', !isPlaying);
       btn.classList.toggle('playing', isPlaying);
     }
 
+    function saveState() {
+      // Guardar el segundo exacto y si está sonando, con marca de tiempo real
+      save('musicTime', String(music.currentTime || 0));
+      save('musicPlaying', isPlaying ? '1' : '0');
+      save('musicStamp', String(Date.now()));
+    }
+
     function play() {
       music.play().then(() => {
         isPlaying = true;
         updateButton();
+        saveState();
       }).catch(() => {
-        // Si el navegador lo bloquea, dejamos el botón para que la activen a mano
         isPlaying = false;
         updateButton();
       });
     }
-
     function pause() {
       music.pause();
       isPlaying = false;
       updateButton();
+      saveState();
     }
 
-    // ¿Venimos de abrir el sobre? → arrancar música
-    let cameFromEnvelope = false;
-    try { cameFromEnvelope = sessionStorage.getItem('playMusic') === '1'; } catch (e) {}
+    // Guardar el progreso muy a menudo mientras suena
+    setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
 
-    if (cameFromEnvelope) {
-      try { sessionStorage.removeItem('playMusic'); } catch (e) {}
-      // Pequeño respiro tras la transición y arrancamos
-      setTimeout(play, 300);
-    } else {
-      // Entrada directa (sin pasar por el sobre): botón en silencio, listo para pulsar
-      updateButton();
-    }
-
-    // Botón: alternar
-    btn.addEventListener('click', () => {
-      if (isPlaying) pause();
-      else play();
+    // Guardar SIEMPRE justo antes de salir de la página (varios eventos por seguridad)
+    ['pagehide', 'beforeunload', 'visibilitychange'].forEach(ev => {
+      window.addEventListener(ev, () => {
+        if (isPlaying && !music.paused) {
+          save('musicTime', String(music.currentTime || 0));
+          save('musicPlaying', '1');
+          save('musicStamp', String(Date.now()));
+        }
+      });
     });
+    // Al pinchar cualquier enlace (cambio de pestaña), guardar en ese instante
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (a && isPlaying && !music.paused) {
+        save('musicTime', String(music.currentTime || 0));
+        save('musicPlaying', '1');
+        save('musicStamp', String(Date.now()));
+      }
+    }, true);
 
-    // Si el navegador bloqueó el autoplay, el primer toque en la página lo activa
-    if (cameFromEnvelope) {
+    // --- Al cargar la página: decidir si suena y desde dónde ---
+    const cameFromEnvelope = load('playMusic') === '1';
+    const wasPlaying = load('musicPlaying') === '1';
+    let resumeTime = parseFloat(load('musicTime') || '0') || 0;
+
+    // Compensar el tiempo que pasó durante la transición entre páginas
+    const stamp = parseFloat(load('musicStamp') || '0') || 0;
+    if (stamp > 0 && wasPlaying) {
+      const elapsed = (Date.now() - stamp) / 1000;
+      if (elapsed > 0 && elapsed < 5) resumeTime += elapsed;
+    }
+    // Mantener dentro del loop
+    if (resumeTime >= DUR || resumeTime < 0) resumeTime = resumeTime % DUR;
+
+    function seekTo(t) {
+      try { music.currentTime = t; } catch (e) {}
+    }
+
+    if (resumeTime > 0.1) {
+      if (music.readyState >= 1) {
+        seekTo(resumeTime);
+      } else {
+        music.addEventListener('loadedmetadata', () => seekTo(resumeTime), { once: true });
+      }
+    }
+
+    if (cameFromEnvelope || wasPlaying) {
+      try { sessionStorage.removeItem('playMusic'); localStorage.removeItem('playMusic'); } catch (e) {}
+      // Arrancar en cuanto se pueda
+      if (music.readyState >= 2) {
+        play();
+      } else {
+        music.addEventListener('canplay', () => { if (!isPlaying) play(); }, { once: true });
+        setTimeout(() => { if (!isPlaying) play(); }, 400);
+      }
+      // Red de seguridad: el primer toque/scroll activa la música si el navegador la bloqueó
       const kickstart = () => {
         if (!isPlaying && music.paused) play();
         document.removeEventListener('click', kickstart);
         document.removeEventListener('touchstart', kickstart);
+        document.removeEventListener('scroll', kickstart);
       };
       document.addEventListener('click', kickstart, { once: true });
       document.addEventListener('touchstart', kickstart, { once: true });
+      document.addEventListener('scroll', kickstart, { once: true, passive: true });
+    } else {
+      updateButton();
     }
+
+    btn.addEventListener('click', () => {
+      if (isPlaying) pause();
+      else play();
+    });
   })();
 </script>
 
