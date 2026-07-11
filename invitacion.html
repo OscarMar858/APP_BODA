@@ -1138,12 +1138,49 @@
   }
 
   .footer-note {
-    font-family: 'Italiana', serif;
-    font-size: 11px;
-    letter-spacing: 0.45em;
-    opacity: 0.75;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: clamp(12px, 3vw, 14px);
+    letter-spacing: 0.25em;
+    color: #F0D9A8;
+    opacity: 0.95;
     text-transform: uppercase;
-    margin-top: 14px;
+    margin-top: 16px;
+  }
+
+  .menu-hint {
+    max-width: 480px;
+    margin: clamp(40px, 8vw, 60px) auto 0;
+    padding: clamp(22px, 5vw, 30px);
+    text-align: center;
+    background: rgba(93, 110, 69, 0.08);
+    border: 1px solid rgba(93, 110, 69, 0.22);
+    border-radius: 8px;
+  }
+  .menu-hint-icon {
+    width: 30px;
+    height: 30px;
+    color: var(--olive);
+    margin: 0 auto 14px;
+    display: block;
+    opacity: 0.85;
+  }
+  .menu-hint p {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(17px, 4.2vw, 20px);
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+  .menu-hint strong {
+    font-weight: 600;
+    color: var(--olive-dark);
+  }
+  .menu-hint-strong {
+    font-style: normal;
+    color: var(--olive-dark);
+    font-weight: 600;
   }
 
   @media (max-width: 380px) {
@@ -1390,6 +1427,15 @@
 
     <div class="form-message" id="form-message"></div>
   </form>
+
+  <div class="menu-hint">
+    <svg class="menu-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="4" y1="7" x2="20" y2="7"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="17" x2="20" y2="17"/>
+    </svg>
+    <p>¿Necesitas saber más? En el menú <span class="menu-hint-strong">☰</span> de arriba tienes toda la información: el <strong>autobús</strong>, el <strong>alojamiento</strong>, nuestro <strong>álbum de fotos</strong> y más detalles.</p>
+  </div>
 </section>
 
 <!-- FOOTER -->
