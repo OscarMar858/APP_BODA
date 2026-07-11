@@ -221,9 +221,69 @@
     text-decoration: none;
   }
   .back-link:hover { color: var(--bronze); }
+
+  /* Botón de música, disimulado abajo a la derecha */
+  .music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 45;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(245, 240, 227, 0.82);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(61, 74, 42, 0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: var(--olive-dark);
+    opacity: 0.55;
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+    box-shadow: 0 4px 14px -6px rgba(61, 74, 42, 0.4);
+  }
+  .music-toggle:hover { opacity: 1; transform: scale(1.05); }
+  .music-toggle svg { width: 20px; height: 20px; }
+  .music-toggle .music-off { display: none; }
+  .music-toggle.muted .music-on { display: none; }
+  .music-toggle.muted .music-off { display: block; }
+  .music-toggle.muted { opacity: 0.4; }
+
+  /* Latido sutil cuando suena, para invitar a fijarse */
+  .music-toggle.playing {
+    animation: musicBeat 2.6s ease-in-out infinite;
+  }
+  @keyframes musicBeat {
+    0%, 100% { box-shadow: 0 4px 14px -6px rgba(61, 74, 42, 0.4); }
+    50% { box-shadow: 0 4px 18px -4px rgba(139, 107, 47, 0.55); }
+  }
+
+
 </style>
 </head>
 <body>
+
+<!-- Música de fondo -->
+<audio id="bg-music" loop preload="auto">
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+<button class="music-toggle" id="music-toggle" aria-label="Activar o silenciar música" title="Música">
+  <svg class="music-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V6l10-2v12"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="16" cy="16" r="3"/>
+  </svg>
+  <svg class="music-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V6l10-2v12"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="16" cy="16" r="3"/>
+    <line x1="3" y1="3" x2="21" y2="21" stroke-width="2"/>
+  </svg>
+</button>
+
 
 <!-- MENÚ -->
 <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
@@ -311,6 +371,89 @@
       done();
     }
   });
+
+  // ==================== MÚSICA DE FONDO (sincronizada entre páginas) ====================
+  (function () {
+    const music = document.getElementById('bg-music');
+    const btn = document.getElementById('music-toggle');
+    if (!music || !btn) return;
+
+    music.volume = 0.6;
+    let isPlaying = false;
+
+    function updateButton() {
+      btn.classList.toggle('muted', !isPlaying);
+      btn.classList.toggle('playing', isPlaying);
+    }
+
+    // Guardar estado continuamente para que otras páginas lo retomen
+    function saveState() {
+      try {
+        sessionStorage.setItem('musicTime', String(music.currentTime));
+        sessionStorage.setItem('musicPlaying', isPlaying ? '1' : '0');
+      } catch (e) {}
+    }
+    setInterval(() => { if (isPlaying) saveState(); }, 500);
+    window.addEventListener('pagehide', saveState);
+    window.addEventListener('beforeunload', saveState);
+    // Al pinchar cualquier enlace interno, guardar justo antes de irse
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (a) saveState();
+    }, true);
+
+    function play() {
+      music.play().then(() => {
+        isPlaying = true;
+        updateButton();
+        saveState();
+      }).catch(() => {
+        isPlaying = false;
+        updateButton();
+      });
+    }
+    function pause() {
+      music.pause();
+      isPlaying = false;
+      updateButton();
+      saveState();
+    }
+
+    // ¿Retomar desde otra página, o venir del sobre?
+    let resumeTime = 0, wasPlaying = false, cameFromEnvelope = false;
+    try {
+      resumeTime = parseFloat(sessionStorage.getItem('musicTime') || '0') || 0;
+      wasPlaying = sessionStorage.getItem('musicPlaying') === '1';
+      cameFromEnvelope = sessionStorage.getItem('playMusic') === '1';
+    } catch (e) {}
+
+    // Colocar la canción donde iba
+    if (resumeTime > 0 && resumeTime < 24) {
+      music.addEventListener('loadedmetadata', () => { try { music.currentTime = resumeTime; } catch(e){} }, { once: true });
+      try { music.currentTime = resumeTime; } catch (e) {}
+    }
+
+    if (cameFromEnvelope || wasPlaying) {
+      try { sessionStorage.removeItem('playMusic'); } catch (e) {}
+      setTimeout(play, cameFromEnvelope ? 300 : 0);
+
+      // Red de seguridad: si el navegador bloqueó, el primer toque lo activa
+      const kickstart = () => {
+        if (!isPlaying && music.paused) play();
+        document.removeEventListener('click', kickstart);
+        document.removeEventListener('touchstart', kickstart);
+      };
+      document.addEventListener('click', kickstart, { once: true });
+      document.addEventListener('touchstart', kickstart, { once: true });
+    } else {
+      updateButton();
+    }
+
+    btn.addEventListener('click', () => {
+      if (isPlaying) pause();
+      else play();
+    });
+  })();
 </script>
 
 </body>
