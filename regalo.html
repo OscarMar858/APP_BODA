@@ -3,10 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="format-detection" content="telephone=no">
-<meta name="format-detection" content="date=no">
-<meta name="format-detection" content="address=no">
-<meta name="format-detection" content="email=no">
 <title>Un detalle · Alejandra & Óscar</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -184,11 +180,6 @@
     color: var(--olive);
     margin-bottom: 14px;
   }
-  .account-number, .account-number a {
-    color: var(--olive-dark) !important;
-    text-decoration: none !important;
-  }
-  .account-number a { pointer-events: none; }
   .account-number {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
@@ -439,24 +430,6 @@
       updateButton();
       saveState();
     }
-
-    // --- Reanudar automáticamente al volver a la pestaña o traer la app al frente (iOS/Android) ---
-    function resumeIfNeeded() {
-      if (isPlaying && music.paused) {
-        music.play().catch(() => {
-          // iOS a veces exige un gesto: el primer toque o scroll reactiva el sonido
-          const evs = ['touchstart', 'pointerdown', 'click', 'scroll'];
-          const onceResume = () => {
-            if (isPlaying && music.paused) music.play().catch(() => {});
-            evs.forEach(ev => document.removeEventListener(ev, onceResume));
-          };
-          evs.forEach(ev => document.addEventListener(ev, onceResume, { once: true, passive: true }));
-        });
-      }
-    }
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) resumeIfNeeded(); });
-    window.addEventListener('pageshow', resumeIfNeeded);
-    window.addEventListener('focus', resumeIfNeeded);
 
     // Guardar el progreso muy a menudo mientras suena
     setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
