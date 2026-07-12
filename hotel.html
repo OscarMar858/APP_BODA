@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+<meta name="format-detection" content="email=no">
 <title>Alojamiento · Alejandra & Óscar</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -785,16 +789,25 @@
         music.addEventListener('canplay', () => { if (!isPlaying) play(); }, { once: true });
         setTimeout(() => { if (!isPlaying) play(); }, 400);
       }
-      // Red de seguridad: el primer toque/scroll activa la música si el navegador la bloqueó
+      // Red de seguridad para iPhone/Safari: CUALQUIER interacción activa la música.
+      // No se elimina hasta que de verdad esté sonando (importante para iOS).
       const kickstart = () => {
-        if (!isPlaying && music.paused) play();
-        document.removeEventListener('click', kickstart);
-        document.removeEventListener('touchstart', kickstart);
-        document.removeEventListener('scroll', kickstart);
+        if (!isPlaying && music.paused) {
+          music.play().then(() => {
+            isPlaying = true;
+            updateButton();
+            saveState();
+            removeKick();
+          }).catch(() => {});
+        } else {
+          removeKick();
+        }
       };
-      document.addEventListener('click', kickstart, { once: true });
-      document.addEventListener('touchstart', kickstart, { once: true });
-      document.addEventListener('scroll', kickstart, { once: true, passive: true });
+      const kickEvents = ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'keydown'];
+      function removeKick() {
+        kickEvents.forEach(ev => document.removeEventListener(ev, kickstart));
+      }
+      kickEvents.forEach(ev => document.addEventListener(ev, kickstart, { passive: true }));
     } else {
       updateButton();
     }
