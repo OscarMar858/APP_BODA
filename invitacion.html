@@ -1862,6 +1862,24 @@
       saveState();
     }
 
+    // --- Reanudar automáticamente al volver a la pestaña o traer la app al frente (iOS/Android) ---
+    function resumeIfNeeded() {
+      if (isPlaying && music.paused) {
+        music.play().catch(() => {
+          // iOS a veces exige un gesto: el primer toque o scroll reactiva el sonido
+          const evs = ['touchstart', 'pointerdown', 'click', 'scroll'];
+          const onceResume = () => {
+            if (isPlaying && music.paused) music.play().catch(() => {});
+            evs.forEach(ev => document.removeEventListener(ev, onceResume));
+          };
+          evs.forEach(ev => document.addEventListener(ev, onceResume, { once: true, passive: true }));
+        });
+      }
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) resumeIfNeeded(); });
+    window.addEventListener('pageshow', resumeIfNeeded);
+    window.addEventListener('focus', resumeIfNeeded);
+
     // Guardar el progreso muy a menudo mientras suena
     setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
 
