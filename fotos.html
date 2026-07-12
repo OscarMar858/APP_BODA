@@ -287,7 +287,7 @@
 
 <!-- Música de fondo -->
 <audio id="bg-music" loop preload="auto">
-  <source src="musica.mp3" type="audio/mpeg">
+  <source src="musica.wav" type="audio/wav">
 </audio>
 <button class="music-toggle" id="music-toggle" aria-label="Activar o silenciar música" title="Música">
   <svg class="music-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -432,7 +432,6 @@
     function resumeIfNeeded() {
       if (isPlaying && music.paused) {
         music.play().catch(() => {
-          // iOS a veces exige un gesto: el primer toque o scroll reactiva el sonido
           const evs = ['touchstart', 'pointerdown', 'click', 'scroll'];
           const onceResume = () => {
             if (isPlaying && music.paused) music.play().catch(() => {});
@@ -448,7 +447,6 @@
 
     // Guardar el progreso muy a menudo mientras suena
     // Guardado ligero mientras suena: solo sessionStorage y cada 1s (evita tirones).
-    // La copia completa (session + local) se hace al salir de página y al pulsar enlaces.
     setInterval(() => {
       if (isPlaying && !music.paused) {
         try {
