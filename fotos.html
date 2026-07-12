@@ -447,7 +447,17 @@
     window.addEventListener('focus', resumeIfNeeded);
 
     // Guardar el progreso muy a menudo mientras suena
-    setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
+    // Guardado ligero mientras suena: solo sessionStorage y cada 1s (evita tirones).
+    // La copia completa (session + local) se hace al salir de página y al pulsar enlaces.
+    setInterval(() => {
+      if (isPlaying && !music.paused) {
+        try {
+          sessionStorage.setItem('musicTime', String(music.currentTime || 0));
+          sessionStorage.setItem('musicPlaying', '1');
+          sessionStorage.setItem('musicStamp', String(Date.now()));
+        } catch (e) {}
+      }
+    }, 1000);
 
     // Guardar SIEMPRE justo antes de salir de la página (varios eventos por seguridad)
     ['pagehide', 'beforeunload', 'visibilitychange'].forEach(ev => {
