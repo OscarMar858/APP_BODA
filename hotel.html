@@ -687,6 +687,15 @@
     try { music.volume = VOL; } catch (e) {}
     try { music.loop = true; } catch (e) {}
 
+    // Refuerzo del bucle: si el navegador no repite solo (pasa con WAV en algunos Android), lo reiniciamos al terminar
+    music.addEventListener('ended', function () {
+      if (isPlaying) {
+        try { music.currentTime = 0; } catch (e) {}
+        const p = music.play();
+        if (p && p.catch) p.catch(function () {});
+      }
+    });
+
     function save(k, v) {
       try { sessionStorage.setItem(k, v); } catch (e) {}
       try { localStorage.setItem(k, v); } catch (e) {}
