@@ -1388,4 +1388,690 @@
   <div class="section-eyebrow">Confirma tu asistencia</div>
   <h2 class="section-title">Tu hueco nos importa</h2>
 
-  <form id="rsvp-form" autocomplete="on
+  <form id="rsvp-form" autocomplete="on">
+    <input type="checkbox" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off">
+
+    <div class="field">
+      <label class="field-label" for="nombre">Nombre y apellidos</label>
+      <input type="text" id="nombre" name="nombre" required autocomplete="name">
+    </div>
+
+    <div class="field">
+      <label class="field-label">¿Vendrás?</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="asist-si" name="asistencia" value="Sí, allí estaré" required>
+          <label for="asist-si">Sí, allí estaré</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="asist-no" name="asistencia" value="No podré ir" required>
+          <label for="asist-no">No podré ir</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="si-fields">
+
+      <div class="field">
+        <label class="field-label" for="alergias">Tus alergias o intolerancias</label>
+        <textarea id="alergias" name="alergias" placeholder="Escribe «Ninguna» si no tienes"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Autobús · ¿Dónde te recogemos?</label>
+        <div class="radio-group vertical">
+          <div class="radio-option">
+            <input type="radio" id="bus-moncloa" name="autobus" value="Autobús desde Moncloa">
+            <label for="bus-moncloa">Autobús desde Moncloa</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="bus-suances" name="autobus" value="Autobús desde Suanzes">
+            <label for="bus-suances">Autobús desde Suanzes</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="bus-no" name="autobus" value="No necesitaré bus">
+            <label for="bus-no">No necesitaré bus</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">¿Vienes con alguien?</label>
+        <div id="companions-list"></div>
+        <button type="button" class="add-companion-btn" id="add-companion">
+          <span class="acb-plus">+</span> Añadir acompañante
+        </button>
+        <p class="companion-hint">Añade una ficha por cada persona que venga contigo.</p>
+      </div>
+
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="mensaje">Mensaje para los novios (opcional)</label>
+      <textarea id="mensaje" name="mensaje"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn">Enviar confirmación</button>
+
+    <div class="form-message" id="form-message"></div>
+  </form>
+
+
+</section>
+
+
+
+<section class="content playlist-section" id="playlist">
+  <div class="spotify-card">
+    <svg class="spotify-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.5 17.3a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.55-1.16a.75.75 0 1 1-.33-1.46c4.57-1.04 8.5-.59 11.66 1.34.35.22.46.68.25 1.03zm1.47-3.27a.94.94 0 0 1-1.29.31c-3.23-1.98-8.15-2.56-11.97-1.4a.94.94 0 1 1-.54-1.8c4.37-1.31 9.79-.67 13.5 1.6.44.27.58.85.3 1.29zm.13-3.4C15.24 8.3 8.82 8.1 5.1 9.23a1.125 1.125 0 1 1-.65-2.15c4.27-1.3 11.36-1.05 15.85 1.61a1.125 1.125 0 0 1-1.15 1.93z"/></svg>
+    <div class="spotify-kicker">Playlist colaborativa</div>
+    <h3 class="spotify-title">Pon tu canción<br>en nuestra fiesta</h3>
+    <p class="spotify-desc">¿Hay un temazo que no puede faltar en la pista? Añádelo a nuestra lista y ayúdanos a preparar la fiesta.</p>
+    <a href="https://open.spotify.com/playlist/00HsoEuVqLYkgWwQeuzOfy?si=S5S8D4DaSiKHjJ8czq8SAA" target="_blank" rel="noopener" class="spotify-cta">
+      <svg class="spotify-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.5 17.3a.75.75 0 0 1-1.03.25c-2.82-1.72-6.37-2.11-10.55-1.16a.75.75 0 1 1-.33-1.46c4.57-1.04 8.5-.59 11.66 1.34.35.22.46.68.25 1.03zm1.47-3.27a.94.94 0 0 1-1.29.31c-3.23-1.98-8.15-2.56-11.97-1.4a.94.94 0 1 1-.54-1.8c4.37-1.31 9.79-.67 13.5 1.6.44.27.58.85.3 1.29zm.13-3.4C15.24 8.3 8.82 8.1 5.1 9.23a1.125 1.125 0 1 1-.65-2.15c4.27-1.3 11.36-1.05 15.85 1.61a1.125 1.125 0 0 1-1.15 1.93z"/></svg>
+      Añadir mi canción
+    </a>
+  </div>
+</section>
+
+<section class="content extra-note">
+  <div class="menu-hint">
+    <svg class="menu-hint-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="4" y1="7" x2="20" y2="7"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+      <line x1="4" y1="17" x2="20" y2="17"/>
+    </svg>
+    <p>¿Necesitas saber más? En el menú <span class="menu-hint-strong">☰</span> de arriba tienes toda la información: el <strong>autobús</strong>, el <strong>alojamiento</strong>, nuestro <strong>álbum de fotos</strong> y más detalles.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-names">Alejandra<span class="footer-amp">&</span>Óscar</div>
+  <div class="footer-note">17 · Octubre · 2026</div>
+</footer>
+
+<script>
+  // ==================== HAMBURGER MENU ====================
+  const menuToggle = document.getElementById('menu-toggle');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuBackdrop = document.getElementById('menu-backdrop');
+
+  function toggleMenu(forceState) {
+    const isOpen = (typeof forceState === 'boolean')
+      ? forceState
+      : !menuToggle.classList.contains('open');
+
+    menuToggle.classList.toggle('open', isOpen);
+    menuPanel.classList.toggle('open', isOpen);
+    menuBackdrop.classList.toggle('open', isOpen);
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuPanel.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  menuToggle.addEventListener('click', () => toggleMenu());
+  menuBackdrop.addEventListener('click', () => toggleMenu(false));
+
+  // Al pulsar un enlace del menú, cerrarlo (el scroll suave lo hace el CSS)
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuPanel.classList.contains('open')) {
+      toggleMenu(false);
+    }
+  });
+
+  // ==================== LIGHTBOX (imagen cómo llegar) ====================
+  const directionsImg = document.getElementById('directions-img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  function openLightbox() {
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  directionsImg.addEventListener('click', openLightbox);
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    // Cerrar al tocar fuera de la imagen
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      closeLightbox();
+    }
+  });
+
+  // ==================== COUNTDOWN ====================
+  // Apertura de puertas: 17 Octubre 2026, 13:30 (horario de Madrid)
+  const TARGET_DATE = new Date('2026-10-17T13:30:00+02:00').getTime();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  // Actualiza un dígito solo si cambió, y le aplica la animación de giro
+  function setNum(id, value) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.textContent !== value) {
+      el.textContent = value;
+      el.classList.remove('flip');
+      // forzar reflow para reiniciar la animación
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+
+  function updateCountdown() {
+    const diff = TARGET_DATE - Date.now();
+
+    if (diff <= 0) {
+      setNum('cd-days', '0');
+      setNum('cd-hours', '00');
+      setNum('cd-minutes', '00');
+      setNum('cd-seconds', '00');
+      return;
+    }
+
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff / 3600000) % 24);
+    const minutes = Math.floor((diff / 60000) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    setNum('cd-days', String(days));
+    setNum('cd-hours', pad(hours));
+    setNum('cd-minutes', pad(minutes));
+    setNum('cd-seconds', pad(seconds));
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ==================== SCROLL ANIMATIONS ====================
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('section.content').forEach(s => observer.observe(s));
+
+  // ==================== TEXTO DE LA HISTORIA POR FRASES ====================
+  const introSection = document.getElementById('intro');
+  if (introSection) {
+    const phrases = introSection.querySelectorAll('.intro-text');
+    const introObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          phrases.forEach((p, i) => {
+            setTimeout(() => p.classList.add('revealed'), i * 900);
+          });
+          introObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    introObserver.observe(introSection);
+  }
+
+  // ==================== RSVP FORM ====================
+  // URL del script de Google Apps Script que recibe los datos y los guarda en tu Google Sheets
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhg1hd99hIr_L9zsQPF1dg1r7fZwa_vcD_8ogM2jA_0GjK6fmo6x1ahgxiC2xUhg/exec';
+
+  const form = document.getElementById('rsvp-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const message = document.getElementById('form-message');
+
+  // ---- Mostrar / ocultar campos según si viene o no ----
+  const siFields = document.getElementById('si-fields');
+  const asistSi = document.getElementById('asist-si');
+  const asistNo = document.getElementById('asist-no');
+
+  function toggleFields() {
+    const viene = asistSi.checked;
+    siFields.classList.toggle('hidden', !viene);
+    // El bus solo es obligatorio si viene
+    document.querySelectorAll('input[name="autobus"]').forEach(r => r.required = viene);
+  }
+  asistSi.addEventListener('change', toggleFields);
+  asistNo.addEventListener('change', toggleFields);
+  siFields.classList.add('hidden'); // oculto hasta que elija
+
+  // ---- Acompañantes dinámicos ----
+  const companionsList = document.getElementById('companions-list');
+  const addCompanionBtn = document.getElementById('add-companion');
+  let companionCount = 0;
+
+  function renumberCompanions() {
+    companionsList.querySelectorAll('.companion-card').forEach((card, i) => {
+      card.querySelector('.companion-title').textContent = 'Acompañante ' + (i + 1);
+    });
+  }
+
+  function addCompanion() {
+    companionCount++;
+    const id = companionCount;
+    const card = document.createElement('div');
+    card.className = 'companion-card';
+    card.innerHTML = `
+      <div class="companion-head">
+        <span class="companion-title">Acompañante</span>
+        <button type="button" class="remove-companion" aria-label="Quitar acompañante">×</button>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-nombre-${id}">Nombre y apellidos</label>
+        <input type="text" id="c-nombre-${id}" class="c-nombre" required>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label">¿Adulto o niño?</label>
+        <div class="type-toggle">
+          <input type="radio" id="c-adulto-${id}" name="c-tipo-${id}" class="c-tipo" value="Adulto" checked>
+          <label for="c-adulto-${id}">Adulto</label>
+          <input type="radio" id="c-nino-${id}" name="c-tipo-${id}" class="c-tipo" value="Niño">
+          <label for="c-nino-${id}">Niño</label>
+        </div>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-bus-${id}">¿Necesita autobús?</label>
+        <select id="c-bus-${id}" class="bus-select c-bus">
+          <option value="No necesitaré bus">No necesita bus</option>
+          <option value="Autobús desde Moncloa">Autobús desde Moncloa</option>
+          <option value="Autobús desde Suanzes">Autobús desde Suanzes</option>
+        </select>
+      </div>
+
+      <div class="sub-field">
+        <label class="sub-label" for="c-alergias-${id}">Alergias o intolerancias</label>
+        <textarea id="c-alergias-${id}" class="c-alergias" placeholder="Escribe «Ninguna» si no tiene"></textarea>
+      </div>
+    `;
+
+    card.querySelector('.remove-companion').addEventListener('click', () => {
+      card.remove();
+      renumberCompanions();
+    });
+
+    companionsList.appendChild(card);
+    renumberCompanions();
+    card.querySelector('.c-nombre').focus();
+  }
+
+  addCompanionBtn.addEventListener('click', addCompanion);
+
+  // ---- Recoger todos los invitados (titular + acompañantes) ----
+  function buildGuestList() {
+    const guests = [];
+
+    // Titular
+    guests.push({
+      nombre: document.getElementById('nombre').value.trim(),
+      tipo: 'Adulto',
+      bus: (document.querySelector('input[name="autobus"]:checked') || {}).value || '',
+      alergias: document.getElementById('alergias').value.trim() || 'Ninguna',
+      titular: 'Sí'
+    });
+
+    // Acompañantes
+    companionsList.querySelectorAll('.companion-card').forEach(card => {
+      const tipoInput = card.querySelector('.c-tipo:checked');
+      guests.push({
+        nombre: card.querySelector('.c-nombre').value.trim(),
+        tipo: tipoInput ? tipoInput.value : 'Adulto',
+        bus: card.querySelector('.c-bus').value,
+        alergias: card.querySelector('.c-alergias').value.trim() || 'Ninguna',
+        titular: 'No'
+      });
+    });
+
+    return guests;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Filtro Honeypot: si el checkbox oculto está marcado, es un bot. Bloqueamos el envío silenciosamente.
+    if (form.botcheck.checked) {
+      message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
+      message.className = 'form-message success';
+      form.reset();
+      companionsList.innerHTML = '';
+      siFields.classList.add('hidden');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando…';
+    message.className = 'form-message';
+    message.textContent = '';
+
+    try {
+      const viene = asistSi.checked;
+      const params = new URLSearchParams();
+
+      params.append('botcheck', form.botcheck.checked ? 'on' : '');
+      params.append('asistencia', viene ? 'Sí, allí estaré' : 'No podré ir');
+      params.append('mensaje', document.getElementById('mensaje').value.trim());
+
+      if (viene) {
+        const guests = buildGuestList();
+        params.append('num_personas', String(guests.length));
+        // Enviamos los invitados como JSON: el script creará una fila por cada uno
+        params.append('invitados', JSON.stringify(guests));
+      } else {
+        params.append('num_personas', '0');
+        params.append('invitados', JSON.stringify([{
+          nombre: document.getElementById('nombre').value.trim(),
+          tipo: 'Adulto',
+          bus: '',
+          alergias: '',
+          titular: 'Sí'
+        }]));
+      }
+
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: params,
+        mode: 'no-cors'
+      });
+
+      message.textContent = '✓ ¡Gracias! Hemos recibido tu confirmación. Nos vemos el 17 de Octubre.';
+      message.className = 'form-message success';
+      form.reset();
+      companionsList.innerHTML = '';
+      siFields.classList.add('hidden');
+      submitBtn.textContent = 'Confirmación enviada';
+
+    } catch (error) {
+      message.textContent = 'Ha habido un problema al enviar. Por favor, inténtalo de nuevo en unos minutos.';
+      message.className = 'form-message error';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar confirmación';
+    }
+  });
+
+  // ==================== HOJAS DE ACUARELA CAYENDO ====================
+  (function () {
+    const container = document.getElementById('leaves');
+    if (!container) return;
+
+    // Paleta extraída de la acuarela real del árbol (verdes suaves y ocres)
+    const palettes = [
+      ['#B4B496', '#96B496', '#789678'],
+      ['#A8B888', '#88A878', '#6B8A5A'],
+      ['#C0BC9C', '#A0B482', '#84986A'],
+      ['#98A878', '#7E9B5C', '#5D6E45']
+    ];
+
+    function createLeaf(i) {
+      const leaf = document.createElement('div');
+      leaf.className = 'leaf';
+      const inner = document.createElement('div');
+      inner.className = 'leaf-inner';
+
+      const pal = palettes[Math.floor(Math.random() * palettes.length)];
+      const w = 26 + Math.random() * 14;
+      const h = w * 0.5;
+      const gradId = 'lg' + i, roughId = 'lr' + i;
+
+      // Hoja de acuarela: degradado de 3 tonos + textura irregular en los bordes
+      inner.innerHTML = `
+        <svg width="${w}" height="${h}" viewBox="0 0 50 26" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="${gradId}" cx="42%" cy="38%" r="70%">
+              <stop offset="0%" stop-color="${pal[0]}"/>
+              <stop offset="50%" stop-color="${pal[1]}"/>
+              <stop offset="100%" stop-color="${pal[2]}"/>
+            </radialGradient>
+            <filter id="${roughId}">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
+            </filter>
+          </defs>
+          <path d="M3 13 C 14 3, 36 3, 47 13 C 36 23, 14 23, 3 13 Z"
+                fill="url(#${gradId})" filter="url(#${roughId})" opacity="0.88"/>
+          <path d="M8 13 Q 25 ${11 + Math.random() * 2} 42 13" stroke="${pal[2]}" stroke-width="0.7" fill="none" opacity="0.45"/>
+        </svg>`;
+
+      leaf.appendChild(inner);
+      leaf.style.left = Math.random() * 100 + '%';
+      leaf.style.animationDuration = (9 + Math.random() * 7) + 's';
+      leaf.style.animationDelay = Math.random() * 9 + 's';
+      leaf.style.setProperty('--drift', (Math.random() * 130 - 65) + 'px');
+      leaf.style.setProperty('--spin', (Math.random() * 360 + 120) + 'deg');
+      inner.style.animationDuration = (2.2 + Math.random() * 2) + 's';
+      container.appendChild(leaf);
+    }
+
+    // Pocas hojas, elegante
+    const count = window.innerWidth < 600 ? 7 : 11;
+    for (let i = 0; i < count; i++) createLeaf(i);
+  })();
+
+  // ==================== MÚSICA DE FONDO (Web Audio · bucle sin cortes) ====================
+  (function () {
+    const music = document.getElementById('bg-music');
+    const btn = document.getElementById('music-toggle');
+    if (!btn) return;
+
+    const SRC = 'musica.mp3';
+    const VOL = 0.6;
+
+    function save(key, val) {
+      try { sessionStorage.setItem(key, val); } catch (e) {}
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+    function load(key) {
+      try { const s = sessionStorage.getItem(key); if (s !== null) return s; } catch (e) {}
+      try { return localStorage.getItem(key); } catch (e) {}
+      return null;
+    }
+
+    let isPlaying = false; // intención del usuario: la música debe sonar
+    function updateButton() {
+      btn.classList.toggle('muted', !isPlaying);
+      btn.classList.toggle('playing', isPlaying);
+    }
+
+    // ---- Motor Web Audio: decodifica una vez y repite el buffer de forma exacta (sin hueco, también en iPhone) ----
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let useWebAudio = !!AudioCtx;
+    let ctx = null, gain = null, buffer = null, bufferPromise = null, source = null;
+    let unlocked = false, watchdogArmed = false;
+
+    function ensureCtx() {
+      if (!ctx) {
+        ctx = new AudioCtx();
+        gain = ctx.createGain();
+        gain.gain.value = VOL;
+        gain.connect(ctx.destination);
+      }
+      return ctx;
+    }
+    // Desbloqueo iOS: reproducir un buffer silencioso dentro del gesto ayuda a "abrir" el audio
+    function unlockSilent() {
+      if (unlocked || !useWebAudio) return;
+      try {
+        ensureCtx();
+        if (ctx.state === 'suspended' || ctx.state === 'interrupted') ctx.resume().catch(function () {});
+        const b = ctx.createBuffer(1, 1, 22050);
+        const s = ctx.createBufferSource();
+        s.buffer = b;
+        s.connect(ctx.destination);
+        s.start(0);
+        unlocked = true;
+      } catch (e) {}
+    }
+    // Vigilante: si tras el primer gesto Web Audio no ha sonado, pasar al reproductor normal (garantiza sonido en iPhone)
+    function armFallbackWatchdog() {
+      if (watchdogArmed || !useWebAudio) return;
+      watchdogArmed = true;
+      setTimeout(function () {
+        if (isPlaying && useWebAudio && (!source || !ctx || ctx.state !== 'running')) {
+          useWebAudio = false;
+          stopSource();
+          fallbackPlay();
+        }
+      }, 5000); // Subido a 5 segundos para tolerar conexiones lentas en redes móviles de calle
+    }
+    function ensureBuffer() {
+      if (buffer) return Promise.resolve(buffer);
+      if (!bufferPromise) {
+        bufferPromise = fetch(SRC)
+          .then(function (r) { return r.arrayBuffer(); })
+          .then(function (arr) {
+            return new Promise(function (res, rej) {
+              const ret = ctx.decodeAudioData(arr, res, rej);
+              if (ret && ret.then) ret.then(res, rej);
+            });
+          })
+          .then(function (buf) { buffer = buf; return buf; });
+      }
+      return bufferPromise;
+    }
+    // Reloj compartido entre páginas: epoch = instante (ms) que corresponde a la posición 0 del loop
+    function phaseFromEpoch(dur) {
+      const epoch = parseFloat(load('musicEpoch') || '0') || 0;
+      if (!epoch || !dur) return 0;
+      let p = ((Date.now() - epoch) / 1000) % dur;
+      if (p < 0) p += dur;
+      return p;
+    }
+    function stopSource() {
+      if (source) {
+        try { source.onended = null; source.stop(); } catch (e) {}
+        try { source.disconnect(); } catch (e) {}
+        source = null;
+      }
+    }
+    function fallbackPlay() {
+      if (!music) return;
+      try { music.volume = VOL; } catch (e) {}
+      music.play().then(function () { save('musicPlaying', '1'); }).catch(function () {});
+    }
+    function startWebAudio() {
+      ensureCtx();
+      const proceed = function () {
+        ensureBuffer().then(function (buf) {
+          if (!isPlaying) return;                 // el usuario pausó mientras cargaba
+          if (ctx.state !== 'running') return;    // aún sin gesto: el kickstart reintentará
+          if (source) return;                     // ya está sonando
+          let epoch = parseFloat(load('musicEpoch') || '0') || 0;
+          if (!epoch) { epoch = Date.now(); save('musicEpoch', String(epoch)); }
+          const offset = phaseFromEpoch(buf.duration);
+          source = ctx.createBufferSource();
+          source.buffer = buf;
+          source.loop = true;                     // <-- bucle sample-exacto: sin corte ni parón
+          source.connect(gain);
+          source.start(0, offset);
+          save('musicPlaying', '1');
+        }).catch(function () { useWebAudio = false; fallbackPlay(); });
+      };
+      if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+        ctx.resume().then(proceed).catch(proceed);
+      } else {
+        proceed();
+      }
+    }
+    function play() {
+      isPlaying = true;
+      updateButton();
+      if (useWebAudio) startWebAudio();
+      else fallbackPlay();
+    }
+    function resumeFromPause() {
+      const off = parseFloat(load('musicOffset') || '0') || 0;
+      save('musicEpoch', String(Date.now() - off * 1000));
+      play();
+    }
+    function pause() {
+      isPlaying = false;
+      updateButton();
+      if (useWebAudio && buffer) save('musicOffset', String(phaseFromEpoch(buffer.duration)));
+      save('musicPlaying', '0');
+      stopSource();
+      if (ctx && ctx.suspend) { try { ctx.suspend(); } catch (e) {} }
+      if (music) { try { music.pause(); } catch (e) {} }
+    }
+
+    // ---- Reanudar al volver a la pestaña o traer la app al frente ----
+    function resumeIfNeeded() {
+      if (!isPlaying) return;
+      if (!useWebAudio) { if (music && music.paused) music.play().catch(function () {}); return; }
+      ensureCtx();
+      if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
+        ctx.resume().then(function () { if (!source) play(); }).catch(function () {
+          const evs = ['touchstart', 'pointerdown', 'click', 'scroll'];
+          const once = function () { play(); evs.forEach(function (ev) { document.removeEventListener(ev, once); }); };
+          evs.forEach(function (ev) { document.addEventListener(ev, once, { once: true, passive: true }); });
+        });
+      } else if (!source) {
+        play();
+      }
+    }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) resumeIfNeeded(); });
+    window.addEventListener('pageshow', resumeIfNeeded);
+    window.addEventListener('focus', resumeIfNeeded);
+
+    // ---- Al cargar la página: decidir si debe sonar ----
+    const cameFromEnvelope = load('playMusic') === '1';
+    const wasPlaying = load('musicPlaying') === '1';
+    if (cameFromEnvelope) {
+      save('musicEpoch', String(Date.now())); // arranque nuevo desde el sobre: posición 0
+      try { sessionStorage.removeItem('playMusic'); localStorage.removeItem('playMusic'); } catch (e) {}
+    }
+
+    if (cameFromEnvelope || wasPlaying) {
+      play();
+      // Red de seguridad iPhone/Safari: la primera interacción desbloquea y arranca el sonido síncronamente
+      const kickEvents = ['touchstart', 'touchend', 'click', 'pointerdown', 'keydown'];
+      const kickstart = function () {
+        if (useWebAudio) {
+          ensureCtx();
+          if (ctx && (ctx.state === 'suspended' || ctx.state === 'interrupted')) {
+            ctx.resume().catch(function () {});
+          }
+          unlockSilent();
+        }
+        armFallbackWatchdog();
+        const running = useWebAudio ? (!!ctx && ctx.state === 'running' && !!source) : (!!music && !music.paused);
+        if (isPlaying && !running) play();
+        const now = useWebAudio ? (!!ctx && ctx.state === 'running' && !!source) : (!!music && !music.paused);
+        if (now) {
+          kickEvents.forEach(function (ev) { 
+            document.removeEventListener(ev, kickstart, { passive: false }); 
+          });
+        }
+      };
+      // Registramos SIN el flag passive para que Safari reconozca la interacción interactiva
+      kickEvents.forEach(function (ev) { 
+        document.addEventListener(ev, kickstart, { passive: false }); 
+      });
+    } else {
+      updateButton();
+    }
+
+    btn.addEventListener('click', function () {
+      unlockSilent();
+      armFallbackWatchdog();
+      if (isPlaying) pause();
+      else resumeFromPause();
+    });
+  })();
+</script>
+
+</body>
+</html>
