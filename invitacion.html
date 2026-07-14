@@ -111,9 +111,7 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(245, 240, 227, 0.82);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background: rgba(245, 240, 227, 0.93);
     border: 1px solid rgba(61, 74, 42, 0.2);
     cursor: pointer;
     display: flex;
@@ -148,9 +146,7 @@
     z-index: 50;
     width: 46px;
     height: 46px;
-    background: rgba(245, 240, 227, 0.85);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background: rgba(245, 240, 227, 0.93);
     border: 1px solid rgba(61, 74, 42, 0.18);
     border-radius: 50%;
     cursor: pointer;
@@ -229,6 +225,26 @@
   .menu-nav a:hover {
     color: var(--bronze);
     padding-left: 16px;
+  }
+  .menu-nav-subhead {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--olive);
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin: 16px 0 2px;
+    padding: 0 8px;
+  }
+  .menu-link-page::after {
+    content: '\2197';
+    font-style: normal;
+    font-size: 0.62em;
+    color: var(--bronze);
+    margin-left: 9px;
+    vertical-align: 2px;
+    opacity: 0.85;
   }
 
   .menu-nav-eyebrow {
@@ -839,9 +855,7 @@
 
   /* ==================== RSVP FORM ==================== */
   .rsvp-section {
-    background: rgba(236, 227, 205, 0.55);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    background: rgba(236, 227, 205, 0.6);
   }
 
   /* Tono ligeramente más cálido en secciones alternas,
@@ -1298,6 +1312,7 @@
     <a href="#ubicacion" class="menu-link">Cómo llegar</a>
     <a href="#confirmar" class="menu-link">Confirmar asistencia</a>
     <a href="#playlist" class="menu-link">La playlist</a>
+    <div class="menu-nav-subhead">Más información</div>
     <a href="bus.html" class="menu-link menu-link-page">Autobús</a>
     <a href="hotel.html" class="menu-link menu-link-page">Alojamiento</a>
     <a href="regalo.html" class="menu-link menu-link-page">Un detalle</a>
