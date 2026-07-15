@@ -752,6 +752,8 @@
       if (watchdogArmed || !useWebAudio) return;
       watchdogArmed = true;
       setTimeout(function () {
+        // Con la web oculta el motor está silenciado a propósito: no juzgar ni arrancar nada
+        if (document.hidden) { watchdogArmed = false; return; }
         if (isPlaying && useWebAudio && (!source || !ctx || ctx.state !== 'running')) {
           useWebAudio = false;
           stopSource();
@@ -841,6 +843,7 @@
 
     // ---- Reanudar al volver a la pestaña o traer la app al frente ----
     function resumeIfNeeded() {
+      if (document.hidden) return;            // escudo: si la web está oculta, no sonar
       if (!isPlaying) return;
       if (!useWebAudio) { if (music && music.paused) music.play().catch(function () {}); return; }
       ensureCtx();
