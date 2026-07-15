@@ -2157,7 +2157,19 @@
         play();
       }
     }
-    document.addEventListener('visibilitychange', function () { if (!document.hidden) resumeIfNeeded(); });
+    // ---- Silenciar al salir de la pestaña/app (se reanuda solo al volver) ----
+    function silenceWhileHidden() {
+      if (!isPlaying) return;                 // si el usuario ya la pausó, nada que hacer
+      if (useWebAudio) {
+        if (ctx && ctx.suspend) { try { ctx.suspend(); } catch (e) {} }
+      } else if (music) {
+        try { music.pause(); } catch (e) {}
+      }
+    }
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) silenceWhileHidden();
+      else resumeIfNeeded();
+    });
     window.addEventListener('pageshow', resumeIfNeeded);
     window.addEventListener('focus', resumeIfNeeded);
 
