@@ -436,6 +436,19 @@
   }
 
 
+
+  .menu-nav-subhead {
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--olive);
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin: 16px 0 2px;
+    padding: 0 8px;
+  }
+  .menu-nav .menu-nav-subhead:first-child { margin-top: 2px; }
 </style>
   <link rel="prefetch" href="invitacion.html">
   <link rel="prefetch" href="hotel.html">
@@ -472,11 +485,14 @@
 <aside class="menu-panel" id="menu-panel" aria-hidden="true">
   <div class="menu-nav-eyebrow">Alejandra &amp; Óscar</div>
   <nav class="menu-nav">
+    <div class="menu-nav-subhead">La invitación</div>
     <a href="invitacion.html#intro">Nuestra historia</a>
     <a href="invitacion.html#programa">El gran día</a>
     <a href="invitacion.html#countdown">La cuenta atrás</a>
     <a href="invitacion.html#ubicacion">Cómo llegar</a>
     <a href="invitacion.html#confirmar">Confirmar asistencia</a>
+    <a href="invitacion.html#playlist">La playlist</a>
+    <div class="menu-nav-subhead">Más información</div>
     <a href="bus.html">Autobús</a>
     <a href="hotel.html" class="current">Alojamiento</a>
     <a href="regalo.html">Un detalle</a>
@@ -677,201 +693,144 @@
     if (e.key === 'Escape' && menuPanel.classList.contains('open')) toggleMenu(false);
   });
 
-  // ==================== MÚSICA DE FONDO (Web Audio · bucle sin cortes) ====================
+  // ==================== MÚSICA DE FONDO (sincronizada entre páginas) ====================
   (function () {
     const music = document.getElementById('bg-music');
     const btn = document.getElementById('music-toggle');
-    if (!btn) return;
+    if (!music || !btn) return;
 
-    const SRC = 'musica.mp3';
     const VOL = 0.6;
+    const DUR = 20; // duración del loop en segundos
+    music.volume = VOL;
+    let isPlaying = false;
 
+    // --- Almacenamiento robusto (session + local como respaldo) ---
     function save(key, val) {
       try { sessionStorage.setItem(key, val); } catch (e) {}
       try { localStorage.setItem(key, val); } catch (e) {}
     }
     function load(key) {
-      try { const s = sessionStorage.getItem(key); if (s !== null) return s; } catch (e) {}
+      try {
+        const s = sessionStorage.getItem(key);
+        if (s !== null) return s;
+      } catch (e) {}
       try { return localStorage.getItem(key); } catch (e) {}
       return null;
     }
 
-    let isPlaying = false; // intención del usuario: la música debe sonar
     function updateButton() {
       btn.classList.toggle('muted', !isPlaying);
       btn.classList.toggle('playing', isPlaying);
     }
 
-    // ---- Motor Web Audio: decodifica una vez y repite el buffer de forma exacta (sin hueco, también en iPhone) ----
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let useWebAudio = !!AudioCtx;
-    let ctx = null, gain = null, buffer = null, bufferPromise = null, source = null;
-    let unlocked = false, watchdogArmed = false;
+    function saveState() {
+      // Guardar el segundo exacto y si está sonando, con marca de tiempo real
+      save('musicTime', String(music.currentTime || 0));
+      save('musicPlaying', isPlaying ? '1' : '0');
+      save('musicStamp', String(Date.now()));
+    }
 
-    function ensureCtx() {
-      if (!ctx) {
-        ctx = new AudioCtx();
-        gain = ctx.createGain();
-        gain.gain.value = VOL;
-        gain.connect(ctx.destination);
-      }
-      return ctx;
-    }
-    // Desbloqueo iOS: reproducir un buffer silencioso dentro del gesto ayuda a "abrir" el audio
-    function unlockSilent() {
-      if (unlocked || !useWebAudio) return;
-      try {
-        ensureCtx();
-        if (ctx.state === 'suspended' || ctx.state === 'interrupted') ctx.resume().catch(function () {});
-        const b = ctx.createBuffer(1, 1, 22050);
-        const s = ctx.createBufferSource();
-        s.buffer = b;
-        s.connect(ctx.destination);
-        s.start(0);
-        unlocked = true;
-      } catch (e) {}
-    }
-    // Vigilante: si tras el primer gesto Web Audio no ha sonado, pasar al reproductor normal (garantiza sonido en iPhone)
-    function armFallbackWatchdog() {
-      if (watchdogArmed || !useWebAudio) return;
-      watchdogArmed = true;
-      setTimeout(function () {
-        if (isPlaying && useWebAudio && (!source || !ctx || ctx.state !== 'running')) {
-          useWebAudio = false;
-          stopSource();
-          fallbackPlay();
-        }
-      }, 1500);
-    }
-    function ensureBuffer() {
-      if (buffer) return Promise.resolve(buffer);
-      if (!bufferPromise) {
-        bufferPromise = fetch(SRC)
-          .then(function (r) { return r.arrayBuffer(); })
-          .then(function (arr) {
-            return new Promise(function (res, rej) {
-              const ret = ctx.decodeAudioData(arr, res, rej);
-              if (ret && ret.then) ret.then(res, rej);
-            });
-          })
-          .then(function (buf) { buffer = buf; return buf; });
-      }
-      return bufferPromise;
-    }
-    // Reloj compartido entre páginas: epoch = instante (ms) que corresponde a la posición 0 del loop
-    function phaseFromEpoch(dur) {
-      const epoch = parseFloat(load('musicEpoch') || '0') || 0;
-      if (!epoch || !dur) return 0;
-      let p = ((Date.now() - epoch) / 1000) % dur;
-      if (p < 0) p += dur;
-      return p;
-    }
-    function stopSource() {
-      if (source) {
-        try { source.onended = null; source.stop(); } catch (e) {}
-        try { source.disconnect(); } catch (e) {}
-        source = null;
-      }
-    }
-    function fallbackPlay() {
-      if (!music) return;
-      try { music.volume = VOL; } catch (e) {}
-      music.play().then(function () { save('musicPlaying', '1'); }).catch(function () {});
-    }
-    function startWebAudio() {
-      ensureCtx();
-      const proceed = function () {
-        ensureBuffer().then(function (buf) {
-          if (!isPlaying) return;                 // el usuario pausó mientras cargaba
-          if (ctx.state !== 'running') return;    // aún sin gesto: el kickstart reintentará
-          if (source) return;                     // ya está sonando
-          let epoch = parseFloat(load('musicEpoch') || '0') || 0;
-          if (!epoch) { epoch = Date.now(); save('musicEpoch', String(epoch)); }
-          const offset = phaseFromEpoch(buf.duration);
-          source = ctx.createBufferSource();
-          source.buffer = buf;
-          source.loop = true;                     // <-- bucle sample-exacto: sin corte ni parón
-          source.connect(gain);
-          source.start(0, offset);
-          save('musicPlaying', '1');
-        }).catch(function () { useWebAudio = false; fallbackPlay(); });
-      };
-      if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
-        ctx.resume().then(proceed).catch(proceed);
-      } else {
-        proceed();
-      }
-    }
     function play() {
-      isPlaying = true;
-      updateButton();
-      if (useWebAudio) startWebAudio();
-      else fallbackPlay();
-    }
-    function resumeFromPause() {
-      const off = parseFloat(load('musicOffset') || '0') || 0;
-      save('musicEpoch', String(Date.now() - off * 1000));
-      play();
+      music.play().then(() => {
+        isPlaying = true;
+        updateButton();
+        saveState();
+      }).catch(() => {
+        isPlaying = false;
+        updateButton();
+      });
     }
     function pause() {
+      music.pause();
       isPlaying = false;
       updateButton();
-      if (useWebAudio && buffer) save('musicOffset', String(phaseFromEpoch(buffer.duration)));
-      save('musicPlaying', '0');
-      stopSource();
-      if (ctx && ctx.suspend) { try { ctx.suspend(); } catch (e) {} }
-      if (music) { try { music.pause(); } catch (e) {} }
+      saveState();
     }
 
-    // ---- Reanudar al volver a la pestaña o traer la app al frente ----
-    function resumeIfNeeded() {
-      if (!isPlaying) return;
-      if (!useWebAudio) { if (music && music.paused) music.play().catch(function () {}); return; }
-      ensureCtx();
-      if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
-        ctx.resume().then(function () { if (!source) play(); }).catch(function () {
-          const evs = ['touchstart', 'pointerdown', 'click', 'scroll'];
-          const once = function () { play(); evs.forEach(function (ev) { document.removeEventListener(ev, once); }); };
-          evs.forEach(function (ev) { document.addEventListener(ev, once, { once: true, passive: true }); });
-        });
-      } else if (!source) {
-        play();
+    // Guardar el progreso muy a menudo mientras suena
+    setInterval(() => { if (isPlaying && !music.paused) saveState(); }, 300);
+
+    // Guardar SIEMPRE justo antes de salir de la página (varios eventos por seguridad)
+    ['pagehide', 'beforeunload', 'visibilitychange'].forEach(ev => {
+      window.addEventListener(ev, () => {
+        if (isPlaying && !music.paused) {
+          save('musicTime', String(music.currentTime || 0));
+          save('musicPlaying', '1');
+          save('musicStamp', String(Date.now()));
+        }
+      });
+    });
+    // Al pinchar cualquier enlace (cambio de pestaña), guardar en ese instante
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href]');
+      if (a && isPlaying && !music.paused) {
+        save('musicTime', String(music.currentTime || 0));
+        save('musicPlaying', '1');
+        save('musicStamp', String(Date.now()));
       }
-    }
-    document.addEventListener('visibilitychange', function () { if (!document.hidden) resumeIfNeeded(); });
-    window.addEventListener('pageshow', resumeIfNeeded);
-    window.addEventListener('focus', resumeIfNeeded);
+    }, true);
 
-    // ---- Al cargar la página: decidir si debe sonar ----
+    // --- Al cargar la página: decidir si suena y desde dónde ---
     const cameFromEnvelope = load('playMusic') === '1';
     const wasPlaying = load('musicPlaying') === '1';
-    if (cameFromEnvelope) {
-      save('musicEpoch', String(Date.now())); // arranque nuevo desde el sobre: posición 0
-      try { sessionStorage.removeItem('playMusic'); localStorage.removeItem('playMusic'); } catch (e) {}
+    let resumeTime = parseFloat(load('musicTime') || '0') || 0;
+
+    // Compensar el tiempo que pasó durante la transición entre páginas
+    const stamp = parseFloat(load('musicStamp') || '0') || 0;
+    if (stamp > 0 && wasPlaying) {
+      const elapsed = (Date.now() - stamp) / 1000;
+      if (elapsed > 0 && elapsed < 5) resumeTime += elapsed;
+    }
+    // Mantener dentro del loop
+    if (resumeTime >= DUR || resumeTime < 0) resumeTime = resumeTime % DUR;
+
+    function seekTo(t) {
+      try { music.currentTime = t; } catch (e) {}
+    }
+
+    if (resumeTime > 0.1) {
+      if (music.readyState >= 1) {
+        seekTo(resumeTime);
+      } else {
+        music.addEventListener('loadedmetadata', () => seekTo(resumeTime), { once: true });
+      }
     }
 
     if (cameFromEnvelope || wasPlaying) {
-      play();
-      // Red de seguridad iPhone/Safari: la primera interacción desbloquea y arranca el sonido
-      const kickEvents = ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'keydown'];
-      const kickstart = function () {
-        unlockSilent();
-        armFallbackWatchdog();
-        const running = useWebAudio ? (!!ctx && ctx.state === 'running' && !!source) : (!!music && !music.paused);
-        if (isPlaying && !running) play();
-        const now = useWebAudio ? (!!ctx && ctx.state === 'running' && !!source) : (!!music && !music.paused);
-        if (now) kickEvents.forEach(function (ev) { document.removeEventListener(ev, kickstart); });
+      try { sessionStorage.removeItem('playMusic'); localStorage.removeItem('playMusic'); } catch (e) {}
+      // Arrancar en cuanto se pueda
+      if (music.readyState >= 2) {
+        play();
+      } else {
+        music.addEventListener('canplay', () => { if (!isPlaying) play(); }, { once: true });
+        setTimeout(() => { if (!isPlaying) play(); }, 400);
+      }
+      // Red de seguridad para iPhone/Safari: CUALQUIER interacción activa la música.
+      // No se elimina hasta que de verdad esté sonando (importante para iOS).
+      const kickstart = () => {
+        if (!isPlaying && music.paused) {
+          music.play().then(() => {
+            isPlaying = true;
+            updateButton();
+            saveState();
+            removeKick();
+          }).catch(() => {});
+        } else {
+          removeKick();
+        }
       };
-      kickEvents.forEach(function (ev) { document.addEventListener(ev, kickstart, { passive: true }); });
+      const kickEvents = ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'keydown'];
+      function removeKick() {
+        kickEvents.forEach(ev => document.removeEventListener(ev, kickstart));
+      }
+      kickEvents.forEach(ev => document.addEventListener(ev, kickstart, { passive: true }));
     } else {
       updateButton();
     }
 
-    btn.addEventListener('click', function () {
-      unlockSilent();
-      armFallbackWatchdog();
+    btn.addEventListener('click', () => {
       if (isPlaying) pause();
-      else resumeFromPause();
+      else play();
     });
   })();
 </script>
