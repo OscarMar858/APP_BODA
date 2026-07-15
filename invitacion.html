@@ -46,7 +46,10 @@
   body {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 500;
-    background: var(--cream);
+    background-color: var(--cream);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.29 0 0 0 0 0.16 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23paper)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
     color: var(--ink);
     overflow-x: hidden;
     line-height: 1.55;
@@ -55,15 +58,7 @@
   }
 
   /* Fondo crema con textura sutil de papel de acuarela (mismo color de siempre) */
-  .page-bg {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-color: var(--cream);
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.29 0 0 0 0 0.16 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23paper)'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
-  }
+  .page-bg { display: none; }  /* textura movida al body: evita el fondo fijo que rompía el scroll */
 
   /* Hojas de olivo cayendo */
   .leaves {
@@ -90,7 +85,6 @@
     100% { opacity: 0; transform: translateY(105vh) translateX(var(--drift, 40px)) rotate(var(--spin, 220deg)); }
   }
   .leaf-inner {
-    will-change: transform;
     animation-name: leafSway;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
