@@ -290,6 +290,8 @@
     background-position: center;
     background-repeat: no-repeat;
     z-index: 1;
+    will-change: transform;
+    transform: translateZ(0);
     animation: heroZoom 25s ease-out forwards;
   }
 
@@ -1960,7 +1962,7 @@
       const pal = palettes[Math.floor(Math.random() * palettes.length)];
       const w = 26 + Math.random() * 14;
       const h = w * 0.5;
-      const gradId = 'lg' + i, roughId = 'lr' + i;
+      const gradId = 'lg' + i;
 
       // Hoja de acuarela: degradado de 3 tonos + textura irregular en los bordes
       inner.innerHTML = `
@@ -1971,13 +1973,9 @@
               <stop offset="50%" stop-color="${pal[1]}"/>
               <stop offset="100%" stop-color="${pal[2]}"/>
             </radialGradient>
-            <filter id="${roughId}">
-              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="noise"/>
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
-            </filter>
           </defs>
           <path d="M3 13 C 14 3, 36 3, 47 13 C 36 23, 14 23, 3 13 Z"
-                fill="url(#${gradId})" filter="url(#${roughId})" opacity="0.88"/>
+                fill="url(#${gradId})" opacity="0.88"/>
           <path d="M8 13 Q 25 ${11 + Math.random() * 2} 42 13" stroke="${pal[2]}" stroke-width="0.7" fill="none" opacity="0.45"/>
         </svg>`;
 
