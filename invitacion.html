@@ -130,13 +130,24 @@
   .music-toggle.muted .music-off { display: block; }
   .music-toggle.muted { opacity: 0.4; }
 
-  /* Latido sutil cuando suena, para invitar a fijarse */
-  .music-toggle.playing {
+  /* Latido sutil cuando suena, para invitar a fijarse.
+     Se anima la opacidad de un halo (no la sombra): lo resuelve la GPU y no repinta en cada scroll. */
+  .music-toggle::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    box-shadow: 0 4px 18px -4px rgba(139, 107, 47, 0.55);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .music-toggle.playing::after {
+    will-change: opacity;
     animation: musicBeat 2.6s ease-in-out infinite;
   }
   @keyframes musicBeat {
-    0%, 100% { box-shadow: 0 4px 14px -6px rgba(61, 74, 42, 0.4); }
-    50% { box-shadow: 0 4px 18px -4px rgba(139, 107, 47, 0.55); }
+    0%, 100% { opacity: 0; }
+    50%      { opacity: 1; }
   }
 
   .menu-toggle {
